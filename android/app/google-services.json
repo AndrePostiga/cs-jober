@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "605781910605",
+    "project_id": "jober-7722a",
+    "storage_bucket": "jober-7722a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:605781910605:android:22b84d1998f2e51df62804",
+        "android_client_info": {
+          "package_name": "br.uff.ic.dm.grupolaranja20212"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "605781910605-jvfo8ep5l9kkm7772karf3e5mrmnok41.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhjY3wGD6hYDCkPlczO5TeSBwZcz5yAiE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "605781910605-jvfo8ep5l9kkm7772karf3e5mrmnok41.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
