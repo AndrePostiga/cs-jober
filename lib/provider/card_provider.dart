@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -39,7 +41,7 @@ class CardProvider extends ChangeNotifier {
     _isDragging = false;
     notifyListeners();
 
-    final status = getStatus();
+    final status = getStatus(force: true);
 
     if (status != null) {
       Fluttertoast.cancel();
@@ -80,19 +82,39 @@ class CardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  CardStatus? getStatus() {
+  double getStatusOpacity() {
+    final delta = 100;
+    final pos = max(_position.dx.abs(), _position.dy.abs());
+    final opacity = pos / delta;
+
+    return min(opacity, 1);
+  }
+
+  CardStatus? getStatus({bool force = false}) {
     final x = _position.dx;
     final y = _position.dy;
     final forceSkip = x.abs() < 20;
 
-    final delta = 100;
+    if (force) {
+      final delta = 100;
 
-    if (x >= delta) {
-      return CardStatus.like;
-    } else if (x <= -delta) {
-      return CardStatus.dislike;
-    } else if (y <= -delta / 4 && forceSkip) {
-      return CardStatus.skip;
+      if (x >= delta) {
+        return CardStatus.like;
+      } else if (x <= -delta) {
+        return CardStatus.dislike;
+      } else if (y <= -delta / 2 && forceSkip) {
+        return CardStatus.skip;
+      }
+    } else {
+      final delta = 10;
+
+      if (y <= -delta * 2 && forceSkip) {
+        return CardStatus.skip;
+      } else if (x >= delta) {
+        return CardStatus.like;
+      } else if (x <= -delta) {
+        return CardStatus.dislike;
+      }
     }
   }
 
