@@ -4,11 +4,13 @@ class User {
   final String name;
   final String linkedinUrl;
   final String photoUrl;
+  final String description;
   final int typeId;
 
   DocumentReference reference;
 
-  User(this.name, this.linkedinUrl, this.photoUrl, this.typeId,
+  User(
+      this.name, this.linkedinUrl, this.photoUrl, this.typeId, this.description,
       [this.reference]);
 
   String get userId {
@@ -20,12 +22,13 @@ class User {
       "name": name,
       "linkedinUrl": linkedinUrl,
       "photoUrl": photoUrl,
+      "description": description,
       "typeId": typeId
     };
   }
 
   factory User.fromSnapshot(QueryDocumentSnapshot doc) {
-    return User(doc["name"], doc["linkedinUrl"], doc["photoUrl"], doc["typeId"],
-        doc.reference);
+    return User(doc["name"], doc["linkedinUrl"], doc["photoUrl"],
+        doc["description"], doc["typeId"], doc.reference);
   }
 }
