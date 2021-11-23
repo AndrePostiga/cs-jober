@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserLikedUser {
-  String userLikedUser;
+  String userLikedUserId;
   final String userId;
 
-  UserLikedUser(this.userId, [this.userLikedUser]);
+  UserLikedUser(this.userId, [this.userLikedUserId]);
 
   Map<String, dynamic> toMap() {
     return {"userId": userId};

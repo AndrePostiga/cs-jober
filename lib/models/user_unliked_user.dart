@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserUnlikedUser {
-  String userUnlikedUser;
+  String userUnlikedUserId;
   final String userId;
 
-  UserUnlikedUser(this.userId, [this.userUnlikedUser]);
+  UserUnlikedUser(this.userId, [this.userUnlikedUserId]);
 
   Map<String, dynamic> toMap() {
     return {"userId": userId};
