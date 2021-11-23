@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:grupolaranja20212/Pages/todo_list_page.dart';
+import 'package:grupolaranja20212/pages/todo_list_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(App());
+  runApp(const App());
 }
 
 class App extends StatelessWidget {
