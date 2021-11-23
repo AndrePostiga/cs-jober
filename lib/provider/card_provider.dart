@@ -77,7 +77,7 @@ class CardProvider extends ChangeNotifier {
   void resetPositionForSkip() {
     _isDragging = true;
     _position = Offset.zero;
-    //_angle = 0;
+    _angle = 0;
 
     notifyListeners();
   }
@@ -93,7 +93,7 @@ class CardProvider extends ChangeNotifier {
   CardStatus? getStatus({bool force = false}) {
     final x = _position.dx;
     final y = _position.dy;
-    final forceSkip = x.abs() < 20;
+    final forceSkip = x.abs() < 40;
 
     if (force) {
       final delta = 100;

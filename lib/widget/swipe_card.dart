@@ -43,7 +43,7 @@ class _SwipeCardState extends State<SwipeCard> {
         child: LayoutBuilder(builder: (context, constraints) {
           final provider = Provider.of<CardProvider>(context);
           final position = provider.position;
-          final milliseconds = provider.isDragging ? 0 : 400;
+          final milliseconds = provider.isDragging ? 0 : 300;
 
           final center = constraints.smallest.center(Offset.zero);
           final angle = provider.angle * pi / 180;
@@ -89,16 +89,23 @@ class _SwipeCardState extends State<SwipeCard> {
       );
 
   Widget buildCard() => ClipRRect(
-        borderRadius: BorderRadius.circular(30),
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: NetworkImage(widget.urlImage),
-              fit: BoxFit.cover,
-            ),
+      borderRadius: BorderRadius.circular(30),
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage(widget.urlImage),
+            fit: BoxFit.cover,
           ),
         ),
-      );
+        child: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.transparent, Colors.black],
+                  stops: [0.7, 1])),
+        ),
+      ));
 
   Widget buildStamps() {
     final provider = Provider.of<CardProvider>(context, listen: false);
