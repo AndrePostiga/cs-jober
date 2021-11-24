@@ -8,11 +8,12 @@ class User {
   final int typeId;
   final double lat;
   final double long;
+  final int maxSearchDistance;
 
   DocumentReference? reference;
 
   User(this.name, this.linkedinUrl, this.photoUrl, this.typeId,
-      this.description, this.lat, this.long,
+      this.description, this.lat, this.long, this.maxSearchDistance,
       [this.reference]);
 
   String? get userId {
@@ -27,7 +28,8 @@ class User {
       "description": description,
       "lat": lat,
       "long": long,
-      "typeId": typeId
+      "typeId": typeId,
+      "maxSearchDistance": maxSearchDistance
     };
   }
 
@@ -36,10 +38,11 @@ class User {
         doc["name"],
         doc["linkedinUrl"],
         doc["photoUrl"],
+        doc["typeId"],
         doc["description"],
         doc["lat"],
         doc["long"],
-        doc["typeId"],
+        doc["maxSearchDistance"],
         doc.reference);
   }
 }
