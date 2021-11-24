@@ -2,6 +2,10 @@
 
 This repo is a college computer science project about mobile development using Flutter and Firebase
 
+# Fluxo JOBer
+
+* https://whimsical.com/fluxo-jober-8GsEeHrTk4KysdUjmUGD1W
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.

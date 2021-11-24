@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:grupolaranja20212/widget/swipe_card.dart';
 import 'package:grupolaranja20212/provider/card_provider.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  static final String title = 'JOBer';
+  static const String title = 'JOBer';
+
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(
@@ -21,15 +26,17 @@ class MyApp extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
             elevation: 8,
             primary: Colors.white,
-            shape: CircleBorder(),
-            minimumSize: Size.square(80),
+            shape: const CircleBorder(),
+            minimumSize: const Size.square(80),
           ))),
-          home: MainPage(),
+          home: const MainPage(),
         ),
       );
 }
 
 class MainPage extends StatefulWidget {
+  const MainPage({Key? key}) : super(key: key);
+
   @override
   _MainPageState createState() => _MainPageState();
 }
@@ -49,10 +56,10 @@ class _MainPageState extends State<MainPage> {
           body: SafeArea(
             child: Container(
                 alignment: Alignment.center,
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
-                    Text(
+                    const Text(
                       'JOBer',
                       textAlign: TextAlign.left,
                       style: TextStyle(
@@ -61,15 +68,15 @@ class _MainPageState extends State<MainPage> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 16,
                     ),
-                    Container(
+                    SizedBox(
                       height: 580,
                       child:
                           buildCards(), //SizedBox(height: 500), /*buildCards()*/
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 16,
                     ),
                     buildButtons()
@@ -86,7 +93,7 @@ class _MainPageState extends State<MainPage> {
     return urlImages.isEmpty
         ? Center(
             child: ElevatedButton(
-              child: Text('Reinicia Lista'),
+              child: const Text('Reinicia Lista'),
               onPressed: () {
                 final provider =
                     Provider.of<CardProvider>(context, listen: false);
@@ -115,7 +122,7 @@ class _MainPageState extends State<MainPage> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         ElevatedButton(
-          child: Icon(Icons.clear, size: 48),
+          child: const Icon(Icons.clear, size: 48),
           style: ButtonStyle(
             foregroundColor: getColor(Colors.red, Colors.white, isDislike),
             backgroundColor: getColor(Colors.white, Colors.red, isDislike),
@@ -126,7 +133,7 @@ class _MainPageState extends State<MainPage> {
           },
         ),
         ElevatedButton(
-          child: Icon(
+          child: const Icon(
             Icons.skip_next_rounded,
             size: 48,
           ),
@@ -140,7 +147,7 @@ class _MainPageState extends State<MainPage> {
           },
         ),
         ElevatedButton(
-          child: Icon(
+          child: const Icon(
             Icons.favorite,
             size: 48,
           ),
