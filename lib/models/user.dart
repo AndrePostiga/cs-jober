@@ -9,14 +9,14 @@ class User {
   final double lat;
   final double long;
 
-  DocumentReference reference;
+  DocumentReference? reference;
 
   User(this.name, this.linkedinUrl, this.photoUrl, this.typeId,
       this.description, this.lat, this.long,
       [this.reference]);
 
-  String get userId {
-    return reference.id;
+  String? get userId {
+    return reference?.id;
   }
 
   Map<String, dynamic> toMap() {

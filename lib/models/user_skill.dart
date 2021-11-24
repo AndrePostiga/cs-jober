@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserSkill {
-  String userSkillId;
+  String? userSkillId;
   final String skill;
 
   UserSkill(this.skill, [this.userSkillId]);

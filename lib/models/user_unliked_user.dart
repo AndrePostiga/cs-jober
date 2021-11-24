@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserUnlikedUser {
-  String userUnlikedUserId;
+  String? userUnlikedUserId;
   final String userId;
 
   UserUnlikedUser(this.userId, [this.userUnlikedUserId]);

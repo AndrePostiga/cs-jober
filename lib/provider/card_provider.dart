@@ -83,7 +83,7 @@ class CardProvider extends ChangeNotifier {
   }
 
   double getStatusOpacity() {
-    final delta = 100;
+    const delta = 100;
     final pos = max(_position.dx.abs(), _position.dy.abs());
     final opacity = pos / delta;
 
@@ -96,7 +96,7 @@ class CardProvider extends ChangeNotifier {
     final forceSkip = x.abs() < 40;
 
     if (force) {
-      final delta = 100;
+      const delta = 100;
 
       if (x >= delta) {
         return CardStatus.like;
@@ -106,7 +106,7 @@ class CardProvider extends ChangeNotifier {
         return CardStatus.skip;
       }
     } else {
-      final delta = 10;
+      const delta = 10;
 
       if (y <= -delta * 2 && forceSkip) {
         return CardStatus.skip;
@@ -145,7 +145,7 @@ class CardProvider extends ChangeNotifier {
   Future _nextCard() async {
     if (_urlImages.isEmpty) return;
 
-    await Future.delayed(Duration(milliseconds: 200));
+    await Future.delayed(const Duration(milliseconds: 200));
     _urlImages.removeLast();
     resetPosition();
   }
@@ -153,7 +153,7 @@ class CardProvider extends ChangeNotifier {
   Future _skipCard() async {
     if (_urlImages.isEmpty) return;
 
-    await Future.delayed(Duration(milliseconds: 200));
+    await Future.delayed(const Duration(milliseconds: 200));
     String ultimo = _urlImages.removeLast();
     _urlImages.insert(0, ultimo);
     resetPositionForSkip();

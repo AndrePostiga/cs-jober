@@ -56,7 +56,7 @@ class _MainPageState extends State<MainPage> {
           body: SafeArea(
             child: Container(
                 alignment: Alignment.center,
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
                     const Text(

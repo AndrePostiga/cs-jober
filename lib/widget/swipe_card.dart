@@ -98,7 +98,7 @@ class _SwipeCardState extends State<SwipeCard> {
           ),
         ),
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -156,7 +156,7 @@ class _SwipeCardState extends State<SwipeCard> {
         child: Transform.rotate(
             angle: angle,
             child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: color, width: 4),
