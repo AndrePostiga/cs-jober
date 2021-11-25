@@ -41,7 +41,7 @@ class _SwipePage extends State<SwipePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("Latest Incidents")),
+        appBar: AppBar(title: const Text("Swipe Page")),
         drawer: Drawer(
             child: ListView(
           children: [

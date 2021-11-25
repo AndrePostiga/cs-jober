@@ -6,13 +6,13 @@ class MatchesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Welcome to Flutter',
+      title: 'Matches',
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Welcome to Flutter'),
+          title: const Text('Matches'),
         ),
         body: const Center(
-          child: Text('Hello World'),
+          child: Text('Matches'),
         ),
       ),
     );
