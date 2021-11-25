@@ -9,11 +9,24 @@ class User {
   final double lat;
   final double long;
   final int maxSearchDistance;
+  final List<String> skills;
+  final List<String> likes;
+  final List<String> unlikes;
 
   DocumentReference? reference;
 
-  User(this.name, this.linkedinUrl, this.photoUrl, this.typeId,
-      this.description, this.lat, this.long, this.maxSearchDistance,
+  User(
+      this.name,
+      this.linkedinUrl,
+      this.photoUrl,
+      this.typeId,
+      this.description,
+      this.lat,
+      this.long,
+      this.maxSearchDistance,
+      this.skills,
+      this.likes,
+      this.unlikes,
       [this.reference]);
 
   String? get userId {
@@ -29,7 +42,10 @@ class User {
       "lat": lat,
       "long": long,
       "typeId": typeId,
-      "maxSearchDistance": maxSearchDistance
+      "maxSearchDistance": maxSearchDistance,
+      "skills": skills,
+      "likes": likes,
+      "unlikes": unlikes
     };
   }
 
@@ -43,6 +59,9 @@ class User {
         doc["lat"],
         doc["long"],
         doc["maxSearchDistance"],
+        doc["skills"],
+        doc["likes"],
+        doc["unlikes"],
         doc.reference);
   }
 }
