@@ -3,14 +3,18 @@ import 'package:flutter/widgets.dart';
 import 'package:grupolaranja20212/view_models/register_view_model.dart';
 import 'package:provider/provider.dart';
 
-class AuthRegisterPage extends StatelessWidget {
+class AuthRegisterPage extends StatefulWidget {
+  const AuthRegisterPage({Key? key}) : super(key: key);
+
+  @override
+  _AuthRegisterPage createState() => _AuthRegisterPage();
+}
+
+class _AuthRegisterPage extends State<AuthRegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
-  RegisterViewModel _registerVM = RegisterViewModel();
-
-  AuthRegisterPage({Key? key}) : super(key: key);
+  late RegisterViewModel _registerVM = RegisterViewModel();
 
   Future<bool> _registerUser(BuildContext context) async {
     bool isRegistered = false;

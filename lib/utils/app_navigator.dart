@@ -11,7 +11,8 @@ class AppNavigator {
         context,
         MaterialPageRoute(
             builder: (context) => ChangeNotifierProvider(
-                create: (context) => LoginViewModel(), child: AuthLoginPage()),
+                create: (context) => LoginViewModel(),
+                child: const AuthLoginPage()),
             fullscreenDialog: true));
   }
 
@@ -21,7 +22,7 @@ class AppNavigator {
         MaterialPageRoute(
             builder: (context) => ChangeNotifierProvider(
                 create: (context) => RegisterViewModel(),
-                child: AuthRegisterPage()),
+                child: const AuthRegisterPage()),
             fullscreenDialog: true));
   }
 }

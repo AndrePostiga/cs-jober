@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grupolaranja20212/pages/matches_page.dart';
 import 'package:grupolaranja20212/view_models/login_view_model.dart';
+import 'package:provider/provider.dart';
 
 class AuthLoginPage extends StatefulWidget {
   const AuthLoginPage({Key? key}) : super(key: key);
@@ -14,9 +15,13 @@ class _AuthLoginPage extends State<AuthLoginPage> {
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _loginVM = LoginViewModel();
+  late LoginViewModel _loginVM = LoginViewModel();
 
   void _login(BuildContext context) async {
+    setState(() {
+      _message = "";
+    });
+
     final email = _emailController.text;
     final password = _passwordController.text;
 
@@ -30,6 +35,9 @@ class _AuthLoginPage extends State<AuthLoginPage> {
         _message = "Digite sua senha!";
       });
     } else {
+      _emailController.text = "";
+      _passwordController.text = "";
+
       // perform login
       final isLoggedIn = await _loginVM.login(email, password);
       if (isLoggedIn) {
@@ -42,6 +50,8 @@ class _AuthLoginPage extends State<AuthLoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    _loginVM = Provider.of<LoginViewModel>(context);
+
     return Scaffold(
         body: Center(
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -55,6 +65,7 @@ class _AuthLoginPage extends State<AuthLoginPage> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: TextField(
+            obscureText: true,
             controller: _passwordController,
             decoration: const InputDecoration(hintText: "Digite sua Senha"),
           ),
