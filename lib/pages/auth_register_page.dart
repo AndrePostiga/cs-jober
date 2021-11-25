@@ -49,7 +49,7 @@ class _AuthRegisterPage extends State<AuthRegisterPage> {
                     controller: _emailController,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return "Email is required!";
+                        return "O E-Mail é obrigatório";
                       }
                       return null;
                     },
@@ -60,7 +60,7 @@ class _AuthRegisterPage extends State<AuthRegisterPage> {
                     obscureText: true,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return "Password is required!";
+                        return "A Senha é obrigatória";
                       }
                       return null;
                     },
@@ -71,12 +71,7 @@ class _AuthRegisterPage extends State<AuthRegisterPage> {
                           style: TextStyle(color: Colors.white)),
                       onPressed: () {
                         _registerUser(context);
-                      },
-                      style: ButtonStyle(
-                          foregroundColor:
-                              MaterialStateProperty.all<Color>(Colors.red),
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.white))),
+                      }),
                   Text(_registerVM.message)
                 ],
               ),

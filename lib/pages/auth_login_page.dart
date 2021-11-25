@@ -53,33 +53,35 @@ class _AuthLoginPage extends State<AuthLoginPage> {
     _loginVM = Provider.of<LoginViewModel>(context);
 
     return Scaffold(
+        appBar: AppBar(title: const Text("Login")),
         body: Center(
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            controller: _emailController,
-            decoration: const InputDecoration(hintText: "Digite seu E-Mail"),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            obscureText: true,
-            controller: _passwordController,
-            decoration: const InputDecoration(hintText: "Digite sua Senha"),
-          ),
-        ),
-        TextButton(
-            onPressed: () {
-              _login(context);
-            },
-            child: const Text("Login")),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(_message),
-        )
-      ]),
-    ));
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: _emailController,
+                decoration:
+                    const InputDecoration(hintText: "Digite seu E-Mail"),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                obscureText: true,
+                controller: _passwordController,
+                decoration: const InputDecoration(hintText: "Digite sua Senha"),
+              ),
+            ),
+            TextButton(
+                onPressed: () {
+                  _login(context);
+                },
+                child: const Text("Login")),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(_message),
+            )
+          ]),
+        ));
   }
 }
