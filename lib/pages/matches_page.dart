@@ -12,7 +12,7 @@ class MatchesPage extends StatelessWidget {
           title: const Text('Matches'),
         ),
         body: const Center(
-          child: Text('Matches'),
+          child: Text('Lista de conversas com os Matches'),
         ),
       ),
     );

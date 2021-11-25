@@ -12,7 +12,7 @@ class MatchesMapPage extends StatelessWidget {
           title: const Text('Mapa'),
         ),
         body: const Center(
-          child: Text('Mapa'),
+          child: Text('Mapa mostrando onde os matches estao'),
         ),
       ),
     );

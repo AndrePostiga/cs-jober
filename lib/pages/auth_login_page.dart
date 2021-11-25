@@ -44,6 +44,10 @@ class _AuthLoginPage extends State<AuthLoginPage> {
         // on successful login take the user to the main page
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const MatchesPage()));
+      } else {
+        setState(() {
+          _message = _loginVM.message;
+        });
       }
     }
   }

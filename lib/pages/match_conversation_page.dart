@@ -12,7 +12,7 @@ class MatchConversationPage extends StatelessWidget {
           title: const Text('Conversa'),
         ),
         body: const Center(
-          child: Text('Conversa'),
+          child: Text('Conversa com um match escolhido'),
         ),
       ),
     );
