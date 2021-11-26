@@ -13,11 +13,19 @@ class LoginViewModel extends ChangeNotifier {
       isLoggedIn = userCredential.user != null;
     } on FirebaseAuthException catch (e) {
       if (e.code == "user-not-found") {
-        message = "User is not registered!";
+        message = "O usuário não está registrado";
+      } else if (e.code == "invalid-email") {
+        message = "O e-mail informado é inválido";
+      } else if (e.code == "user-disabled") {
+        message = "Seu usuário foi desabilitado";
+      } else if (e.code == "user-disabled") {
+        message = "Usuário não encontrado... Registre-se";
+      } else if (e.code == "wrong-password") {
+        message = "Sua Senha está errada";
+      } else if (e.code == "too-many-requests") {
+        message = "Aguarde 2 minutos e tente novamente";
       }
       notifyListeners();
-    } catch (e) {
-      print(e);
     }
 
     return isLoggedIn;

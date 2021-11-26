@@ -35,9 +35,6 @@ class _AuthLoginPage extends State<AuthLoginPage> {
         _message = "Digite sua senha!";
       });
     } else {
-      _emailController.text = "";
-      _passwordController.text = "";
-
       // perform login
       final isLoggedIn = await _loginVM.login(email, password);
       if (isLoggedIn) {
