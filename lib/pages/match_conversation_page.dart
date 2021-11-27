@@ -9,6 +9,10 @@ class MatchConversationPage extends StatelessWidget {
       title: 'Conversa',
       home: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
           title: const Text('Conversa'),
         ),
         body: const Center(

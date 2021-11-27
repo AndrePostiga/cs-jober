@@ -35,6 +35,10 @@ class _AuthLogoutPage extends State<AuthLogoutPage> {
       title: 'Logout',
       home: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
           title: const Text('Logout'),
         ),
         body: Center(

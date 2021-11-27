@@ -3,6 +3,8 @@ import 'package:grupolaranja20212/pages/auth_login_page.dart';
 import 'package:grupolaranja20212/pages/auth_logout_page.dart';
 import 'package:grupolaranja20212/pages/auth_register_page.dart';
 import 'package:grupolaranja20212/pages/main_page.dart';
+import 'package:grupolaranja20212/pages/match_conversation_page.dart';
+import 'package:grupolaranja20212/pages/matches_map_page.dart';
 import 'package:grupolaranja20212/pages/matches_page.dart';
 import 'package:grupolaranja20212/pages/swipe_page.dart';
 import 'package:grupolaranja20212/provider/card_provider.dart';
@@ -51,6 +53,26 @@ class AppNavigator {
             builder: (context) => ChangeNotifierProvider(
                 create: (context) => MatchesViewModel(),
                 child: const MatchesPage()),
+            fullscreenDialog: false));
+  }
+
+  static Future navigateToMatchesMapPage(BuildContext context) async {
+    return await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ChangeNotifierProvider(
+                create: (context) => MatchesViewModel(),
+                child: const MatchesMapPage()),
+            fullscreenDialog: false));
+  }
+
+  static Future navigateToMatchConversationPage(BuildContext context) async {
+    return await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ChangeNotifierProvider(
+                create: (context) => MatchesViewModel(),
+                child: const MatchConversationPage()),
             fullscreenDialog: false));
   }
 

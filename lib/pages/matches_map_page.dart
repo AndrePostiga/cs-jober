@@ -9,6 +9,10 @@ class MatchesMapPage extends StatelessWidget {
       title: 'Mapa',
       home: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
           title: const Text('Mapa'),
         ),
         body: const Center(
