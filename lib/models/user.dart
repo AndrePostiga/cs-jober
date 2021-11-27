@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {
+  final String firebaseAuthUid;
+  final String oneSignalId;
   final String name;
   final String linkedinUrl;
   final String photoUrl;
@@ -16,6 +18,8 @@ class User {
   DocumentReference? reference;
 
   User(
+      this.firebaseAuthUid,
+      this.oneSignalId,
       this.name,
       this.linkedinUrl,
       this.photoUrl,
@@ -35,6 +39,8 @@ class User {
 
   Map<String, dynamic> toMap() {
     return {
+      "firebaseAuthUid": firebaseAuthUid,
+      "oneSignalId": oneSignalId,
       "name": name,
       "linkedinUrl": linkedinUrl,
       "photoUrl": photoUrl,
@@ -51,6 +57,8 @@ class User {
 
   factory User.fromSnapshot(QueryDocumentSnapshot doc) {
     return User(
+        doc["firebaseAuthUid"],
+        doc["oneSignalId"],
         doc["name"],
         doc["linkedinUrl"],
         doc["photoUrl"],
