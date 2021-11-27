@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:grupolaranja20212/pages/auth_login_page.dart';
 import 'package:grupolaranja20212/pages/auth_logout_page.dart';
 import 'package:grupolaranja20212/pages/auth_register_page.dart';
+import 'package:grupolaranja20212/pages/main_page.dart';
 import 'package:grupolaranja20212/pages/matches_page.dart';
 import 'package:grupolaranja20212/pages/swipe_page.dart';
+import 'package:grupolaranja20212/provider/card_provider.dart';
 import 'package:grupolaranja20212/view_models/login_view_model.dart';
 import 'package:grupolaranja20212/view_models/logout_view_model.dart';
 import 'package:grupolaranja20212/view_models/matches_view_model.dart';
@@ -49,6 +51,15 @@ class AppNavigator {
             builder: (context) => ChangeNotifierProvider(
                 create: (context) => MatchesViewModel(),
                 child: const MatchesPage()),
+            fullscreenDialog: false));
+  }
+
+  static Future navigateToMainPage(BuildContext context) async {
+    return await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ChangeNotifierProvider(
+                create: (context) => CardProvider(), child: const MainPage()),
             fullscreenDialog: false));
   }
 

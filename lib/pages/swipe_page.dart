@@ -27,6 +27,12 @@ class SwipePage extends StatelessWidget {
               },
               child: const Text('MATCHES'),
             ),
+            ElevatedButton(
+              onPressed: () {
+                AppNavigator.navigateToMainPage(context);
+              },
+              child: const Text('MAIN PAGE (SWIPE)'),
+            ),
           ],
         )),
       ),
