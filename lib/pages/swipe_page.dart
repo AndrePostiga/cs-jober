@@ -1,8 +1,26 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:grupolaranja20212/pages/welcome_page.dart';
 import 'package:grupolaranja20212/utils/app_navigator.dart';
 
-class SwipePage extends StatelessWidget {
+class SwipePage extends StatefulWidget {
   const SwipePage({Key? key}) : super(key: key);
+
+  @override
+  _SwipePage createState() => _SwipePage();
+}
+
+class _SwipePage extends State<SwipePage> {
+  @override
+  void initState() {
+    super.initState();
+
+    if (FirebaseAuth.instance.currentUser == null) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const WelcomePage()),
+          (Route<dynamic> route) => false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -17,8 +17,9 @@ class _AuthLogoutPage extends State<AuthLogoutPage> {
   void _logout(BuildContext context) async {
     final success = await _logoutVM.logout();
     if (success) {
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => const WelcomePage()));
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const WelcomePage()),
+          (Route<dynamic> route) => false);
     } else {
       setState(() {
         _btnLogoutTxt = "Opa, não foi possível realizar o Logout";
