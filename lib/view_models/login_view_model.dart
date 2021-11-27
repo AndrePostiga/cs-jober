@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grupolaranja20212/utils/constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginViewModel extends ChangeNotifier {
   String message = "";
@@ -12,12 +11,7 @@ class LoginViewModel extends ChangeNotifier {
     try {
       final userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      if (userCredential.user != null) {
-        isLoggedIn = true;
-
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('loggedUserUid', userCredential.user!.uid);
-      }
+      isLoggedIn = userCredential.user != null;
     } on FirebaseAuthException catch (e) {
       if (e.code == "user-not-found") {
         message = Constants.userNotFound;

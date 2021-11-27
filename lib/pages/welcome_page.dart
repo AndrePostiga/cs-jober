@@ -1,31 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:grupolaranja20212/utils/app_navigator.dart';
 
-class SwipePage extends StatelessWidget {
-  const SwipePage({Key? key}) : super(key: key);
+class WelcomePage extends StatelessWidget {
+  const WelcomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Swipe',
+      title: 'WelcomePage',
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Swipe'),
+          title: const Text('WelcomePage'),
         ),
         body: Center(
             child: Column(
           children: [
             ElevatedButton(
               onPressed: () {
-                AppNavigator.navigateToLogoutPage(context);
+                AppNavigator.navigateToLoginPage(context);
               },
-              child: const Text('LOGOUT'),
+              child: const Text('LOGIN'),
             ),
             ElevatedButton(
               onPressed: () {
-                AppNavigator.navigateToMatchesPage(context);
+                AppNavigator.navigateToRegisterPage(context);
               },
-              child: const Text('MATCHES'),
+              child: const Text('REGISTER'),
             ),
           ],
         )),

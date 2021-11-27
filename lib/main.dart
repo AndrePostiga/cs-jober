@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:grupolaranja20212/pages/swipe_page.dart';
+import 'package:grupolaranja20212/pages/welcome_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,6 +13,9 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: SwipePage(), title: "Swipe page");
+    return const MaterialApp(
+      home: WelcomePage(),
+      title: "Welcome page",
+    );
   }
 }
