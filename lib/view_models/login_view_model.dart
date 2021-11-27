@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:grupolaranja20212/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginViewModel extends ChangeNotifier {
@@ -19,17 +20,15 @@ class LoginViewModel extends ChangeNotifier {
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == "user-not-found") {
-        message = "O usuário não está registrado";
+        message = Constants.userNotFound;
       } else if (e.code == "invalid-email") {
-        message = "O e-mail informado é inválido";
+        message = Constants.invalidEmail;
       } else if (e.code == "user-disabled") {
-        message = "Seu usuário foi desabilitado";
-      } else if (e.code == "user-disabled") {
-        message = "Usuário não encontrado... Registre-se";
+        message = Constants.disabledUser;
       } else if (e.code == "wrong-password") {
-        message = "Sua Senha está errada";
+        message = Constants.wrongPassword;
       } else if (e.code == "too-many-requests") {
-        message = "Aguarde 2 minutos e tente novamente";
+        message = Constants.tooManyRequests;
       }
       notifyListeners();
     }
