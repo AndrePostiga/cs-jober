@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:grupolaranja20212/pages/user_register_page.dart';
 import 'package:grupolaranja20212/view_models/register_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -25,7 +26,9 @@ class _AuthRegisterPage extends State<AuthRegisterPage> {
 
       isRegistered = await _registerVM.register(email, password);
       if (isRegistered) {
-        Navigator.pop(context, true);
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const UserRegisterPage()),
+            (Route<dynamic> route) => false);
       }
     }
 

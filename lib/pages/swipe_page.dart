@@ -51,6 +51,12 @@ class _SwipePage extends State<SwipePage> {
               },
               child: const Text('MAIN PAGE (SWIPE)'),
             ),
+            ElevatedButton(
+              onPressed: () {
+                AppNavigator.navigateToUserRegisterPage(context);
+              },
+              child: const Text('EDIT DO USUARIO E PREFERENCIAS'),
+            ),
           ],
         )),
       ),

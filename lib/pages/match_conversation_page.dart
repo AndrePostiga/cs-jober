@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grupolaranja20212/utils/app_navigator.dart';
 
 class MatchConversationPage extends StatelessWidget {
   const MatchConversationPage({Key? key}) : super(key: key);
@@ -15,9 +16,17 @@ class MatchConversationPage extends StatelessWidget {
           ),
           title: const Text('Conversa'),
         ),
-        body: const Center(
-          child: Text('Conversa com um match escolhido'),
-        ),
+        body: Center(
+            child: Column(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                AppNavigator.navigateToProfilePage(context);
+              },
+              child: const Text('PERFIL DE UM USUARIO'),
+            ),
+          ],
+        )),
       ),
     );
   }
