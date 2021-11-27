@@ -17,7 +17,7 @@ class _AuthLogoutPage extends State<AuthLogoutPage> {
   void _logout(BuildContext context) async {
     final success = await _logoutVM.logout();
     if (success) {
-      Navigator.push(context,
+      Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (context) => const WelcomePage()));
     } else {
       setState(() {
