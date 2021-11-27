@@ -8,7 +8,7 @@ import 'package:grupolaranja20212/view_models/register_view_model.dart';
 import 'package:provider/provider.dart';
 
 class AppNavigator {
-  static Future<bool> navigateToLoginPage(BuildContext context) async {
+  static Future<bool?> navigateToLoginPage(BuildContext context) async {
     return await Navigator.push(
         context,
         MaterialPageRoute(
@@ -18,7 +18,7 @@ class AppNavigator {
             fullscreenDialog: true));
   }
 
-  static Future<bool> navigateToRegisterPage(BuildContext context) async {
+  static Future<bool?> navigateToRegisterPage(BuildContext context) async {
     return await Navigator.push(
         context,
         MaterialPageRoute(
@@ -28,7 +28,7 @@ class AppNavigator {
             fullscreenDialog: true));
   }
 
-  static Future<bool> navigateToMatchesPage(BuildContext context) async {
+  static Future navigateToMatchesPage(BuildContext context) async {
     return await Navigator.push(
         context,
         MaterialPageRoute(

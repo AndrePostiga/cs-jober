@@ -67,11 +67,10 @@ class _AuthRegisterPage extends State<AuthRegisterPage> {
                     decoration: const InputDecoration(hintText: "Password"),
                   ),
                   TextButton(
-                      child: const Text("Register",
-                          style: TextStyle(color: Colors.white)),
                       onPressed: () {
                         _registerUser(context);
-                      }),
+                      },
+                      child: const Text("Register")),
                   Text(_registerVM.message)
                 ],
               ),

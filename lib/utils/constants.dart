@@ -6,4 +6,6 @@ class Constants {
   static String weekPassword = "Senha fraca";
   static String wrongPassword = "Sua Senha está errada";
   static String tooManyRequests = "Aguarde 2 minutos e tente novamente";
+  static String operationNotAllowed =
+      "Por alguma razão seu e-mail ou senha não estão habilitados para serem utilizados";
 }

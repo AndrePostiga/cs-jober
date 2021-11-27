@@ -11,17 +11,22 @@ class RegisterViewModel extends ChangeNotifier {
     try {
       final userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
-      isRegistered = userCredential.user != null;
+
+      if (userCredential.user != null) {
+        isRegistered = true;
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == "weak-password") {
         message = Constants.weekPassword;
       } else if (e.code == "email-already-in-use") {
         message = Constants.emailAlreadyInUse;
+      } else if (e.code == "invalid-email") {
+        message = Constants.invalidEmail;
+      } else if (e.code == "operation-not-allowed") {
+        message = Constants.operationNotAllowed;
       }
 
       notifyListeners();
-    } catch (e) {
-      print(e);
     }
 
     return isRegistered;
