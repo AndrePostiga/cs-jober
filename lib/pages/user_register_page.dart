@@ -81,7 +81,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                     items: _dropDownUserTypesItens,
                     onChanged: changedDropDownUserTypeItem,
                   ),
-                  Text("Qual distância máxima para encontrarmos: " +
+                  Text("Qual distância máxima (em KM) para encontrarmos: " +
                       (_userTypeId == 0 ? "Recrutadores" : "Candidatos")),
                   Container(
                     padding: const EdgeInsets.all(16.0),
