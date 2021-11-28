@@ -15,6 +15,8 @@ class _UserRegisterPage extends State<UserRegisterPage> {
   final UserRegisterViewModel _userRegisterVM = UserRegisterViewModel();
   final _formKey = GlobalKey<FormState>();
 
+  String _btnStoreMsg = "Gravar e ir pra tela do SWIPE";
+
   List<DropdownMenuItem<int>> _dropDownUserTypesItens =
       <DropdownMenuItem<int>>[];
   int _userTypeId = 0;
@@ -69,7 +71,20 @@ class _UserRegisterPage extends State<UserRegisterPage> {
   }
 
   Future _saveAndRedirectToSwipePage(BuildContext context) async {
-    // salva user no firestore
+    try {
+      await _userRegisterVM.createOrUpdateUserByFirebaseAuthUid(
+          FirebaseAuth.instance.currentUser!.uid,
+          _nameController.text,
+          _linkedinUrlController.text,
+          "",
+          _userTypeId,
+          _descriptionController.text,
+          _maxSearchDistance,
+          _skillsController.text.split(","));
+    } catch (e) {
+      _btnStoreMsg = e.toString();
+    }
+
     await AppNavigator.navigateToSwipePage(context);
   }
 
@@ -125,7 +140,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                     decoration: const InputDecoration(hintText: "Nome"),
                   ),
                   TextFormField(
-                    controller: _nameController,
+                    controller: _skillsController,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Informe suas habilidades separadas por ','";
@@ -161,7 +176,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                       onPressed: () {
                         _saveAndRedirectToSwipePage(context);
                       },
-                      child: const Text("Gravar e ir pra tela do SWIPE"))
+                      child: Text(_btnStoreMsg))
                 ],
               ),
             ),

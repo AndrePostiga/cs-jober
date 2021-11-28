@@ -3,15 +3,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class User {
   final String firebaseAuthUid;
   final String oneSignalId;
-  final String name;
-  final String linkedinUrl;
-  final String photoUrl;
-  final String description;
-  final int typeId;
+  late final String name;
+  late final String linkedinUrl;
+  late final String photoUrl;
+  late final String description;
+  late final int typeId;
   final double lat;
   final double long;
-  final int maxSearchDistance;
-  final List<String> skills;
+  late final int maxSearchDistance;
+  late final List<String> skills;
   final List<String> likes;
   final List<String> unlikes;
 
@@ -32,10 +32,6 @@ class User {
       this.likes,
       this.unlikes,
       [this.reference]);
-
-  String? get userId {
-    return reference?.id;
-  }
 
   Map<String, dynamic> toMap() {
     return {
