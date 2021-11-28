@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grupolaranja20212/models/user_type.dart';
+import 'package:grupolaranja20212/utils/app_navigator.dart';
 import 'package:grupolaranja20212/view_models/user_register_view_model.dart';
 
 class UserRegisterPage extends StatefulWidget {
@@ -49,6 +50,11 @@ class _UserRegisterPage extends State<UserRegisterPage> {
     setState(() {
       _userTypeId = selectedUserTypeId ?? 0;
     });
+  }
+
+  Future _saveAndRedirectToSwipePage(BuildContext context) async {
+    // salva user no firestore
+    await AppNavigator.navigateToSwipePage(context);
   }
 
   @override
@@ -124,6 +130,11 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                     decoration:
                         const InputDecoration(hintText: "Sua descrição"),
                   ),
+                  TextButton(
+                      onPressed: () {
+                        _saveAndRedirectToSwipePage(context);
+                      },
+                      child: const Text("Gravar e ir pra tela do SWIPE"))
                 ],
               ),
             ),
