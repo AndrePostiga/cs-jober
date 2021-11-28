@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grupolaranja20212/models/user_type.dart';
 import 'package:grupolaranja20212/utils/app_navigator.dart';
@@ -18,9 +19,12 @@ class _UserRegisterPage extends State<UserRegisterPage> {
       <DropdownMenuItem<int>>[];
   int _userTypeId = 0;
   int _maxSearchDistance = 10;
+  List<String> _skillsArr = <String>[];
+
   final _nameController = TextEditingController();
   final _linkedinUrlController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final _skillsController = TextEditingController();
 
   List<DropdownMenuItem<int>> _getDropDownUserTypesItems(
       List<UserType> dropDownUserTypesItens) {
@@ -34,9 +38,21 @@ class _UserRegisterPage extends State<UserRegisterPage> {
 
   Future _initVars() async {
     var userTypes = await _userRegisterVM.getUserTypes();
+    var user = await _userRegisterVM
+        .getUserByFirebaseAuthUid(FirebaseAuth.instance.currentUser!.uid);
     setState(() {
       _dropDownUserTypesItens = _getDropDownUserTypesItems(userTypes);
-      _userTypeId = userTypes[0].id;
+      if (user != null) {
+        _nameController.text = user.name;
+        _linkedinUrlController.text = user.linkedinUrl;
+        _descriptionController.text = user.linkedinUrl;
+        _maxSearchDistance = user.maxSearchDistance;
+        _userTypeId = user.typeId;
+        _skillsArr = user.skills;
+        _skillsController.text = _skillsArr.join(",");
+      } else {
+        _userTypeId = userTypes[0].id;
+      }
     });
   }
 
@@ -107,6 +123,17 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                       return null;
                     },
                     decoration: const InputDecoration(hintText: "Nome"),
+                  ),
+                  TextFormField(
+                    controller: _nameController,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Informe suas habilidades separadas por ','";
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(
+                        hintText: "Suas Habilidades (separadas por ',')"),
                   ),
                   TextFormField(
                     controller: _linkedinUrlController,
