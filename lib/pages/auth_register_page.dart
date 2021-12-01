@@ -22,7 +22,7 @@ class _AuthRegisterPage extends State<AuthRegisterPage> {
 
     if (_formKey.currentState!.validate()) {
       final email = _emailController.text;
-      final password = _emailController.text;
+      final password = _passwordController.text;
 
       isRegistered = await _registerVM.register(email, password);
       if (isRegistered) {
