@@ -73,7 +73,7 @@ class UserService {
       return storedUser;
     }
 
-    throw Exception("Não foi possível gravar o novo usuário");
+    throw Exception("Não foi possível gravar o usuário");
   }
 
   Future<List<UserType>> getUserTypes() async {
