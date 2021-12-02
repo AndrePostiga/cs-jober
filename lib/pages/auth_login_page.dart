@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grupolaranja20212/pages/swipe_page.dart';
+import 'package:grupolaranja20212/utils/app_navigator.dart';
 import 'package:grupolaranja20212/view_models/login_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -78,6 +79,12 @@ class _AuthLoginPage extends State<AuthLoginPage> {
                   _login(context);
                 },
                 child: const Text("Login")),
+            ElevatedButton(
+              onPressed: () {
+                AppNavigator.navigateToForgotPasswordPage(context);
+              },
+              child: const Text('Esqueci minha senha'),
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(_message),

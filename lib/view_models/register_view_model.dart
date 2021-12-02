@@ -9,9 +9,7 @@ class RegisterViewModel extends ChangeNotifier {
     bool isRegistered = false;
 
     try {
-      final userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
-
+      final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
       isRegistered = userCredential.user != null;
     } on FirebaseAuthException catch (e) {
       if (e.code == "weak-password") {

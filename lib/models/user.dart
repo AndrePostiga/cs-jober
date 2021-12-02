@@ -3,15 +3,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class User {
   final String firebaseAuthUid;
   final String oneSignalId;
-  late final String name;
-  late final String linkedinUrl;
-  late final String photoUrl;
-  late final String description;
-  late final int typeId;
-  final double lat;
-  final double long;
-  late final int maxSearchDistance;
-  late final List<String> skills;
+  late String name;
+  late String linkedinUrl;
+  late String photoUrl;
+  late String description;
+  late int typeId;
+  late double lat;
+  late double long;
+  late int maxSearchDistance;
+  late List<String> skills;
   final List<String> likes;
   final List<String> unlikes;
 
@@ -63,9 +63,9 @@ class User {
         doc["lat"],
         doc["long"],
         doc["maxSearchDistance"],
-        doc["skills"],
-        doc["likes"],
-        doc["unlikes"],
+        doc["skills"].cast<String>(),
+        doc["likes"].cast<String>(),
+        doc["unlikes"].cast<String>(),
         doc.reference);
   }
 }
