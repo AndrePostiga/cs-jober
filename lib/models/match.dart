@@ -1,21 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Match {
-  final List<String> usersId;
+  final String recruiterUserId;
+  final String candidateUserId;
 
   DocumentReference? reference;
 
-  Match(this.usersId, [this.reference]);
-
-  String? get matchId {
-    return reference?.id;
-  }
+  Match(this.recruiterUserId, this.candidateUserId, [this.reference]);
 
   Map<String, dynamic> toMap() {
-    return {"usersId": usersId};
+    return {
+      "recruiterUserId": recruiterUserId,
+      "candidateUserId": candidateUserId
+    };
   }
 
   factory Match.fromSnapshot(QueryDocumentSnapshot doc) {
-    return Match(doc["usersId"], doc.reference);
+    return Match(doc["recruiterUserId"], doc["candidateUserId"], doc.reference);
   }
 }
