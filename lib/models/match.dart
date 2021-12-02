@@ -12,6 +12,7 @@ class Match {
   }
 
   factory Match.fromSnapshot(QueryDocumentSnapshot doc) {
-    return Match(doc["usersId"], doc["createdAt"], doc.reference);
+    return Match(
+        doc["usersId"].cast<String>(), doc["createdAt"], doc.reference);
   }
 }

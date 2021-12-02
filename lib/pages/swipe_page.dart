@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:grupolaranja20212/pages/user_register_page.dart';
 import 'package:grupolaranja20212/pages/welcome_page.dart';
 import 'package:grupolaranja20212/utils/app_navigator.dart';
+import 'package:grupolaranja20212/view_models/swipe_view_model.dart';
 
 class SwipePage extends StatefulWidget {
   const SwipePage({Key? key}) : super(key: key);
@@ -11,6 +13,8 @@ class SwipePage extends StatefulWidget {
 }
 
 class _SwipePage extends State<SwipePage> {
+  final SwipeViewModel _swipeVM = SwipeViewModel();
+
   @override
   void initState() {
     super.initState();
@@ -19,6 +23,21 @@ class _SwipePage extends State<SwipePage> {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const WelcomePage()),
           (Route<dynamic> route) => false);
+    }
+
+    _initPage();
+  }
+
+  Future _initPage() async {
+    var loggedUser = await _swipeVM
+        .getUserByFirebaseAuthUid(FirebaseAuth.instance.currentUser!.uid);
+
+    if (loggedUser == null) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const UserRegisterPage()),
+          (Route<dynamic> route) => false);
+    } else {
+      await _swipeVM.updateUserLocation(FirebaseAuth.instance.currentUser!.uid);
     }
   }
 
