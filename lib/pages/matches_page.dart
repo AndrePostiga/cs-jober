@@ -14,7 +14,7 @@ class MatchesPage extends StatelessWidget {
             icon: const Icon(Icons.arrow_back),
             onPressed: () => Navigator.of(context).pop(),
           ),
-          title: const Center(child: Text('Matches')),
+          title: const Text('Matches'),
         ),
         body: const ChatPage(),
         bottomNavigationBar: BottomNavigationBar(
