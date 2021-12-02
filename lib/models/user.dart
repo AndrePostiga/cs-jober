@@ -8,8 +8,8 @@ class User {
   late final String photoUrl;
   late final String description;
   late final int typeId;
-  final double lat;
-  final double long;
+  late final double lat;
+  late final double long;
   late final int maxSearchDistance;
   late final List<String> skills;
   final List<String> likes;
