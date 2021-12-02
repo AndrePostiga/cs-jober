@@ -143,12 +143,19 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                     controller: _skillsController,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return "Informe suas habilidades separadas por ','";
+                        return "Informe " +
+                            (_userTypeId == 0
+                                ? "suas habilitades"
+                                : "as habilidades que procura") +
+                            " separadas por ','";
                       }
                       return null;
                     },
-                    decoration: const InputDecoration(
-                        hintText: "Suas Habilidades (separadas por ',')"),
+                    decoration: InputDecoration(
+                        hintText: (_userTypeId == 0
+                                ? "Suas habilitades"
+                                : "Liste as habilidades que procura") +
+                            " (separadas por ',')"),
                   ),
                   TextFormField(
                     controller: _linkedinUrlController,
