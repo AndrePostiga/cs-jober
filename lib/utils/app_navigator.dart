@@ -3,7 +3,7 @@ import 'package:grupolaranja20212/pages/auth_login_page.dart';
 import 'package:grupolaranja20212/pages/auth_logout_page.dart';
 import 'package:grupolaranja20212/pages/auth_register_page.dart';
 import 'package:grupolaranja20212/pages/main_page.dart';
-import 'package:grupolaranja20212/pages/match_conversation_page.dart';
+import 'package:grupolaranja20212/pages/chat_detail_page.dart';
 import 'package:grupolaranja20212/pages/matches_map_page.dart';
 import 'package:grupolaranja20212/pages/matches_page.dart';
 import 'package:grupolaranja20212/pages/profile_page.dart';
@@ -88,13 +88,13 @@ class AppNavigator {
             fullscreenDialog: false));
   }
 
-  static Future navigateToMatchConversationPage(BuildContext context) async {
+  static Future navigateToChatDetailPage(BuildContext context) async {
     return await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => ChangeNotifierProvider(
                 create: (context) => MatchesViewModel(),
-                child: const MatchConversationPage()),
+                child: const ChatDetailPage()),
             fullscreenDialog: false));
   }
 
