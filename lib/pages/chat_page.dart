@@ -86,21 +86,21 @@ class _ChatPageState extends State<ChatPage> {
                       borderSide: BorderSide(color: Colors.grey.shade100)),
                 ),
               ),
-              ListView.builder(
-                itemCount: chatUsers.length,
-                shrinkWrap: true,
-                padding: const EdgeInsets.only(top: 16),
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index){
-                  return ConversationList(
-                    name: chatUsers[index].name,
-                    msgTxt: chatUsers[index].msgTxt,
-                    imageUrl: chatUsers[index].imageUrl,
-                    time: chatUsers[index].time,
-                    isMessageRead: (index == 0 || index == 3)?true:false,
-                  );
-                },
-              ),
+            ),
+            ListView.builder(
+              itemCount: chatUsers.length,
+              shrinkWrap: true,
+              padding: const EdgeInsets.only(top: 16),
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index){
+                return ConversationList(
+                  name: chatUsers[index].name,
+                  msgTxt: chatUsers[index].msgTxt,
+                  imageUrl: chatUsers[index].imageUrl,
+                  time: chatUsers[index].time,
+                  isMessageRead: (index == 0 || index == 3)?true:false,
+                );
+              },
             ),
           ],
         ),
