@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grupolaranja20212/models/chat_message_model.dart';
+import 'package:grupolaranja20212/utils/app_location.dart';
+import 'package:grupolaranja20212/utils/app_navigator.dart';
 
 class MatchChatPage extends StatefulWidget {
   const MatchChatPage({Key? key}) : super(key: key);
@@ -30,44 +32,47 @@ class _MatchChatPage extends State<MatchChatPage> {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.cyanAccent,
         flexibleSpace: SafeArea(
-            child: Container(
-          padding: const EdgeInsets.only(right: 16),
-          child: Row(
-            children: <Widget>[
-              IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(
-                  Icons.arrow_back,
-                  color: Colors.black,
+            child: GestureDetector(
+          onTap: () => {AppNavigator.navigateToProfilePage(context)},
+          child: Container(
+            padding: const EdgeInsets.only(right: 16),
+            child: Row(
+              children: <Widget>[
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.black,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                width: 2,
-              ),
-              const CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "https://randomuser.me/api/portraits/men/5.jpg"),
-                maxRadius: 20,
-              ),
-              const SizedBox(
-                width: 12,
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const <Widget>[
-                    Text(
-                      "John Doe",
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                    ),
-                  ],
+                const SizedBox(
+                  width: 2,
                 ),
-              ),
-            ],
+                const CircleAvatar(
+                  backgroundImage: NetworkImage(
+                      "https://randomuser.me/api/portraits/men/5.jpg"),
+                  maxRadius: 20,
+                ),
+                const SizedBox(
+                  width: 12,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const <Widget>[
+                      Text(
+                        "John Doe",
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         )),
       ),
