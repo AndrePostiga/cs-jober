@@ -23,6 +23,9 @@ dependencies:
   fluttertoast: ^8.0.8
   firebase_auth: ^3.2.0
   location: ^4.2.0
+  image_picker: ^0.8.4+4
+  firebase_storage: ^10.2.3
+  uuid: ^3.0.5
 
 dev_dependencies:
   flutter_test:
