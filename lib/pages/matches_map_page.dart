@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:grupolaranja20212/utils/app_navigator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MatchesMapPage extends StatelessWidget {
   const MatchesMapPage({Key? key}) : super(key: key);
@@ -8,16 +8,15 @@ class MatchesMapPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-          child: Column(
-        children: [
-          ElevatedButton(
-            onPressed: () {
-              AppNavigator.navigateToProfilePage(context);
-            },
-            child: const Text('PERFIL DE UM USUARIO'),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: const GoogleMap(
+            initialCameraPosition:
+                CameraPosition(target: LatLng(40.7128, -74.0060), zoom: 12.0),
           ),
-        ],
-      )),
+        ),
+      ),
     );
   }
 }
