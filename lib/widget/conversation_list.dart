@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:grupolaranja20212/pages/chat_detail_page.dart';
+import 'package:grupolaranja20212/pages/match_chat_page.dart';
 
 class ConversationList extends StatefulWidget {
   final String name;
@@ -24,9 +24,9 @@ class _ConversationListState extends State<ConversationList> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder:(context){
-          return const ChatDetailPage();
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return const MatchChatPage();
         }));
       },
       child: Container(

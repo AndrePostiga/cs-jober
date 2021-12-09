@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:grupolaranja20212/models/chat_message_model.dart';
 
-class ChatDetailPage extends StatefulWidget {
-  const ChatDetailPage({Key? key}) : super(key: key);
+class MatchChatPage extends StatefulWidget {
+  const MatchChatPage({Key? key}) : super(key: key);
 
   @override
-  _ChatDetailPageState createState() => _ChatDetailPageState();
+  _MatchChatPage createState() => _MatchChatPage();
 }
 
 List<ChatMessage> messages = [
@@ -21,14 +21,14 @@ List<ChatMessage> messages = [
       messageType: "sender")
 ];
 
-class _ChatDetailPageState extends State<ChatDetailPage> {
+class _MatchChatPage extends State<MatchChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.cyanAccent,
         flexibleSpace: SafeArea(
             child: Container(
           padding: const EdgeInsets.only(right: 16),
@@ -48,7 +48,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
               ),
               const CircleAvatar(
                 backgroundImage: NetworkImage(
-                    "<https://randomuser.me/api/portraits/men/5.jpg>"),
+                    "https://randomuser.me/api/portraits/men/5.jpg"),
                 maxRadius: 20,
               ),
               const SizedBox(
@@ -64,18 +64,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
-                    SizedBox(
-                      height: 6,
-                    ),
-                    Text(
-                      "Online",
-                      style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-                    ),
                   ],
                 ),
               ),
-              const Icon(Icons.settings, color: Colors.black54),
             ],
           ),
         )),
@@ -121,25 +112,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
               color: Colors.white,
               child: Row(
                 children: <Widget>[
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                        color: Colors.lightBlue,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: const Icon(
-                        Icons.add,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
                   const Expanded(
                     child: TextField(
                       decoration: InputDecoration(

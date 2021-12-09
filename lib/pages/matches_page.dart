@@ -1,8 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:grupolaranja20212/pages/chat_page.dart';
+import 'package:grupolaranja20212/pages/matches_chat_page.dart';
+import 'package:grupolaranja20212/pages/matches_map_page.dart';
 
-class MatchesPage extends StatelessWidget {
+class MatchesPage extends StatefulWidget {
   const MatchesPage({Key? key}) : super(key: key);
+
+  @override
+  _MatchesPage createState() => _MatchesPage();
+}
+
+class _MatchesPage extends State<MatchesPage> {
+  int _selectedIndex = 0;
+
+  static const List<Widget> _widgetOptions = <Widget>[
+    MatchesChatPage(),
+    MatchesMapPage()
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +35,10 @@ class MatchesPage extends StatelessWidget {
           ),
           title: const Text('Matches'),
         ),
-        body: const ChatPage(),
+        body: _widgetOptions.elementAt(_selectedIndex),
         bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
           selectedItemColor: Colors.purple,
           unselectedItemColor: Colors.grey.shade500,
           selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600),
@@ -28,10 +49,6 @@ class MatchesPage extends StatelessWidget {
                 icon: Icon(Icons.message), label: ("Conversas")),
             BottomNavigationBarItem(
                 icon: Icon(Icons.location_on), label: ("Mapa")),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_box),
-              label: ("Perfil"),
-            ),
           ],
         ),
       ),

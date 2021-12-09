@@ -6,28 +6,18 @@ class MatchesMapPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Mapa',
-      home: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => Navigator.of(context).pop(),
+    return Scaffold(
+      body: Center(
+          child: Column(
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              AppNavigator.navigateToProfilePage(context);
+            },
+            child: const Text('PERFIL DE UM USUARIO'),
           ),
-          title: const Text('Mapa'),
-        ),
-        body: Center(
-            child: Column(
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                AppNavigator.navigateToProfilePage(context);
-              },
-              child: const Text('PERFIL DE UM USUARIO'),
-            ),
-          ],
-        )),
-      ),
+        ],
+      )),
     );
   }
 }
