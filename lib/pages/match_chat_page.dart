@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:grupolaranja20212/models/chat_message_model.dart';
-import 'package:grupolaranja20212/utils/app_location.dart';
 import 'package:grupolaranja20212/utils/app_navigator.dart';
 
 class MatchChatPage extends StatefulWidget {
