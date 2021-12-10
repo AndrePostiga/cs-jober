@@ -30,6 +30,7 @@ class SwipeViewModel extends ChangeNotifier {
         .where("firebaseAuthUid", whereNotIn: user.likes)
         .where("firebaseAuthUid", whereNotIn: user.unlikes)
         .where("firebaseAuthUid", whereNotIn: previousFoundedUsersIds)
+        .where("typeId", isNotEqualTo: user.typeId)
         .limit(maxItensToGet)
         .get();
 
