@@ -74,13 +74,16 @@ class SwipeViewModel extends ChangeNotifier {
 
   bool _containsAny(List<String> listaParaVerificarSeContemAlgum,
       List<String> listaParaChecarElementos) {
+    var result = true;
+
     for (var element in listaParaChecarElementos) {
+      result = false;
       if (listaParaVerificarSeContemAlgum.contains(element)) {
         return true;
       }
     }
 
-    return false;
+    return result;
   }
 
   double _distanceBetweenTwoLatAndLongs(
