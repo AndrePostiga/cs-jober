@@ -8,7 +8,7 @@ class Match {
   Match(this.usersId, this.createdAt, [this.reference]);
 
   Map<String, dynamic> toMap() {
-    return {"recruiterUserId": usersId, "createdAt": createdAt};
+    return {"usersId": usersId, "createdAt": createdAt};
   }
 
   factory Match.fromSnapshot(QueryDocumentSnapshot doc) {
