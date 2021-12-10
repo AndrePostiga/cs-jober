@@ -4,6 +4,7 @@ import 'package:grupolaranja20212/pages/user_register_page.dart';
 import 'package:grupolaranja20212/pages/welcome_page.dart';
 import 'package:grupolaranja20212/utils/app_navigator.dart';
 import 'package:grupolaranja20212/view_models/swipe_view_model.dart';
+import 'package:grupolaranja20212/models/user.dart' as user_model;
 
 class SwipePage extends StatefulWidget {
   const SwipePage({Key? key}) : super(key: key);
@@ -14,6 +15,8 @@ class SwipePage extends StatefulWidget {
 
 class _SwipePage extends State<SwipePage> {
   final SwipeViewModel _swipeVM = SwipeViewModel();
+
+  late List<user_model.User> _usersToSwipe = <user_model.User>[];
 
   @override
   void initState() {
@@ -38,6 +41,12 @@ class _SwipePage extends State<SwipePage> {
           (Route<dynamic> route) => false);
     } else {
       await _swipeVM.updateUserLocation(FirebaseAuth.instance.currentUser!.uid);
+
+      var usersToSwipe = await _swipeVM.getUsersToSwipe(loggedUser, null);
+
+      setState(() {
+        _usersToSwipe = usersToSwipe;
+      });
     }
   }
 

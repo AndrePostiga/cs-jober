@@ -13,7 +13,7 @@ class SwipeViewModel extends ChangeNotifier {
     return await UserService().updateUserLatLong(firebaseAuthUid);
   }
 
-  Future<List<User>> getNotUnlikedAndNotLikedUsers(
+  Future<List<User>> getUsersToSwipe(
       User user, List<User>? previousFoundedUsers) async {
     previousFoundedUsers ??= <User>[];
 
@@ -25,15 +25,28 @@ class SwipeViewModel extends ChangeNotifier {
 
     var maxItensToGet = 5;
 
-    var querySnapShot = await FirebaseFirestore.instance
-        .collection("users")
-        .where("firebaseAuthUid", whereNotIn: user.likes)
-        .where("firebaseAuthUid", whereNotIn: user.unlikes)
-        .where("firebaseAuthUid", whereNotIn: previousFoundedUsersIds)
-        .where("typeId", isNotEqualTo: user.typeId)
-        .where("skills", arrayContainsAny: user.skills)
-        .limit(maxItensToGet)
-        .get();
+    Query query = FirebaseFirestore.instance
+        .collection('users')
+        .where("typeId", isNotEqualTo: user.typeId);
+
+    if (user.likes.isNotEmpty) {
+      query = query.where("firebaseAuthUid", whereNotIn: user.likes);
+    }
+
+    if (user.unlikes.isNotEmpty) {
+      query = query.where("firebaseAuthUid", whereNotIn: user.unlikes);
+    }
+
+    if (previousFoundedUsersIds.isNotEmpty) {
+      query =
+          query.where("firebaseAuthUid", whereNotIn: previousFoundedUsersIds);
+    }
+
+    if (user.skills.isNotEmpty) {
+      query = query.where("skills", arrayContainsAny: user.skills);
+    }
+
+    var querySnapShot = await query.limit(maxItensToGet).get();
 
     var foundedUsers =
         querySnapShot.docs.map((e) => User.fromSnapshot(e)).toList();
@@ -46,27 +59,26 @@ class SwipeViewModel extends ChangeNotifier {
 
     for (var newFoundedUser in foundedUsers) {
       if (user.maxSearchDistance.toDouble() >=
-          distanceBetweenTwoLatAndLongs(
+          _distanceBetweenTwoLatAndLongs(
               user.lat, user.long, newFoundedUser.lat, newFoundedUser.long)) {
         usersToReturn.add(newFoundedUser);
       }
     }
 
     if (usersToReturn.length < maxItensToGet) {
-      usersToReturn
-          .addAll(await getNotUnlikedAndNotLikedUsers(user, usersToReturn));
+      usersToReturn.addAll(await getUsersToSwipe(user, foundedUsers));
     }
 
     return usersToReturn;
   }
 
-  double distanceBetweenTwoLatAndLongs(
+  double _distanceBetweenTwoLatAndLongs(
       double lat1, double lon1, double lat2, double lon2) {
     double theta = lon1 - lon2;
-    double dist = sin(deg2rad(lat1)) * sin(deg2rad(lat2)) +
-        cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * cos(deg2rad(theta));
+    double dist = sin(_deg2rad(lat1)) * sin(_deg2rad(lat2)) +
+        cos(_deg2rad(lat1)) * cos(_deg2rad(lat2)) * cos(_deg2rad(theta));
     dist = acos(dist);
-    dist = rad2deg(dist);
+    dist = _rad2deg(dist);
     dist = dist * 60 * 1.1515;
 
     dist = dist * 1.609344;
@@ -74,11 +86,11 @@ class SwipeViewModel extends ChangeNotifier {
     return dist;
   }
 
-  double deg2rad(double deg) {
+  double _deg2rad(double deg) {
     return (deg * pi / 180.0);
   }
 
-  double rad2deg(double rad) {
+  double _rad2deg(double rad) {
     return (rad * 180.0 / pi);
   }
 }
