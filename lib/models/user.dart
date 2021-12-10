@@ -14,6 +14,7 @@ class User {
   late List<String> skills;
   final List<String> likes;
   final List<String> unlikes;
+  late String birthDate;
 
   DocumentReference? reference;
 
@@ -31,6 +32,7 @@ class User {
       this.skills,
       this.likes,
       this.unlikes,
+      this.birthDate,
       [this.reference]);
 
   Map<String, dynamic> toMap() {
@@ -47,7 +49,8 @@ class User {
       "maxSearchDistance": maxSearchDistance,
       "skills": skills,
       "likes": likes,
-      "unlikes": unlikes
+      "unlikes": unlikes,
+      "birthDate": birthDate
     };
   }
 
@@ -66,6 +69,7 @@ class User {
         doc["skills"].cast<String>(),
         doc["likes"].cast<String>(),
         doc["unlikes"].cast<String>(),
+        doc["birthDate"],
         doc.reference);
   }
 }

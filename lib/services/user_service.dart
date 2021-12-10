@@ -34,7 +34,8 @@ class UserService {
       int typeId,
       String description,
       int maxSearchDistance,
-      List<String> skills) async {
+      List<String> skills,
+      String birthDate) async {
     var oldUser = await getUserByFirebaseAuthUid(firebaseAuthUid);
 
     if (oldUser == null) {
@@ -49,7 +50,10 @@ class UserService {
           0,
           0,
           maxSearchDistance,
-          skills, <String>[], <String>[]);
+          skills,
+          <String>[],
+          <String>[],
+          birthDate);
 
       await FirebaseFirestore.instance.collection("users").add(newUser.toMap());
     } else {
@@ -60,6 +64,7 @@ class UserService {
       oldUser.description = description;
       oldUser.maxSearchDistance = maxSearchDistance;
       oldUser.skills = skills;
+      oldUser.birthDate = birthDate;
 
       await FirebaseFirestore.instance
           .collection("users")

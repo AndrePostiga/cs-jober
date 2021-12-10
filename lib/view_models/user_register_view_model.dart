@@ -17,7 +17,7 @@ class UserRegisterViewModel extends ChangeNotifier {
 
   Future<String> uploadPhoto(File file) async {
     String downloadURL =
-        "https://firebasestorage.googleapis.com/v0/b/jober-7722a.appspot.com/o/images%2Favatar.png?alt=media&token=0b1f609f-071d-47f1-a4c3-881971b54d67";
+        "https://firebasestorage.googleapis.com/v0/b/laranja20212.appspot.com/o/avatar.png?alt=media&token=780ef04c-eb05-4837-89ff-f93302d7db41";
 
     const uuid = Uuid();
     final filePath = "/images/${uuid.v4()}.jpg";
@@ -40,7 +40,8 @@ class UserRegisterViewModel extends ChangeNotifier {
       int typeId,
       String description,
       int maxSearchDistance,
-      List<String> skills) async {
+      List<String> skills,
+      String birthDate) async {
     return await UserService().createOrUpdateUserByFirebaseAuthUid(
         firebaseAuthUid,
         name,
@@ -49,6 +50,7 @@ class UserRegisterViewModel extends ChangeNotifier {
         typeId,
         description,
         maxSearchDistance,
-        skills);
+        skills,
+        birthDate);
   }
 }

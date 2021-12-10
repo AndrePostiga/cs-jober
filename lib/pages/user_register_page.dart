@@ -20,7 +20,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
   final _formKey = GlobalKey<FormState>();
 
   String _image =
-      "https://firebasestorage.googleapis.com/v0/b/jober-7722a.appspot.com/o/images%2Favatar.png?alt=media&token=0b1f609f-071d-47f1-a4c3-881971b54d67";
+      "https://firebasestorage.googleapis.com/v0/b/laranja20212.appspot.com/o/avatar.png?alt=media&token=780ef04c-eb05-4837-89ff-f93302d7db41";
 
   String _btnStoreMsg = "Gravar e ir pra tela do SWIPE";
 
@@ -34,6 +34,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
   final _linkedinUrlController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _skillsController = TextEditingController();
+  final _birthDateController = TextEditingController();
 
   List<DropdownMenuItem<int>> _getDropDownUserTypesItems(
       List<UserType> dropDownUserTypesItens) {
@@ -90,7 +91,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
       _dropDownUserTypesItens = _getDropDownUserTypesItems(userTypes);
       if (user != null) {
         _image = user.photoUrl.isEmpty
-            ? "https://firebasestorage.googleapis.com/v0/b/jober-7722a.appspot.com/o/images%2Favatar.png?alt=media&token=0b1f609f-071d-47f1-a4c3-881971b54d67"
+            ? "https://firebasestorage.googleapis.com/v0/b/laranja20212.appspot.com/o/avatar.png?alt=media&token=780ef04c-eb05-4837-89ff-f93302d7db41"
             : user.photoUrl;
         _nameController.text = user.name;
         _linkedinUrlController.text = user.linkedinUrl;
@@ -99,6 +100,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
         _userTypeId = user.typeId;
         _skillsArr = user.skills;
         _skillsController.text = _skillsArr.join(",");
+        _birthDateController.text = user.birthDate;
       } else {
         _userTypeId = userTypes[0].id;
       }
@@ -127,7 +129,8 @@ class _UserRegisterPage extends State<UserRegisterPage> {
           _userTypeId,
           _descriptionController.text,
           _maxSearchDistance,
-          _skillsController.text.toUpperCase().split(",").toSet().toList());
+          _skillsController.text.toUpperCase().split(",").toSet().toList(),
+          _birthDateController.text);
     } catch (e) {
       _btnStoreMsg = e.toString();
     }
@@ -244,6 +247,17 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                     },
                     decoration:
                         const InputDecoration(hintText: "URL do seu LinkedIn"),
+                  ),
+                  TextFormField(
+                    controller: _birthDateController,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Informe sua data de nascimento";
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(
+                        hintText: "Sua data de nascimento DD/MM/YYYY"),
                   ),
                   TextFormField(
                     controller: _descriptionController,
