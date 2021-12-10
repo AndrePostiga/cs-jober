@@ -127,7 +127,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
           _userTypeId,
           _descriptionController.text,
           _maxSearchDistance,
-          _skillsController.text.split(","));
+          _skillsController.text.toUpperCase().split(","));
     } catch (e) {
       _btnStoreMsg = e.toString();
     }

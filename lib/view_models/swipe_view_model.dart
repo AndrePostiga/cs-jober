@@ -25,28 +25,26 @@ class SwipeViewModel extends ChangeNotifier {
 
     var maxItensToGet = 5;
 
-    Query query = FirebaseFirestore.instance
-        .collection('users')
-        .where("typeId", isNotEqualTo: user.typeId);
+    var firebaseAuthUidToNotGet = <String>[user.firebaseAuthUid];
 
     if (user.likes.isNotEmpty) {
-      query = query.where("firebaseAuthUid", whereNotIn: user.likes);
+      firebaseAuthUidToNotGet.addAll(user.likes);
     }
 
     if (user.unlikes.isNotEmpty) {
-      query = query.where("firebaseAuthUid", whereNotIn: user.unlikes);
+      firebaseAuthUidToNotGet.addAll(user.unlikes);
     }
 
     if (previousFoundedUsersIds.isNotEmpty) {
-      query =
-          query.where("firebaseAuthUid", whereNotIn: previousFoundedUsersIds);
+      firebaseAuthUidToNotGet.addAll(previousFoundedUsersIds);
     }
 
-    if (user.skills.isNotEmpty) {
-      query = query.where("skills", arrayContainsAny: user.skills);
-    }
-
-    var querySnapShot = await query.limit(maxItensToGet).get();
+    var querySnapShot = await FirebaseFirestore.instance
+        .collection('users')
+        .where("firebaseAuthUid",
+            whereNotIn: firebaseAuthUidToNotGet.toSet().toList())
+        .limit(maxItensToGet)
+        .get();
 
     var foundedUsers =
         querySnapShot.docs.map((e) => User.fromSnapshot(e)).toList();
@@ -59,8 +57,10 @@ class SwipeViewModel extends ChangeNotifier {
 
     for (var newFoundedUser in foundedUsers) {
       if (user.maxSearchDistance.toDouble() >=
-          _distanceBetweenTwoLatAndLongs(
-              user.lat, user.long, newFoundedUser.lat, newFoundedUser.long)) {
+              _distanceBetweenTwoLatAndLongs(user.lat, user.long,
+                  newFoundedUser.lat, newFoundedUser.long) &&
+          newFoundedUser.typeId != user.typeId &&
+          _containsAny(newFoundedUser.skills, user.skills)) {
         usersToReturn.add(newFoundedUser);
       }
     }
@@ -70,6 +70,17 @@ class SwipeViewModel extends ChangeNotifier {
     }
 
     return usersToReturn;
+  }
+
+  bool _containsAny(List<String> listaParaVerificarSeContemAlgum,
+      List<String> listaParaChecarElementos) {
+    for (var element in listaParaChecarElementos) {
+      if (listaParaVerificarSeContemAlgum.contains(element)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   double _distanceBetweenTwoLatAndLongs(

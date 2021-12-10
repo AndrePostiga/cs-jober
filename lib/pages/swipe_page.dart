@@ -61,6 +61,7 @@ class _SwipePage extends State<SwipePage> {
         body: Center(
             child: Column(
           children: [
+            Text('Usuarios do swipe recuperados...' + _usersToSwipe.join(",")),
             ElevatedButton(
               onPressed: () {
                 AppNavigator.navigateToLogoutPage(context);
