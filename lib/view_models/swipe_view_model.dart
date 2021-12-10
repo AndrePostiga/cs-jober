@@ -55,18 +55,19 @@ class SwipeViewModel extends ChangeNotifier {
       return usersToReturn;
     }
 
-    var maxSearchDistance = user.maxSearchDistance.toDouble();
-    if (maxSearchDistance == 0) {
-      maxSearchDistance = 1;
-    }
-
     for (var newFoundedUser in foundedUsers) {
-      if (maxSearchDistance >=
-              _distanceBetweenTwoLatAndLongs(user.lat, user.long,
-                  newFoundedUser.lat, newFoundedUser.long) &&
-          newFoundedUser.typeId != user.typeId &&
+      if (newFoundedUser.typeId != user.typeId &&
           _containsAny(newFoundedUser.skills, user.skills)) {
-        usersToReturn.add(newFoundedUser);
+        var maxSearchDistance = user.maxSearchDistance.toDouble();
+        if (maxSearchDistance == 0) {
+          maxSearchDistance = 1;
+        }
+
+        if (maxSearchDistance >=
+            _distanceBetweenTwoLatAndLongs(
+                user.lat, user.long, newFoundedUser.lat, newFoundedUser.long)) {
+          usersToReturn.add(newFoundedUser);
+        }
       }
     }
 
