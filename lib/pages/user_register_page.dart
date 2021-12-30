@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:grupolaranja20212/pages/auth_logout_page.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:grupolaranja20212/models/user_type.dart';
@@ -143,9 +144,6 @@ class _UserRegisterPage extends State<UserRegisterPage> {
     return MaterialApp(
       title: 'Registro do Usuário',
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Registro do Usuário'),
-        ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
@@ -270,11 +268,38 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                     decoration:
                         const InputDecoration(hintText: "Sua descrição"),
                   ),
-                  TextButton(
-                      onPressed: () {
-                        _saveAndRedirectToSwipePage(context);
-                      },
-                      child: Text(_btnStoreMsg))
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 70.0,
+                        child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.orange),
+                            ),
+                            onPressed: () {
+                              _saveAndRedirectToSwipePage(context);
+                            },
+                            child: Text(_btnStoreMsg)),
+                      ),
+                      SizedBox(
+                        width: 10.0,
+                      ),
+                      SizedBox(
+                        height: 70.0,
+                        child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.orange),
+                            ),
+                            onPressed: () {
+                              AppNavigator.navigateToLogoutPage(context);
+                            },
+                            child: const Text('logout')),
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),

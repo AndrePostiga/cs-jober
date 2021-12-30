@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:grupolaranja20212/widget/swipe_card.dart';
 import 'package:grupolaranja20212/provider/card_provider.dart';
+import 'package:grupolaranja20212/pages/matches_page.dart';
+import 'package:grupolaranja20212/pages/user_register_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -11,6 +13,35 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  int _selectedIndex = 0;
+
+  static final List<AppBar> _titleOptions = <AppBar>[
+    AppBar(
+      title: const Text('Swipe'),
+      backgroundColor: Colors.orange,
+    ),
+    AppBar(
+      title: const Text('Matches'),
+      backgroundColor: Colors.orange,
+    ),
+    AppBar(
+      title: const Text('Perfil'),
+      backgroundColor: Colors.orange,
+    ),
+  ];
+
+  late final List<Widget> _widgetOptions = <Widget>[
+    swipe(),
+    MatchesPage(),
+    UserRegisterPage()
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) => Container(
       decoration: BoxDecoration(
@@ -21,39 +52,60 @@ class _MainPageState extends State<MainPage> {
         ),
       ),
       child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: SafeArea(
-            child: Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    const Text(
-                      'JOBer',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 42,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    SizedBox(
-                      height: 580,
-                      child:
-                          buildCards(), //SizedBox(height: 500), /*buildCards()*/
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    buildButtons()
-                  ],
-                )
-                //buildCards(),
+        appBar: _titleOptions.elementAt(_selectedIndex),
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: _widgetOptions.elementAt(_selectedIndex),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.auto_awesome_motion_rounded,
+                  semanticLabel: 'Swipe',
                 ),
-          )));
+                label: 'Swipe'),
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.favorite_rounded,
+                  semanticLabel: 'Matchs',
+                ),
+                label: 'Matchs'),
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.person_rounded,
+                  semanticLabel: 'Perfil',
+                ),
+                label: 'Perfil'),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.orange,
+          onTap: _onItemTapped,
+        ),
+      ));
+
+  Widget swipe() {
+    return Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 16,
+            ),
+            SizedBox(
+              height: 580,
+              child: buildCards(), //SizedBox(height: 500), /*buildCards()*/
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            buildButtons()
+          ],
+        )
+        //buildCards(),
+        );
+  }
 
   Widget buildCards() {
     final provider = Provider.of<CardProvider>(context);
