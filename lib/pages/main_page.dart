@@ -32,8 +32,8 @@ class _MainPageState extends State<MainPage> {
 
   late final List<Widget> _widgetOptions = <Widget>[
     swipe(),
-    MatchesPage(),
-    UserRegisterPage()
+    const MatchesPage(),
+    const UserRegisterPage()
   ];
 
   void _onItemTapped(int index) {

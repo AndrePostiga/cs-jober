@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:grupolaranja20212/pages/auth_logout_page.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:grupolaranja20212/models/user_type.dart';
@@ -283,7 +282,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                             },
                             child: Text(_btnStoreMsg)),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10.0,
                       ),
                       SizedBox(

@@ -49,42 +49,40 @@ class _MatchesChatPage extends State<MatchesChatPage> {
   ];
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SafeArea(
-                child: Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const <Widget>[
-                  Text(
-                    "Conversas",
-                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            )),
-            ListView.builder(
-              itemCount: chatUsers.length,
-              shrinkWrap: true,
-              padding: const EdgeInsets.only(top: 16),
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return ConversationList(
-                  name: chatUsers[index].name,
-                  msgTxt: chatUsers[index].msgTxt,
-                  imageUrl: chatUsers[index].imageUrl,
-                  time: chatUsers[index].time,
-                  isMessageRead: (index == 0 || index == 3) ? true : false,
-                );
-              },
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          SafeArea(
+              child: Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const <Widget>[
+                Text(
+                  "Conversas",
+                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
-          ],
-        ),
+          )),
+          ListView.builder(
+            itemCount: chatUsers.length,
+            shrinkWrap: true,
+            padding: const EdgeInsets.only(top: 16),
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return ConversationList(
+                name: chatUsers[index].name,
+                msgTxt: chatUsers[index].msgTxt,
+                imageUrl: chatUsers[index].imageUrl,
+                time: chatUsers[index].time,
+                isMessageRead: (index == 0 || index == 3) ? true : false,
+              );
+            },
+          ),
+        ],
       ),
     );
   }
