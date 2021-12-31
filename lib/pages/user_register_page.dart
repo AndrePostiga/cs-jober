@@ -22,7 +22,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
   String _image =
       "https://firebasestorage.googleapis.com/v0/b/laranja20212.appspot.com/o/avatar.png?alt=media&token=780ef04c-eb05-4837-89ff-f93302d7db41";
 
-  String _btnStoreMsg = "Gravar e ir pra tela do SWIPE";
+  String _btnStoreMsg = "Gravar";
 
   List<DropdownMenuItem<int>> _dropDownUserTypesItens =
       <DropdownMenuItem<int>>[];
@@ -119,7 +119,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
     });
   }
 
-  Future _saveAndRedirectToSwipePage(BuildContext context) async {
+  Future _save(BuildContext context) async {
     try {
       await _userRegisterVM.createOrUpdateUserByFirebaseAuthUid(
           FirebaseAuth.instance.currentUser!.uid,
@@ -131,11 +131,15 @@ class _UserRegisterPage extends State<UserRegisterPage> {
           _maxSearchDistance,
           _skillsController.text.toUpperCase().split(",").toSet().toList(),
           _birthDateController.text);
-    } catch (e) {
-      _btnStoreMsg = e.toString();
-    }
 
-    await AppNavigator.navigateToSwipePage(context);
+      setState(() {
+        _btnStoreMsg = "Gravação realizada com sucesso!";
+      });
+    } catch (e) {
+      setState(() {
+        _btnStoreMsg = e.toString();
+      });
+    }
   }
 
   @override
@@ -278,7 +282,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                                   Colors.orange),
                             ),
                             onPressed: () {
-                              _saveAndRedirectToSwipePage(context);
+                              _save(context);
                             },
                             child: Text(_btnStoreMsg)),
                       ),

@@ -1,9 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:grupolaranja20212/pages/welcome_page.dart';
+import 'package:grupolaranja20212/view_models/swipe_view_model.dart';
 import 'package:grupolaranja20212/widget/swipe_card.dart';
 import 'package:grupolaranja20212/provider/card_provider.dart';
 import 'package:grupolaranja20212/pages/matches_page.dart';
 import 'package:grupolaranja20212/pages/user_register_page.dart';
+import 'package:grupolaranja20212/models/user.dart' as user_model;
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -13,6 +16,9 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  final SwipeViewModel _swipeVM = SwipeViewModel();
+  final CardProvider _cardProvider = CardProvider();
+
   int _selectedIndex = 0;
 
   static final List<AppBar> _titleOptions = <AppBar>[
@@ -40,6 +46,42 @@ class _MainPageState extends State<MainPage> {
     setState(() {
       _selectedIndex = index;
     });
+    _getUsersToSwipeAndUpdateLocationIfItcouldBeDone();
+  }
+
+  late List<user_model.User> _usersToSwipe = <user_model.User>[];
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (FirebaseAuth.instance.currentUser == null) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const WelcomePage()),
+          (Route<dynamic> route) => false);
+    }
+
+    _getUsersToSwipeAndUpdateLocationIfItcouldBeDone();
+  }
+
+  Future _getUsersToSwipeAndUpdateLocationIfItcouldBeDone() async {
+    var loggedUser = await _swipeVM
+        .getUserByFirebaseAuthUid(FirebaseAuth.instance.currentUser!.uid);
+
+    if (loggedUser == null) {
+      setState(() {
+        // redir pro register page
+        _selectedIndex = 2;
+      });
+    } else {
+      await _swipeVM.updateUserLocation(FirebaseAuth.instance.currentUser!.uid);
+
+      var usersToSwipe = await _swipeVM.getUsersToSwipe(loggedUser, null);
+
+      setState(() {
+        _usersToSwipe = usersToSwipe;
+      });
+    }
   }
 
   @override
@@ -68,9 +110,9 @@ class _MainPageState extends State<MainPage> {
             BottomNavigationBarItem(
                 icon: Icon(
                   Icons.favorite_rounded,
-                  semanticLabel: 'Matchs',
+                  semanticLabel: 'Matches',
                 ),
-                label: 'Matchs'),
+                label: 'Matches'),
             BottomNavigationBarItem(
                 icon: Icon(
                   Icons.person_rounded,
@@ -108,33 +150,20 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget buildCards() {
-    final provider = Provider.of<CardProvider>(context);
-    final urlImages = provider.urlImages;
+    final urlImages = _cardProvider.urlImages;
 
-    return urlImages.isEmpty
-        ? Center(
-            child: ElevatedButton(
-              child: const Text('Reinicia Lista'),
-              onPressed: () {
-                final provider =
-                    Provider.of<CardProvider>(context, listen: false);
-                provider.resetUsers();
-              },
-            ),
-          )
-        : Stack(
-            children: urlImages
-                .map((urlImage) => SwipeCard(
-                      urlImage: urlImage,
-                      isFront: urlImages.last == urlImage,
-                    ))
-                .toList(),
-          );
+    return Stack(
+      children: urlImages
+          .map((urlImage) => SwipeCard(
+                urlImage: urlImage,
+                isFront: urlImages.last == urlImage,
+              ))
+          .toList(),
+    );
   }
 
   Widget buildButtons() {
-    final provider = Provider.of<CardProvider>(context);
-    final status = provider.getStatus();
+    final status = _cardProvider.getStatus();
     final isLike = status == CardStatus.like;
     final isDislike = status == CardStatus.dislike;
     final isSkip = status == CardStatus.skip;
@@ -149,8 +178,7 @@ class _MainPageState extends State<MainPage> {
             backgroundColor: getColor(Colors.white, Colors.red, isDislike),
           ),
           onPressed: () {
-            final provider = Provider.of<CardProvider>(context, listen: false);
-            provider.dislike();
+            _cardProvider.dislike();
           },
         ),
         ElevatedButton(
@@ -163,8 +191,7 @@ class _MainPageState extends State<MainPage> {
             backgroundColor: getColor(Colors.white, Colors.orange, isSkip),
           ),
           onPressed: () {
-            final provider = Provider.of<CardProvider>(context, listen: false);
-            provider.skip();
+            _cardProvider.skip();
           },
         ),
         ElevatedButton(
@@ -177,8 +204,7 @@ class _MainPageState extends State<MainPage> {
             backgroundColor: getColor(Colors.white, Colors.teal, isLike),
           ),
           onPressed: () {
-            final provider = Provider.of<CardProvider>(context, listen: false);
-            provider.like();
+            _cardProvider.like();
           },
         ),
       ],

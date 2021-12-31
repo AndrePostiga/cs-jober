@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:grupolaranja20212/pages/swipe_page.dart';
+import 'package:grupolaranja20212/pages/main_page.dart';
 import 'package:grupolaranja20212/utils/app_navigator.dart';
 import 'package:grupolaranja20212/view_models/login_view_model.dart';
 import 'package:provider/provider.dart';
@@ -40,8 +40,8 @@ class _AuthLoginPage extends State<AuthLoginPage> {
       final isLoggedIn = await _loginVM.login(email, password);
       if (isLoggedIn) {
         // on successful login take the user to the main page
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const SwipePage()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => const MainPage()));
       } else {
         setState(() {
           _message = _loginVM.message;
