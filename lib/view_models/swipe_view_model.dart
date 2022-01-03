@@ -1,18 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:grupolaranja20212/models/user.dart';
-import 'package:grupolaranja20212/services/user_service.dart';
 import 'dart:math' show cos, pi, sin, acos;
 
 class SwipeViewModel extends ChangeNotifier {
-  Future<User?> getUserByFirebaseAuthUid(String firebaseAuthUid) async {
-    return await UserService().getUserByFirebaseAuthUid(firebaseAuthUid);
-  }
-
-  Future<User?> updateUserLocation(String firebaseAuthUid) async {
-    return await UserService().updateUserLatLong(firebaseAuthUid);
-  }
-
   Future<List<User>> getUsersToSwipe(
       User user, List<User>? previousFoundedUsers) async {
     previousFoundedUsers ??= <User>[];

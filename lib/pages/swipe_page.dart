@@ -1,13 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:grupolaranja20212/pages/main_page.dart';
-import 'package:grupolaranja20212/widget/swipe_card.dart';
-import 'package:grupolaranja20212/pages/user_register_page.dart';
-import 'package:grupolaranja20212/pages/welcome_page.dart';
-import 'package:grupolaranja20212/pages/matches_page.dart';
-import 'package:grupolaranja20212/utils/app_navigator.dart';
-import 'package:grupolaranja20212/view_models/swipe_view_model.dart';
-import 'package:grupolaranja20212/models/user.dart' as user_model;
+import 'package:grupolaranja20212/models/swipe_item_content.dart';
+import 'package:swipe_cards/swipe_cards.dart';
 
 class SwipePage extends StatefulWidget {
   const SwipePage({Key? key}) : super(key: key);
@@ -17,57 +10,50 @@ class SwipePage extends StatefulWidget {
 }
 
 class _SwipePage extends State<SwipePage> {
-  int _selectedIndex = 0;
-
-  static final List<AppBar> _titleOptions = <AppBar>[
-    AppBar(
-      title: const Text('Swipe'),
-      backgroundColor: Colors.orange,
-    ),
-    AppBar(
-      title: const Text('Matches'),
-      backgroundColor: Colors.orange,
-    ),
-    AppBar(
-      title: const Text('Perfil'),
-      backgroundColor: Colors.orange,
-    ),
+  final List<SwipeItem> _swipeItems = <SwipeItem>[];
+  late MatchEngine _matchEngine;
+  final List<String> _names = ["Red", "Blue", "Green", "Yellow", "Orange"];
+  final List<Color> _colors = [
+    Colors.red,
+    Colors.blue,
+    Colors.green,
+    Colors.yellow,
+    Colors.orange
   ];
-
-  final SwipeViewModel _swipeVM = SwipeViewModel();
-
-  late List<user_model.User> _usersToSwipe = <user_model.User>[];
 
   @override
   void initState() {
+    for (int i = 0; i < _names.length; i++) {
+      _swipeItems.add(SwipeItem(
+          content: SwipeItemContent(_names[i], _colors[i]),
+          likeAction: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("Liked ${_names[i]}"),
+                duration: const Duration(milliseconds: 500),
+              ),
+            );
+          },
+          nopeAction: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("Nope ${_names[i]}"),
+                duration: const Duration(milliseconds: 500),
+              ),
+            );
+          },
+          superlikeAction: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("Superliked ${_names[i]}"),
+                duration: const Duration(milliseconds: 500),
+              ),
+            );
+          }));
+    }
+
+    _matchEngine = MatchEngine(swipeItems: _swipeItems);
     super.initState();
-
-    if (FirebaseAuth.instance.currentUser == null) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const WelcomePage()),
-          (Route<dynamic> route) => false);
-    }
-
-    _initPage();
-  }
-
-  Future _initPage() async {
-    var loggedUser = await _swipeVM
-        .getUserByFirebaseAuthUid(FirebaseAuth.instance.currentUser!.uid);
-
-    if (loggedUser == null) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const UserRegisterPage()),
-          (Route<dynamic> route) => false);
-    } else {
-      await _swipeVM.updateUserLocation(FirebaseAuth.instance.currentUser!.uid);
-
-      var usersToSwipe = await _swipeVM.getUsersToSwipe(loggedUser, null);
-
-      setState(() {
-        _usersToSwipe = usersToSwipe;
-      });
-    }
   }
 
   late final List<Widget> _widgetOptions = <Widget>[
@@ -84,67 +70,51 @@ class _SwipePage extends State<SwipePage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Swipe',
-      home: Scaffold(
-        appBar: _titleOptions.elementAt(_selectedIndex),
-        body: /*_widgetOptions.elementAt(_selectedIndex),*/
-            Center(
-                child: Column(
-          children: [
-            Text('Usuarios do swipe recuperados...' + _usersToSwipe.join(",")),
-            ElevatedButton(
-              onPressed: () {
-                AppNavigator.navigateToLogoutPage(context);
-              },
-              child: const Text('LOGOUT'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                AppNavigator.navigateToMatchesPage(context);
-              },
-              child: const Text('MATCHES'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                AppNavigator.navigateToMainPage(context);
-              },
-              child: const Text('MAIN PAGE (SWIPE)'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                AppNavigator.navigateToUserRegisterPage(context);
-              },
-              child: const Text('EDIT DO USUARIO E PREFERENCIAS'),
-            ),
-          ],
-        )),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.auto_awesome_motion_rounded,
-                  semanticLabel: 'Swipe',
-                ),
-                label: 'Swipe'),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.favorite_rounded,
-                  semanticLabel: 'Matchs',
-                ),
-                label: 'Matchs'),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.person_rounded,
-                  semanticLabel: 'Perfil',
-                ),
-                label: 'Perfil'),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.orange,
-          onTap: _onItemTapped,
+    return Column(children: [
+      SizedBox(
+        height: 550,
+        child: SwipeCards(
+          matchEngine: _matchEngine,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              alignment: Alignment.center,
+              color: _swipeItems[index].content.color,
+              child: Text(
+                _swipeItems[index].content.text,
+                style: const TextStyle(fontSize: 100),
+              ),
+            );
+          },
+          onStackFinished: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Stack Finished'),
+                duration: Duration(milliseconds: 500),
+              ),
+            );
+          },
         ),
       ),
-    );
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          ElevatedButton(
+              onPressed: () {
+                _matchEngine.currentItem?.nope();
+              },
+              child: const Text("Nope")),
+          ElevatedButton(
+              onPressed: () {
+                _matchEngine.currentItem?.superLike();
+              },
+              child: const Text("Superlike")),
+          ElevatedButton(
+              onPressed: () {
+                _matchEngine.currentItem?.like();
+              },
+              child: const Text("Like"))
+        ],
+      )
+    ]);
   }
 }

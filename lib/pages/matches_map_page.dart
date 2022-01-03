@@ -46,17 +46,15 @@ class _MatchesMapPage extends State<MatchesMapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: GoogleMap(
-            initialCameraPosition:
-                const CameraPosition(target: LatLng(0, 0), zoom: 12.0),
-            markers: Set.from(allMarkers),
-            onMapCreated: mapCreated,
-          ),
+    return Center(
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: GoogleMap(
+          initialCameraPosition:
+              const CameraPosition(target: LatLng(0, 0), zoom: 12.0),
+          markers: Set.from(allMarkers),
+          onMapCreated: mapCreated,
         ),
       ),
     );
