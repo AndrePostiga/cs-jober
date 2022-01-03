@@ -6,10 +6,10 @@ import 'package:grupolaranja20212/pages/auth_register_page.dart';
 import 'package:grupolaranja20212/pages/main_page.dart';
 import 'package:grupolaranja20212/pages/match_chat_page.dart';
 import 'package:grupolaranja20212/pages/profile_page.dart';
-import 'package:grupolaranja20212/provider/card_provider.dart';
 import 'package:grupolaranja20212/view_models/forgot_password_view_model.dart';
 import 'package:grupolaranja20212/view_models/login_view_model.dart';
 import 'package:grupolaranja20212/view_models/logout_view_model.dart';
+import 'package:grupolaranja20212/view_models/main_view_model.dart';
 import 'package:grupolaranja20212/view_models/matches_view_model.dart';
 import 'package:grupolaranja20212/view_models/register_view_model.dart';
 import 'package:provider/provider.dart';
@@ -80,7 +80,7 @@ class AppNavigator {
         context,
         MaterialPageRoute(
             builder: (context) => ChangeNotifierProvider(
-                create: (context) => CardProvider(), child: const MainPage()),
+                create: (context) => MainViewModel(), child: const MainPage()),
             fullscreenDialog: false));
   }
 }

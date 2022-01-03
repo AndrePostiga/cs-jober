@@ -1,12 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:grupolaranja20212/pages/swipe_page.dart';
 import 'package:grupolaranja20212/pages/welcome_page.dart';
-import 'package:grupolaranja20212/view_models/swipe_view_model.dart';
-import 'package:grupolaranja20212/widget/swipe_card.dart';
-import 'package:grupolaranja20212/provider/card_provider.dart';
+import 'package:grupolaranja20212/view_models/main_view_model.dart';
 import 'package:grupolaranja20212/pages/matches_page.dart';
 import 'package:grupolaranja20212/pages/user_register_page.dart';
-import 'package:grupolaranja20212/models/user.dart' as user_model;
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -16,8 +14,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final SwipeViewModel _swipeVM = SwipeViewModel();
-  final CardProvider _cardProvider = CardProvider();
+  final MainViewModel _swipeVM = MainViewModel();
 
   int _selectedIndex = 0;
 
@@ -37,7 +34,7 @@ class _MainPageState extends State<MainPage> {
   ];
 
   late final List<Widget> _widgetOptions = <Widget>[
-    swipe(),
+    const SwipePage(),
     const MatchesPage(),
     const UserRegisterPage()
   ];
@@ -48,8 +45,6 @@ class _MainPageState extends State<MainPage> {
     });
     _getUsersToSwipeAndUpdateLocationIfItcouldBeDone();
   }
-
-  late List<user_model.User> _usersToSwipe = <user_model.User>[];
 
   @override
   void initState() {
@@ -75,12 +70,6 @@ class _MainPageState extends State<MainPage> {
       });
     } else {
       await _swipeVM.updateUserLocation(FirebaseAuth.instance.currentUser!.uid);
-
-      var usersToSwipe = await _swipeVM.getUsersToSwipe(loggedUser, null);
-
-      setState(() {
-        _usersToSwipe = usersToSwipe;
-      });
     }
   }
 
@@ -125,102 +114,4 @@ class _MainPageState extends State<MainPage> {
           onTap: _onItemTapped,
         ),
       ));
-
-  Widget swipe() {
-    return Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 16,
-            ),
-            SizedBox(
-              height: 580,
-              child: buildCards(), //SizedBox(height: 500), /*buildCards()*/
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            buildButtons()
-          ],
-        )
-        //buildCards(),
-        );
-  }
-
-  Widget buildCards() {
-    final urlImages = _cardProvider.urlImages;
-
-    return Stack(
-      children: urlImages
-          .map((urlImage) => SwipeCard(
-                urlImage: urlImage,
-                isFront: urlImages.last == urlImage,
-              ))
-          .toList(),
-    );
-  }
-
-  Widget buildButtons() {
-    final status = _cardProvider.getStatus();
-    final isLike = status == CardStatus.like;
-    final isDislike = status == CardStatus.dislike;
-    final isSkip = status == CardStatus.skip;
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        ElevatedButton(
-          child: const Icon(Icons.clear, size: 48),
-          style: ButtonStyle(
-            foregroundColor: getColor(Colors.red, Colors.white, isDislike),
-            backgroundColor: getColor(Colors.white, Colors.red, isDislike),
-          ),
-          onPressed: () {
-            _cardProvider.dislike();
-          },
-        ),
-        ElevatedButton(
-          child: const Icon(
-            Icons.skip_next_rounded,
-            size: 48,
-          ),
-          style: ButtonStyle(
-            foregroundColor: getColor(Colors.orange, Colors.white, isSkip),
-            backgroundColor: getColor(Colors.white, Colors.orange, isSkip),
-          ),
-          onPressed: () {
-            _cardProvider.skip();
-          },
-        ),
-        ElevatedButton(
-          child: const Icon(
-            Icons.favorite,
-            size: 48,
-          ),
-          style: ButtonStyle(
-            foregroundColor: getColor(Colors.teal, Colors.white, isLike),
-            backgroundColor: getColor(Colors.white, Colors.teal, isLike),
-          ),
-          onPressed: () {
-            _cardProvider.like();
-          },
-        ),
-      ],
-    );
-  }
-
-  MaterialStateProperty<Color> getColor(
-      Color color, Color colorPressed, bool force) {
-    final getColor = (Set<MaterialState> states) {
-      if (force || states.contains(MaterialState.pressed)) {
-        return colorPressed;
-      } else {
-        return color;
-      }
-    };
-
-    return MaterialStateProperty.resolveWith(getColor);
-  }
 }

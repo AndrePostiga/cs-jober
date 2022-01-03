@@ -29,6 +29,7 @@ dependencies:
   google_maps_flutter: ^2.1.1 
   flutter_launcher_icons: ^0.9.2
   onesignal_flutter: ^3.2.7
+  swipe_cards: ^0.1.0
 
 dev_dependencies:
   flutter_test:
