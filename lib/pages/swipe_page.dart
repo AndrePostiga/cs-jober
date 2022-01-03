@@ -56,7 +56,7 @@ class _SwipePage extends State<SwipePage> {
     super.initState();
   }
 
-  late final List<Widget> _widgetOptions = <Widget>[
+  /*late final List<Widget> _widgetOptions = <Widget>[
     MainPage(),
     MatchesPage(),
     UserRegisterPage()
@@ -66,7 +66,7 @@ class _SwipePage extends State<SwipePage> {
     setState(() {
       _selectedIndex = index;
     });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
