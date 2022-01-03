@@ -43,46 +43,46 @@ class _MainPageState extends State<MainPage> {
   }
 
   @override
-  Widget build(BuildContext context) => Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Colors.orange.shade200, Colors.black],
+  Widget build(BuildContext context) {
+    return Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.orange.shade200, Colors.black],
+          ),
         ),
-      ),
-      child: Scaffold(
-        appBar: _titleOptions.elementAt(_selectedIndex),
-        backgroundColor: Colors.transparent,
-        body: SafeArea(
-          child: _widgetOptions.elementAt(_selectedIndex),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.auto_awesome_motion_rounded,
-                  semanticLabel: 'Swipe',
-                ),
-                label: 'Swipe'),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.favorite_rounded,
-                  semanticLabel: 'Matchs',
-                ),
-                label: 'Matchs'),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.person_rounded,
-                  semanticLabel: 'Perfil',
-                ),
-                label: 'Perfil'),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.orange,
-          onTap: _onItemTapped,
-        ),
-      ));
+        child: Scaffold(
+          appBar: _titleOptions.elementAt(_selectedIndex),
+          backgroundColor: Colors.transparent,
+          body: SafeArea(child: swipe()),
+          bottomNavigationBar: BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.auto_awesome_motion_rounded,
+                    semanticLabel: 'Swipe',
+                  ),
+                  label: 'Swipe'),
+              BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.favorite_rounded,
+                    semanticLabel: 'Matchs',
+                  ),
+                  label: 'Matchs'),
+              BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.person_rounded,
+                    semanticLabel: 'Perfil',
+                  ),
+                  label: 'Perfil'),
+            ],
+            currentIndex: _selectedIndex,
+            selectedItemColor: Colors.orange,
+            onTap: _onItemTapped,
+          ),
+        ));
+  }
 
   Widget swipe() {
     return Container(
@@ -95,16 +95,14 @@ class _MainPageState extends State<MainPage> {
             ),
             SizedBox(
               height: 580,
-              child: buildCards(), //SizedBox(height: 500), /*buildCards()*/
+              child: buildCards(),
             ),
             const SizedBox(
               height: 16,
             ),
             buildButtons()
           ],
-        )
-        //buildCards(),
-        );
+        ));
   }
 
   Widget buildCards() {

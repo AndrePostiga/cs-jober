@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:grupolaranja20212/pages/main_page.dart';
+import 'package:grupolaranja20212/widget/swipe_card.dart';
 import 'package:grupolaranja20212/pages/user_register_page.dart';
 import 'package:grupolaranja20212/pages/welcome_page.dart';
+import 'package:grupolaranja20212/pages/matches_page.dart';
 import 'package:grupolaranja20212/utils/app_navigator.dart';
 import 'package:grupolaranja20212/view_models/swipe_view_model.dart';
 import 'package:grupolaranja20212/models/user.dart' as user_model;
@@ -14,6 +17,23 @@ class SwipePage extends StatefulWidget {
 }
 
 class _SwipePage extends State<SwipePage> {
+  int _selectedIndex = 0;
+
+  static final List<AppBar> _titleOptions = <AppBar>[
+    AppBar(
+      title: const Text('Swipe'),
+      backgroundColor: Colors.orange,
+    ),
+    AppBar(
+      title: const Text('Matches'),
+      backgroundColor: Colors.orange,
+    ),
+    AppBar(
+      title: const Text('Perfil'),
+      backgroundColor: Colors.orange,
+    ),
+  ];
+
   final SwipeViewModel _swipeVM = SwipeViewModel();
 
   late List<user_model.User> _usersToSwipe = <user_model.User>[];
@@ -50,16 +70,27 @@ class _SwipePage extends State<SwipePage> {
     }
   }
 
+  late final List<Widget> _widgetOptions = <Widget>[
+    MainPage(),
+    MatchesPage(),
+    UserRegisterPage()
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Swipe',
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Swipe'),
-        ),
-        body: Center(
-            child: Column(
+        appBar: _titleOptions.elementAt(_selectedIndex),
+        body: /*_widgetOptions.elementAt(_selectedIndex),*/
+            Center(
+                child: Column(
           children: [
             Text('Usuarios do swipe recuperados...' + _usersToSwipe.join(",")),
             ElevatedButton(
@@ -88,6 +119,31 @@ class _SwipePage extends State<SwipePage> {
             ),
           ],
         )),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.auto_awesome_motion_rounded,
+                  semanticLabel: 'Swipe',
+                ),
+                label: 'Swipe'),
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.favorite_rounded,
+                  semanticLabel: 'Matchs',
+                ),
+                label: 'Matchs'),
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.person_rounded,
+                  semanticLabel: 'Perfil',
+                ),
+                label: 'Perfil'),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.orange,
+          onTap: _onItemTapped,
+        ),
       ),
     );
   }
