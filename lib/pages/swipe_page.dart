@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:grupolaranja20212/models/swipe_item_content.dart';
+import 'package:grupolaranja20212/models/user.dart' as user_model;
+import 'package:grupolaranja20212/view_models/swipe_view_model.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 
 class SwipePage extends StatefulWidget {
@@ -10,26 +12,33 @@ class SwipePage extends StatefulWidget {
 }
 
 class _SwipePage extends State<SwipePage> {
+  final SwipeViewModel _vM = SwipeViewModel();
+  late user_model.User? user;
+  late List<user_model.User> _usersToSwipe = <user_model.User>[];
+
   final List<SwipeItem> _swipeItems = <SwipeItem>[];
   late MatchEngine _matchEngine;
-  final List<String> _names = ["Red", "Blue", "Green", "Yellow", "Orange"];
-  final List<Color> _colors = [
-    Colors.red,
-    Colors.blue,
-    Colors.green,
-    Colors.yellow,
-    Colors.orange
-  ];
+  late Widget _swipeItem;
 
-  @override
-  void initState() {
-    for (int i = 0; i < _names.length; i++) {
+  Future getUsersToSwipe() async {
+    _usersToSwipe = await _vM.getUsersToSwipe(user!, null);
+  }
+
+  Future startPage() async {
+    user = await _vM
+        .getUserByFirebaseAuthUid(FirebaseAuth.instance.currentUser!.uid);
+    await populateSwipeItens();
+  }
+
+  Future populateSwipeItens() async {
+    await getUsersToSwipe();
+    for (var user in _usersToSwipe) {
       _swipeItems.add(SwipeItem(
-          content: SwipeItemContent(_names[i], _colors[i]),
+          content: user,
           likeAction: () {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text("Liked ${_names[i]}"),
+                content: Text("Gostou do(a) ${user.name}"),
                 duration: const Duration(milliseconds: 500),
               ),
             );
@@ -37,7 +46,7 @@ class _SwipePage extends State<SwipePage> {
           nopeAction: () {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text("Nope ${_names[i]}"),
+                content: Text("Não gostou do(a) ${user.name}"),
                 duration: const Duration(milliseconds: 500),
               ),
             );
@@ -45,43 +54,67 @@ class _SwipePage extends State<SwipePage> {
           superlikeAction: () {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text("Superliked ${_names[i]}"),
+                content: Text("Gostou do(a) ${user.name}"),
                 duration: const Duration(milliseconds: 500),
               ),
             );
           }));
     }
-
     _matchEngine = MatchEngine(swipeItems: _swipeItems);
+
+    setState(() {
+      _swipeItem = _makeSwipeCards();
+    });
+  }
+
+  @override
+  void initState() {
+    _swipeItem = _defaultContainer();
+    startPage();
     super.initState();
+  }
+
+  Widget _defaultContainer() {
+    return Container(
+      alignment: Alignment.center,
+      color: Colors.white,
+      child: const Text(
+        "Aguarde",
+        style: TextStyle(fontSize: 100),
+      ),
+    );
+  }
+
+  Widget _makeSwipeCards() {
+    return SwipeCards(
+      matchEngine: _matchEngine,
+      itemBuilder: (BuildContext context, int index) {
+        return Container(
+          alignment: Alignment.center,
+          color: Colors.blue,
+          child: Text(
+            _swipeItems[index].content.name,
+            style: const TextStyle(fontSize: 100),
+          ),
+        );
+      },
+      onStackFinished: () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Stack Finished'),
+            duration: Duration(milliseconds: 500),
+          ),
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(children: [
       SizedBox(
-        height: 550,
-        child: SwipeCards(
-          matchEngine: _matchEngine,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              alignment: Alignment.center,
-              color: _swipeItems[index].content.color,
-              child: Text(
-                _swipeItems[index].content.text,
-                style: const TextStyle(fontSize: 100),
-              ),
-            );
-          },
-          onStackFinished: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Stack Finished'),
-                duration: Duration(milliseconds: 500),
-              ),
-            );
-          },
-        ),
+        height: 450,
+        child: _swipeItem,
       ),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
