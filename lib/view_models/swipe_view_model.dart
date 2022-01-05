@@ -10,13 +10,23 @@ class SwipeViewModel extends ChangeNotifier {
     return await UserService().getUserByFirebaseAuthUid(firebaseAuthUid);
   }
 
-  Future setLikedUser(User user, String likedFirebaseAuthUid) async {
-    await UserService().updateUserLikesOrDislikes(
+  Future<User> setLikedUser(User user, String likedFirebaseAuthUid) async {
+    return await UserService().updateUserLikesOrDislikes(
         user.firebaseAuthUid, likedFirebaseAuthUid, null);
   }
 
-  Future setUnlikedUser(User user, String unlikedFirebaseAuthUid) async {
-    await UserService().updateUserLikesOrDislikes(
+  Future<bool> isMatch(User user, String likedFirebaseAuthUid) async {
+    var likedUser = await getUserByFirebaseAuthUid(likedFirebaseAuthUid);
+
+    if (likedUser!.likes.contains(user.firebaseAuthUid)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  Future<User> setUnlikedUser(User user, String unlikedFirebaseAuthUid) async {
+    return await UserService().updateUserLikesOrDislikes(
         user.firebaseAuthUid, null, unlikedFirebaseAuthUid);
   }
 

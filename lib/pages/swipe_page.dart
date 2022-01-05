@@ -26,6 +26,25 @@ class _SwipePage extends State<SwipePage> {
     await populateSwipeItens();
   }
 
+  Future likeAction(user_model.User user, user_model.User likedUser) async {
+    _user = await _vM.setLikedUser(user, likedUser.firebaseAuthUid);
+    if (await _vM.isMatch(user, likedUser.firebaseAuthUid)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Match com o(a) ${likedUser.name}!"),
+          duration: const Duration(milliseconds: 1000),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Gostou do(a) ${likedUser.name}"),
+          duration: const Duration(milliseconds: 500),
+        ),
+      );
+    }
+  }
+
   Future populateSwipeItens() async {
     _swipeItems = <SwipeItem>[];
 
@@ -38,13 +57,7 @@ class _SwipePage extends State<SwipePage> {
           _swipeItems.add(SwipeItem(
               content: user,
               likeAction: () async {
-                _user = await _vM.setLikedUser(_user!, user.firebaseAuthUid);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text("Gostou do(a) ${user.name}"),
-                    duration: const Duration(milliseconds: 500),
-                  ),
-                );
+                await likeAction(_user!, user);
               },
               nopeAction: () async {
                 _user = await _vM.setUnlikedUser(_user!, user.firebaseAuthUid);
@@ -56,13 +69,7 @@ class _SwipePage extends State<SwipePage> {
                 );
               },
               superlikeAction: () async {
-                _user = await _vM.setLikedUser(_user!, user.firebaseAuthUid);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text("Gostou do(a) ${user.name}"),
-                    duration: const Duration(milliseconds: 500),
-                  ),
-                );
+                await likeAction(_user!, user);
               }));
         }
       }
