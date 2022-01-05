@@ -144,161 +144,171 @@ class _UserRegisterPage extends State<UserRegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            SizedBox(child: Image.network(_image), width: 300, height: 300),
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: ElevatedButton(
-                onPressed: () {},
-                child: PopupMenuButton<PhotoOptions>(
-                  child: const Text("Defina sua Foto para o JOBer"),
-                  onSelected: _optionSelected,
-                  itemBuilder: (context) => [
-                    const PopupMenuItem(
-                      child: Text("Tirar Foto usando a Câmera"),
-                      value: PhotoOptions.camera,
-                    ),
-                    const PopupMenuItem(
-                        child: Text("Seleciona uma foto da galeria"),
-                        value: PhotoOptions.library)
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(20.0),
-            ),
-            const Text("Escolha o tipo de usuário"),
-            Container(
-              padding: const EdgeInsets.all(4.0),
-            ),
-            DropdownButton(
-              value: _userTypeId,
-              items: _dropDownUserTypesItens,
-              onChanged: changedDropDownUserTypeItem,
-            ),
-            Container(
-              padding: const EdgeInsets.all(20.0),
-            ),
-            Text("Distância máxima para encontrarmos: " +
-                (_userTypeId == 0 ? "Recrutadores" : "Candidatos") +
-                " => " +
-                _maxSearchDistance.toString() +
-                "KM."),
-            Container(
-              padding: const EdgeInsets.all(16.0),
-            ),
-            Slider(
-              value: _maxSearchDistance.toDouble(),
-              min: 0,
-              max: 100,
-              divisions: 10,
-              label: _maxSearchDistance.round().toString(),
-              onChanged: (double value) {
-                setState(() {
-                  _maxSearchDistance = value.toInt();
-                });
-              },
-            ),
-            TextFormField(
-              controller: _nameController,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return "Informe seu nome";
-                }
-                return null;
-              },
-              decoration: const InputDecoration(hintText: "Nome"),
-            ),
-            TextFormField(
-              controller: _skillsController,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return "Informe " +
-                      (_userTypeId == 0
-                          ? "suas habilitades"
-                          : "as habilidades que procura") +
-                      " separadas por ','";
-                }
-                return null;
-              },
-              decoration: InputDecoration(
-                  hintText: (_userTypeId == 0
-                          ? "Suas habilitades"
-                          : "Liste as habilidades que procura") +
-                      " (separadas por ',')"),
-            ),
-            TextFormField(
-              controller: _linkedinUrlController,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return "Informe a URL do seu perfil do LinkedIn";
-                }
-                return null;
-              },
-              decoration:
-                  const InputDecoration(hintText: "URL do seu LinkedIn"),
-            ),
-            TextFormField(
-              controller: _birthDateController,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return "Informe sua data de nascimento";
-                }
-                return null;
-              },
-              decoration: const InputDecoration(
-                  hintText: "Sua data de nascimento DD/MM/YYYY"),
-            ),
-            TextFormField(
-              controller: _descriptionController,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return "Informe sua descrição profissional";
-                }
-                return null;
-              },
-              decoration: const InputDecoration(hintText: "Sua descrição"),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+    return Container(
+        color: Colors.white,
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
               children: [
-                SizedBox(
-                  height: 70.0,
+                SizedBox(height: 20),
+                SizedBox(child: Image.network(_image), width: 300, height: 300),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
                   child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.orange),
-                      ),
-                      onPressed: () {
-                        _save(context);
-                      },
-                      child: Text(_btnStoreMsg)),
+                    onPressed: () {},
+                    child: PopupMenuButton<PhotoOptions>(
+                      child: const Text("Defina sua Foto para o JOBer"),
+                      onSelected: _optionSelected,
+                      itemBuilder: (context) => [
+                        const PopupMenuItem(
+                          child: Text("Tirar Foto usando a Câmera"),
+                          value: PhotoOptions.camera,
+                        ),
+                        const PopupMenuItem(
+                            child: Text("Seleciona uma foto da galeria"),
+                            value: PhotoOptions.library)
+                      ],
+                    ),
+                  ),
                 ),
-                const SizedBox(
-                  width: 10.0,
+                Container(
+                  padding: const EdgeInsets.all(20.0),
                 ),
-                SizedBox(
-                  height: 70.0,
-                  child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.orange),
-                      ),
-                      onPressed: () {
-                        AppNavigator.navigateToLogoutPage(context);
-                      },
-                      child: const Text('logout')),
+                const Text("Escolha o tipo de usuário"),
+                Container(
+                  padding: const EdgeInsets.all(4.0),
                 ),
+                DropdownButton(
+                  value: _userTypeId,
+                  items: _dropDownUserTypesItens,
+                  onChanged: changedDropDownUserTypeItem,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(20.0),
+                ),
+                Text("Distância máxima para encontrarmos: " +
+                    (_userTypeId == 0 ? "Recrutadores" : "Candidatos") +
+                    " => " +
+                    _maxSearchDistance.toString() +
+                    "KM."),
+                Container(
+                  padding: const EdgeInsets.all(16.0),
+                ),
+                Slider(
+                  value: _maxSearchDistance.toDouble(),
+                  min: 0,
+                  max: 100,
+                  divisions: 10,
+                  label: _maxSearchDistance.round().toString(),
+                  onChanged: (double value) {
+                    setState(() {
+                      _maxSearchDistance = value.toInt();
+                    });
+                  },
+                ),
+                Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: _nameController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Informe seu nome";
+                            }
+                            return null;
+                          },
+                          decoration: const InputDecoration(hintText: "Nome"),
+                        ),
+                        TextFormField(
+                          controller: _skillsController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Informe " +
+                                  (_userTypeId == 0
+                                      ? "suas habilitades"
+                                      : "as habilidades que procura") +
+                                  " separadas por ','";
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                              hintText: (_userTypeId == 0
+                                      ? "Suas habilitades"
+                                      : "Liste as habilidades que procura") +
+                                  " (separadas por ',')"),
+                        ),
+                        TextFormField(
+                          controller: _linkedinUrlController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Informe a URL do seu perfil do LinkedIn";
+                            }
+                            return null;
+                          },
+                          decoration: const InputDecoration(
+                              hintText: "URL do seu LinkedIn"),
+                        ),
+                        TextFormField(
+                          controller: _birthDateController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Informe sua data de nascimento";
+                            }
+                            return null;
+                          },
+                          decoration: const InputDecoration(
+                              hintText: "Sua data de nascimento DD/MM/YYYY"),
+                        ),
+                        TextFormField(
+                          controller: _descriptionController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Informe sua descrição profissional";
+                            }
+                            return null;
+                          },
+                          decoration:
+                              const InputDecoration(hintText: "Sua descrição"),
+                        ),
+                      ],
+                    )),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 70.0,
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.orange),
+                          ),
+                          onPressed: () {
+                            _save(context);
+                          },
+                          child: Text(_btnStoreMsg)),
+                    ),
+                    const SizedBox(
+                      width: 10.0,
+                    ),
+                    SizedBox(
+                      height: 70.0,
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.orange),
+                          ),
+                          onPressed: () {
+                            AppNavigator.navigateToLogoutPage(context);
+                          },
+                          child: const Text('logout')),
+                    ),
+                  ],
+                )
               ],
-            )
-          ],
-        ),
-      ),
-    );
+            ),
+          ),
+        ));
   }
 }

@@ -94,23 +94,31 @@ class _SwipePage extends State<SwipePage> {
 
   Widget _emptyAvailableUsersToSwipeContainer() {
     return Container(
+      margin: const EdgeInsets.all(20),
+      decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(40.0))),
       alignment: Alignment.center,
-      color: Colors.white,
-      child: const Text(
+      child: const Center(
+          child: Text(
         "Não foram encontrados usuários na sua região, com os filtros definidos",
         style: TextStyle(fontSize: 50),
-      ),
+      )),
     );
   }
 
   Widget _loadingContainer() {
     return Container(
+      margin: const EdgeInsets.all(20),
+      decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(40.0))),
       alignment: Alignment.center,
-      color: Colors.white,
-      child: const Text(
+      child: const Center(
+          child: Text(
         "Aguarde... Carregando...",
         style: TextStyle(fontSize: 50),
-      ),
+      )),
     );
   }
 
@@ -119,8 +127,11 @@ class _SwipePage extends State<SwipePage> {
       matchEngine: _matchEngine,
       itemBuilder: (BuildContext context, int index) {
         return Container(
+          margin: const EdgeInsets.all(20),
+          decoration: const BoxDecoration(
+              color: Colors.blue,
+              borderRadius: BorderRadius.all(Radius.circular(40.0))),
           alignment: Alignment.center,
-          color: Colors.blue,
           child: Text(
             _swipeItems[index].content.name,
             style: const TextStyle(fontSize: 100),
@@ -143,26 +154,82 @@ class _SwipePage extends State<SwipePage> {
   Widget build(BuildContext context) {
     return Column(children: [
       SizedBox(
-        height: 450,
+        height: 550,
         child: _swipeItem,
+      ),
+      SizedBox(
+        height: 20,
       ),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          ElevatedButton(
+          SizedBox(
+            height: 80.0,
+            width: 80.0,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.white),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50.0),
+                        side: BorderSide(color: Colors.red))),
+              ),
               onPressed: () {
                 if (_swipeItems.isNotEmpty) {
                   _matchEngine.currentItem?.nope();
                 }
               },
-              child: const Text("Nope")),
-          ElevatedButton(
-              onPressed: () {
-                if (_swipeItems.isNotEmpty) {
-                  _matchEngine.currentItem?.like();
-                }
-              },
-              child: const Text("Like"))
+              child: const Icon(
+                Icons.clear_rounded,
+                color: Colors.red,
+                size: 50,
+              ),
+            ),
+          ),
+          SizedBox(
+              height: 80,
+              width: 80,
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.white),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50.0),
+                          side: BorderSide(color: Colors.orange))),
+                ),
+                onPressed: () {
+                  if (_swipeItems.isNotEmpty) {
+                    _matchEngine.currentItem?.superLike();
+                  }
+                },
+                child: const Icon(
+                  Icons.star_rounded,
+                  color: Colors.orange,
+                  size: 50,
+                ),
+              )),
+          SizedBox(
+              height: 80,
+              width: 80,
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.white),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50.0),
+                          side: BorderSide(color: Colors.green))),
+                ),
+                onPressed: () {
+                  if (_swipeItems.isNotEmpty) {
+                    _matchEngine.currentItem?.like();
+                  }
+                },
+                child: const Icon(
+                  Icons.favorite_rounded,
+                  color: Colors.green,
+                  size: 50,
+                ),
+              ))
         ],
       )
     ]);
