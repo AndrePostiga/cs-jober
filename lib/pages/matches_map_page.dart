@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:grupolaranja20212/view_models/matches_map_view_model.dart';
 import 'package:latlong2/latlong.dart' as lat_lng;
 
 class MatchesMapPage extends StatefulWidget {
@@ -10,12 +12,60 @@ class MatchesMapPage extends StatefulWidget {
 }
 
 class _MatchesMapPage extends State<MatchesMapPage> {
+  late final MatchesMapViewModel _vm = MatchesMapViewModel();
+  late List<Marker> _markers = <Marker>[];
+  late Widget _pageContent;
+  late lat_lng.LatLng _centerOfMap = lat_lng.LatLng(-22.9041, -43.1327);
+
+  Future _initVars() async {
+    var users =
+        await _vm.getMatchesUsers(FirebaseAuth.instance.currentUser!.uid);
+
+    var newMarkers = <Marker>[];
+
+    for (var user in users) {
+      newMarkers.add(Marker(
+        width: 50.0,
+        height: 50.0,
+        point: lat_lng.LatLng(user.lat, user.long),
+        builder: (ctx) => Image.network(user.photoUrl),
+      ));
+    }
+
+    var user = await _vm
+        .getUserByFirebaseAuthUid(FirebaseAuth.instance.currentUser!.uid);
+
+    var newCenter = lat_lng.LatLng(user!.lat, user.long);
+
+    setState(() {
+      _centerOfMap = newCenter;
+      _markers = newMarkers;
+      _pageContent = _makeMap();
+    });
+  }
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: FlutterMap(
+  void initState() {
+    _pageContent = _waitPage();
+    super.initState();
+    _initVars();
+  }
+
+  Widget _waitPage() {
+    return Container(
+      alignment: Alignment.center,
+      color: Colors.white,
+      child: const Text(
+        "Aguarde... Carregando...",
+        style: TextStyle(fontSize: 50),
+      ),
+    );
+  }
+
+  Widget _makeMap() {
+    return FlutterMap(
       options: MapOptions(
-        center: lat_lng.LatLng(-22.9041, -43.1327),
+        center: _centerOfMap,
         zoom: 13.0,
       ),
       layers: [
@@ -32,18 +82,14 @@ class _MatchesMapPage extends State<MatchesMapPage> {
           },
         ),
         MarkerLayerOptions(
-          markers: [
-            Marker(
-              width: 50.0,
-              height: 50.0,
-              point: lat_lng.LatLng(-22.9041, -43.1327),
-              builder: (ctx) => Image.asset(
-                "images/pin.png",
-              ),
-            )
-          ],
+          markers: _markers,
         ),
       ],
-    ));
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _pageContent;
   }
 }
