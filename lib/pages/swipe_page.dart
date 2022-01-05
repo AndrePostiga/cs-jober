@@ -60,27 +60,42 @@ class _SwipePage extends State<SwipePage> {
             );
           }));
     }
-    _matchEngine = MatchEngine(swipeItems: _swipeItems);
 
     setState(() {
-      _swipeItem = _makeSwipeCards();
+      if (_swipeItems.isEmpty) {
+        _swipeItem = _emptyAvailableUsersToSwipeContainer();
+      } else {
+        _matchEngine = MatchEngine(swipeItems: _swipeItems);
+        _swipeItem = _makeSwipeCards();
+      }
     });
   }
 
   @override
   void initState() {
-    _swipeItem = _defaultContainer();
+    _swipeItem = _loadingContainer();
     startPage();
     super.initState();
   }
 
-  Widget _defaultContainer() {
+  Widget _emptyAvailableUsersToSwipeContainer() {
     return Container(
       alignment: Alignment.center,
       color: Colors.white,
       child: const Text(
-        "Aguarde",
-        style: TextStyle(fontSize: 100),
+        "Não foram encontrados usuários na sua região, com os filtros definidos",
+        style: TextStyle(fontSize: 50),
+      ),
+    );
+  }
+
+  Widget _loadingContainer() {
+    return Container(
+      alignment: Alignment.center,
+      color: Colors.white,
+      child: const Text(
+        "Aguarde... Carregando...",
+        style: TextStyle(fontSize: 50),
       ),
     );
   }
