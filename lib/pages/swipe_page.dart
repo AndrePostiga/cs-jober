@@ -157,7 +157,7 @@ class _SwipePage extends State<SwipePage> {
         height: 550,
         child: _swipeItem,
       ),
-      SizedBox(
+      const SizedBox(
         height: 20,
       ),
       Row(
@@ -172,7 +172,7 @@ class _SwipePage extends State<SwipePage> {
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50.0),
-                        side: BorderSide(color: Colors.red))),
+                        side: const BorderSide(color: Colors.red))),
               ),
               onPressed: () {
                 if (_swipeItems.isNotEmpty) {
@@ -195,7 +195,7 @@ class _SwipePage extends State<SwipePage> {
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50.0),
-                          side: BorderSide(color: Colors.orange))),
+                          side: const BorderSide(color: Colors.orange))),
                 ),
                 onPressed: () {
                   if (_swipeItems.isNotEmpty) {
@@ -217,7 +217,7 @@ class _SwipePage extends State<SwipePage> {
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50.0),
-                          side: BorderSide(color: Colors.green))),
+                          side: const BorderSide(color: Colors.green))),
                 ),
                 onPressed: () {
                   if (_swipeItems.isNotEmpty) {

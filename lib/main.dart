@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:grupolaranja20212/pages/main_page.dart';
 import 'package:grupolaranja20212/pages/welcome_page.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:grupolaranja20212/services/push_notification_service.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 void main() async {
@@ -11,10 +12,10 @@ void main() async {
   await Firebase.initializeApp();
   AndroidGoogleMapsFlutter.useAndroidViewSurface = true;
 
-  //Remove this method to stop OneSignal Debugging
-  OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+  // Comment this the method above to stop OneSignal Debugging
+  // OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
 
-  OneSignal.shared.setAppId("6e064919-a3ca-4f23-a88a-275b5594d4e8");
+  OneSignal.shared.setAppId(PushNotificationService().getAppId());
 
   // The promptForPushNotificationsWithUserResponse function will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
   OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {

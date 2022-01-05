@@ -151,7 +151,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
             key: _formKey,
             child: Column(
               children: [
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 SizedBox(child: Image.network(_image), width: 300, height: 300),
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0),

@@ -5,6 +5,7 @@ import 'package:grupolaranja20212/pages/welcome_page.dart';
 import 'package:grupolaranja20212/view_models/main_view_model.dart';
 import 'package:grupolaranja20212/pages/matches_page.dart';
 import 'package:grupolaranja20212/pages/user_register_page.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -43,7 +44,7 @@ class _MainPageState extends State<MainPage> {
     setState(() {
       _selectedIndex = index;
     });
-    _getUsersToSwipeAndUpdateLocationIfItcouldBeDone();
+    _updateLocationIfItcouldBeDone();
   }
 
   @override
@@ -56,10 +57,10 @@ class _MainPageState extends State<MainPage> {
           (Route<dynamic> route) => false);
     }
 
-    _getUsersToSwipeAndUpdateLocationIfItcouldBeDone();
+    _updateLocationIfItcouldBeDone();
   }
 
-  Future _getUsersToSwipeAndUpdateLocationIfItcouldBeDone() async {
+  Future _updateLocationIfItcouldBeDone() async {
     var loggedUser = await _swipeVM
         .getUserByFirebaseAuthUid(FirebaseAuth.instance.currentUser!.uid);
 
@@ -69,6 +70,8 @@ class _MainPageState extends State<MainPage> {
         _selectedIndex = 2;
       });
     } else {
+      await OneSignal.shared
+          .setExternalUserId(FirebaseAuth.instance.currentUser!.uid);
       await _swipeVM.updateUserLocation(FirebaseAuth.instance.currentUser!.uid);
     }
   }

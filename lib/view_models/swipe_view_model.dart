@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:grupolaranja20212/models/user.dart';
 import 'dart:math' show cos, pi, sin, acos;
 import 'package:grupolaranja20212/models/match.dart';
+import 'package:grupolaranja20212/services/push_notification_service.dart';
 
 import 'package:grupolaranja20212/services/user_service.dart';
 
@@ -26,6 +27,18 @@ class SwipeViewModel extends ChangeNotifier {
 
     if (likedUser!.likes.contains(user.firebaseAuthUid)) {
       await _createMatch(<String>[user.firebaseAuthUid, likedFirebaseAuthUid]);
+      await PushNotificationService().sendNotification(
+          <String>[likedFirebaseAuthUid],
+          "Você deu um MATCH com " + user.name,
+          "NOVO MATCH!",
+          null,
+          null);
+      await PushNotificationService().sendNotification(
+          <String>[user.firebaseAuthUid],
+          "Você deu um MATCH com " + likedUser.name,
+          "NOVO MATCH!",
+          null,
+          null);
       return true;
     }
 
@@ -96,6 +109,7 @@ class SwipeViewModel extends ChangeNotifier {
     }
 
     if (usersToReturn.length < maxItensToGet) {
+      foundedUsers.addAll(previousFoundedUsers);
       usersToReturn.addAll(await getUsersToSwipe(user, foundedUsers));
     }
 
