@@ -14,6 +14,7 @@ class SwipePage extends StatefulWidget {
 class _SwipePage extends State<SwipePage> {
   final SwipeViewModel _vM = SwipeViewModel();
   late user_model.User? _user;
+  late List<String> _alreadyPassedUsers = <String>[];
   late List<SwipeItem> _swipeItems = <SwipeItem>[];
 
   late MatchEngine _matchEngine;
@@ -26,39 +27,44 @@ class _SwipePage extends State<SwipePage> {
   }
 
   Future populateSwipeItens() async {
-    var usersToSwipe = await _vM.getUsersToSwipe(_user!, null);
     _swipeItems = <SwipeItem>[];
 
-    for (var user in usersToSwipe) {
-      _swipeItems.add(SwipeItem(
-          content: user,
-          likeAction: () async {
-            await _vM.setLikedUser(_user!, user.firebaseAuthUid);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text("Gostou do(a) ${user.name}"),
-                duration: const Duration(milliseconds: 500),
-              ),
-            );
-          },
-          nopeAction: () async {
-            await _vM.setUnlikedUser(_user!, user.firebaseAuthUid);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text("Não gostou do(a) ${user.name}"),
-                duration: const Duration(milliseconds: 500),
-              ),
-            );
-          },
-          superlikeAction: () async {
-            await _vM.setLikedUser(_user!, user.firebaseAuthUid);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text("Gostou do(a) ${user.name}"),
-                duration: const Duration(milliseconds: 500),
-              ),
-            );
-          }));
+    if (_user != null) {
+      var usersToSwipe = await _vM.getUsersToSwipe(_user!, null);
+
+      for (var user in usersToSwipe) {
+        if (!_alreadyPassedUsers.contains(user.firebaseAuthUid)) {
+          _swipeItems.add(SwipeItem(
+              content: user,
+              likeAction: () async {
+                _user = await _vM.setLikedUser(_user!, user.firebaseAuthUid);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Gostou do(a) ${user.name}"),
+                    duration: const Duration(milliseconds: 500),
+                  ),
+                );
+              },
+              nopeAction: () async {
+                _user = await _vM.setUnlikedUser(_user!, user.firebaseAuthUid);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Não gostou do(a) ${user.name}"),
+                    duration: const Duration(milliseconds: 500),
+                  ),
+                );
+              },
+              superlikeAction: () async {
+                _user = await _vM.setLikedUser(_user!, user.firebaseAuthUid);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Gostou do(a) ${user.name}"),
+                    duration: const Duration(milliseconds: 500),
+                  ),
+                );
+              }));
+        }
+      }
     }
 
     setState(() {
@@ -137,17 +143,16 @@ class _SwipePage extends State<SwipePage> {
         children: [
           ElevatedButton(
               onPressed: () {
-                _matchEngine.currentItem?.nope();
+                if (_swipeItems.isNotEmpty) {
+                  _matchEngine.currentItem?.nope();
+                }
               },
               child: const Text("Nope")),
           ElevatedButton(
               onPressed: () {
-                _matchEngine.currentItem?.superLike();
-              },
-              child: const Text("Superlike")),
-          ElevatedButton(
-              onPressed: () {
-                _matchEngine.currentItem?.like();
+                if (_swipeItems.isNotEmpty) {
+                  _matchEngine.currentItem?.like();
+                }
               },
               child: const Text("Like"))
         ],

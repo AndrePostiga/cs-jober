@@ -26,7 +26,7 @@ class UserService {
     return foundedUsers[0];
   }
 
-  Future updateUserLikesOrDislikes(
+  Future<User> updateUserLikesOrDislikes(
       String firebaseAuthUid,
       String? newLikedFirebaseAuthUid,
       String? newUnlikedFirebaseAuthUid) async {
@@ -55,6 +55,8 @@ class UserService {
           .doc(oldUser.reference!.id)
           .update(oldUser.toMap());
     }
+
+    return oldUser;
   }
 
   Future<User> createOrUpdateUserByFirebaseAuthUid(
