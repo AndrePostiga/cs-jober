@@ -14,7 +14,7 @@ class SwipePage extends StatefulWidget {
 class _SwipePage extends State<SwipePage> {
   final SwipeViewModel _vM = SwipeViewModel();
   late user_model.User? _user;
-  late List<String> _alreadyPassedUsers = <String>[];
+  late final List<String> _alreadyPassedUsers = <String>[];
   late List<SwipeItem> _swipeItems = <SwipeItem>[];
 
   late MatchEngine _matchEngine;
