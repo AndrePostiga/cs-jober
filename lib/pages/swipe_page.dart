@@ -13,29 +13,27 @@ class SwipePage extends StatefulWidget {
 
 class _SwipePage extends State<SwipePage> {
   final SwipeViewModel _vM = SwipeViewModel();
-  late user_model.User? user;
-  late List<user_model.User> _usersToSwipe = <user_model.User>[];
+  late user_model.User? _user;
+  late List<SwipeItem> _swipeItems = <SwipeItem>[];
 
-  final List<SwipeItem> _swipeItems = <SwipeItem>[];
   late MatchEngine _matchEngine;
   late Widget _swipeItem;
 
-  Future getUsersToSwipe() async {
-    _usersToSwipe = await _vM.getUsersToSwipe(user!, null);
-  }
-
   Future startPage() async {
-    user = await _vM
+    _user = await _vM
         .getUserByFirebaseAuthUid(FirebaseAuth.instance.currentUser!.uid);
     await populateSwipeItens();
   }
 
   Future populateSwipeItens() async {
-    await getUsersToSwipe();
-    for (var user in _usersToSwipe) {
+    var usersToSwipe = await _vM.getUsersToSwipe(_user!, null);
+    _swipeItems = <SwipeItem>[];
+
+    for (var user in usersToSwipe) {
       _swipeItems.add(SwipeItem(
           content: user,
-          likeAction: () {
+          likeAction: () async {
+            await _vM.setLikedUser(_user!, user.firebaseAuthUid);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text("Gostou do(a) ${user.name}"),
@@ -43,7 +41,8 @@ class _SwipePage extends State<SwipePage> {
               ),
             );
           },
-          nopeAction: () {
+          nopeAction: () async {
+            await _vM.setUnlikedUser(_user!, user.firebaseAuthUid);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text("Não gostou do(a) ${user.name}"),
@@ -51,7 +50,8 @@ class _SwipePage extends State<SwipePage> {
               ),
             );
           },
-          superlikeAction: () {
+          superlikeAction: () async {
+            await _vM.setLikedUser(_user!, user.firebaseAuthUid);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text("Gostou do(a) ${user.name}"),
@@ -98,10 +98,11 @@ class _SwipePage extends State<SwipePage> {
           ),
         );
       },
-      onStackFinished: () {
+      onStackFinished: () async {
+        await populateSwipeItens();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Stack Finished'),
+            content: Text('Carregando usuários... Aguarde...'),
             duration: Duration(milliseconds: 500),
           ),
         );

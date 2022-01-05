@@ -10,6 +10,16 @@ class SwipeViewModel extends ChangeNotifier {
     return await UserService().getUserByFirebaseAuthUid(firebaseAuthUid);
   }
 
+  Future setLikedUser(User user, String likedFirebaseAuthUid) async {
+    await UserService().updateUserLikesOrDislikes(
+        user.firebaseAuthUid, likedFirebaseAuthUid, null);
+  }
+
+  Future setUnlikedUser(User user, String unlikedFirebaseAuthUid) async {
+    await UserService().updateUserLikesOrDislikes(
+        user.firebaseAuthUid, null, unlikedFirebaseAuthUid);
+  }
+
   Future<List<User>> getUsersToSwipe(
       User user, List<User>? previousFoundedUsers) async {
     previousFoundedUsers ??= <User>[];
