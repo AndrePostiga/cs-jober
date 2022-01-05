@@ -26,6 +26,39 @@ class UserService {
     return foundedUsers[0];
   }
 
+  Future<User> updateUserLikesOrDislikes(
+      String firebaseAuthUid,
+      String? newLikedFirebaseAuthUid,
+      String? newUnlikedFirebaseAuthUid) async {
+    var oldUser = await getUserByFirebaseAuthUid(firebaseAuthUid);
+
+    var needUpdate = false;
+
+    if (!oldUser!.likes.contains(newLikedFirebaseAuthUid) &&
+        !oldUser.unlikes.contains(newLikedFirebaseAuthUid) &&
+        !oldUser.likes.contains(newUnlikedFirebaseAuthUid) &&
+        !oldUser.unlikes.contains(newUnlikedFirebaseAuthUid)) {
+      if (newLikedFirebaseAuthUid != null) {
+        oldUser.likes.add(newLikedFirebaseAuthUid);
+        needUpdate = true;
+      }
+
+      if (newUnlikedFirebaseAuthUid != null) {
+        oldUser.unlikes.add(newUnlikedFirebaseAuthUid);
+        needUpdate = true;
+      }
+    }
+
+    if (needUpdate) {
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(oldUser.reference!.id)
+          .update(oldUser.toMap());
+    }
+
+    return oldUser;
+  }
+
   Future<User> createOrUpdateUserByFirebaseAuthUid(
       String firebaseAuthUid,
       String name,

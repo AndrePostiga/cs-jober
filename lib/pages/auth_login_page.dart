@@ -40,8 +40,9 @@ class _AuthLoginPage extends State<AuthLoginPage> {
       final isLoggedIn = await _loginVM.login(email, password);
       if (isLoggedIn) {
         // on successful login take the user to the main page
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const MainPage()));
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const MainPage()),
+            (Route<dynamic> route) => false);
       } else {
         setState(() {
           _message = _loginVM.message;

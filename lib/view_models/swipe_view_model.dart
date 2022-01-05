@@ -2,8 +2,41 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:grupolaranja20212/models/user.dart';
 import 'dart:math' show cos, pi, sin, acos;
+import 'package:grupolaranja20212/models/match.dart';
+
+import 'package:grupolaranja20212/services/user_service.dart';
 
 class SwipeViewModel extends ChangeNotifier {
+  Future _createMatch(List<String> usersId) async {
+    var match = Match(usersId);
+    await FirebaseFirestore.instance.collection("matches").add(match.toMap());
+  }
+
+  Future<User?> getUserByFirebaseAuthUid(String firebaseAuthUid) async {
+    return await UserService().getUserByFirebaseAuthUid(firebaseAuthUid);
+  }
+
+  Future<User> setLikedUser(User user, String likedFirebaseAuthUid) async {
+    return await UserService().updateUserLikesOrDislikes(
+        user.firebaseAuthUid, likedFirebaseAuthUid, null);
+  }
+
+  Future<bool> isMatch(User user, String likedFirebaseAuthUid) async {
+    var likedUser = await getUserByFirebaseAuthUid(likedFirebaseAuthUid);
+
+    if (likedUser!.likes.contains(user.firebaseAuthUid)) {
+      await _createMatch(<String>[user.firebaseAuthUid, likedFirebaseAuthUid]);
+      return true;
+    }
+
+    return false;
+  }
+
+  Future<User> setUnlikedUser(User user, String unlikedFirebaseAuthUid) async {
+    return await UserService().updateUserLikesOrDislikes(
+        user.firebaseAuthUid, null, unlikedFirebaseAuthUid);
+  }
+
   Future<List<User>> getUsersToSwipe(
       User user, List<User>? previousFoundedUsers) async {
     previousFoundedUsers ??= <User>[];

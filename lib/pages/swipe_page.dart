@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:grupolaranja20212/models/swipe_item_content.dart';
+import 'package:grupolaranja20212/models/user.dart' as user_model;
+import 'package:grupolaranja20212/view_models/swipe_view_model.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 
 class SwipePage extends StatefulWidget {
@@ -10,107 +12,155 @@ class SwipePage extends StatefulWidget {
 }
 
 class _SwipePage extends State<SwipePage> {
-  final List<SwipeItem> _swipeItems = <SwipeItem>[];
+  final SwipeViewModel _vM = SwipeViewModel();
+  late user_model.User? _user;
+  late final List<String> _alreadyPassedUsers = <String>[];
+  late List<SwipeItem> _swipeItems = <SwipeItem>[];
+
   late MatchEngine _matchEngine;
-  final List<String> _names = ["Red", "Blue", "Green", "Yellow", "Orange"];
-  final List<Color> _colors = [
-    Colors.red,
-    Colors.blue,
-    Colors.green,
-    Colors.yellow,
-    Colors.orange
-  ];
+  late Widget _swipeItem;
+
+  Future startPage() async {
+    _user = await _vM
+        .getUserByFirebaseAuthUid(FirebaseAuth.instance.currentUser!.uid);
+    await populateSwipeItens();
+  }
+
+  Future likeAction(user_model.User user, user_model.User likedUser) async {
+    _user = await _vM.setLikedUser(user, likedUser.firebaseAuthUid);
+    if (await _vM.isMatch(user, likedUser.firebaseAuthUid)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Match com o(a) ${likedUser.name}!"),
+          duration: const Duration(milliseconds: 1000),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Gostou do(a) ${likedUser.name}"),
+          duration: const Duration(milliseconds: 500),
+        ),
+      );
+    }
+  }
+
+  Future populateSwipeItens() async {
+    _swipeItems = <SwipeItem>[];
+
+    if (_user != null) {
+      var usersToSwipe = await _vM.getUsersToSwipe(_user!, null);
+
+      for (var user in usersToSwipe) {
+        if (!_alreadyPassedUsers.contains(user.firebaseAuthUid)) {
+          _alreadyPassedUsers.add(user.firebaseAuthUid);
+          _swipeItems.add(SwipeItem(
+              content: user,
+              likeAction: () async {
+                await likeAction(_user!, user);
+              },
+              nopeAction: () async {
+                _user = await _vM.setUnlikedUser(_user!, user.firebaseAuthUid);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Não gostou do(a) ${user.name}"),
+                    duration: const Duration(milliseconds: 500),
+                  ),
+                );
+              },
+              superlikeAction: () async {
+                await likeAction(_user!, user);
+              }));
+        }
+      }
+    }
+
+    setState(() {
+      if (_swipeItems.isEmpty) {
+        _swipeItem = _emptyAvailableUsersToSwipeContainer();
+      } else {
+        _matchEngine = MatchEngine(swipeItems: _swipeItems);
+        _swipeItem = _makeSwipeCards();
+      }
+    });
+  }
 
   @override
   void initState() {
-    for (int i = 0; i < _names.length; i++) {
-      _swipeItems.add(SwipeItem(
-          content: SwipeItemContent(_names[i], _colors[i]),
-          likeAction: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text("Liked ${_names[i]}"),
-                duration: const Duration(milliseconds: 500),
-              ),
-            );
-          },
-          nopeAction: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text("Nope ${_names[i]}"),
-                duration: const Duration(milliseconds: 500),
-              ),
-            );
-          },
-          superlikeAction: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text("Superliked ${_names[i]}"),
-                duration: const Duration(milliseconds: 500),
-              ),
-            );
-          }));
-    }
-
-    _matchEngine = MatchEngine(swipeItems: _swipeItems);
+    _swipeItem = _loadingContainer();
+    startPage();
     super.initState();
   }
 
-  /*late final List<Widget> _widgetOptions = <Widget>[
-    MainPage(),
-    MatchesPage(),
-    UserRegisterPage()
-  ];
+  Widget _emptyAvailableUsersToSwipeContainer() {
+    return Container(
+      alignment: Alignment.center,
+      color: Colors.white,
+      child: const Text(
+        "Não foram encontrados usuários na sua região, com os filtros definidos",
+        style: TextStyle(fontSize: 50),
+      ),
+    );
+  }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }*/
+  Widget _loadingContainer() {
+    return Container(
+      alignment: Alignment.center,
+      color: Colors.white,
+      child: const Text(
+        "Aguarde... Carregando...",
+        style: TextStyle(fontSize: 50),
+      ),
+    );
+  }
+
+  Widget _makeSwipeCards() {
+    return SwipeCards(
+      matchEngine: _matchEngine,
+      itemBuilder: (BuildContext context, int index) {
+        return Container(
+          alignment: Alignment.center,
+          color: Colors.blue,
+          child: Text(
+            _swipeItems[index].content.name,
+            style: const TextStyle(fontSize: 100),
+          ),
+        );
+      },
+      onStackFinished: () async {
+        await populateSwipeItens();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Carregando usuários... Aguarde...'),
+            duration: Duration(milliseconds: 500),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(children: [
       SizedBox(
-        height: 550,
-        child: SwipeCards(
-          matchEngine: _matchEngine,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              alignment: Alignment.center,
-              color: _swipeItems[index].content.color,
-              child: Text(
-                _swipeItems[index].content.text,
-                style: const TextStyle(fontSize: 100),
-              ),
-            );
-          },
-          onStackFinished: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Stack Finished'),
-                duration: Duration(milliseconds: 500),
-              ),
-            );
-          },
-        ),
+        height: 450,
+        child: _swipeItem,
       ),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           ElevatedButton(
               onPressed: () {
-                _matchEngine.currentItem?.nope();
+                if (_swipeItems.isNotEmpty) {
+                  _matchEngine.currentItem?.nope();
+                }
               },
               child: const Text("Nope")),
           ElevatedButton(
               onPressed: () {
-                _matchEngine.currentItem?.superLike();
-              },
-              child: const Text("Superlike")),
-          ElevatedButton(
-              onPressed: () {
-                _matchEngine.currentItem?.like();
+                if (_swipeItems.isNotEmpty) {
+                  _matchEngine.currentItem?.like();
+                }
               },
               child: const Text("Like"))
         ],
