@@ -34,6 +34,7 @@ class _SwipePage extends State<SwipePage> {
 
       for (var user in usersToSwipe) {
         if (!_alreadyPassedUsers.contains(user.firebaseAuthUid)) {
+          _alreadyPassedUsers.add(user.firebaseAuthUid);
           _swipeItems.add(SwipeItem(
               content: user,
               likeAction: () async {
