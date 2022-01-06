@@ -70,8 +70,6 @@ class _MainPageState extends State<MainPage> {
         _selectedIndex = 2;
       });
     } else {
-      await OneSignal.shared
-          .setExternalUserId(FirebaseAuth.instance.currentUser!.uid);
       await _swipeVM.updateUserLocation(FirebaseAuth.instance.currentUser!.uid);
     }
   }

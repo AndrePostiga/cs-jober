@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:grupolaranja20212/services/push_notification_service.dart';
 import 'package:grupolaranja20212/utils/constants.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class RegisterViewModel extends ChangeNotifier {
   String message = "";
@@ -15,7 +15,7 @@ class RegisterViewModel extends ChangeNotifier {
       isRegistered = userCredential.user != null;
 
       if (isRegistered) {
-        await OneSignal.shared.setExternalUserId(userCredential.user!.uid);
+        await PushNotificationService().loginUser(userCredential.user!.uid);
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == "weak-password") {

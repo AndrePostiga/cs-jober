@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:grupolaranja20212/services/push_notification_service.dart';
 
 class LogoutViewModel extends ChangeNotifier {
   Future<bool> logout() async {
@@ -10,7 +10,8 @@ class LogoutViewModel extends ChangeNotifier {
 
     if (currentUser != null) {
       await FirebaseAuth.instance.signOut();
-      await OneSignal.shared.removeExternalUserId();
+
+      await PushNotificationService().logout(currentUser.uid);
       logoutOk = true;
     }
 

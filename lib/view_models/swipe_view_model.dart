@@ -27,18 +27,25 @@ class SwipeViewModel extends ChangeNotifier {
 
     if (likedUser!.likes.contains(user.firebaseAuthUid)) {
       await _createMatch(<String>[user.firebaseAuthUid, likedFirebaseAuthUid]);
-      await PushNotificationService().sendNotification(
-          <String>[likedFirebaseAuthUid],
-          "Você deu um MATCH com " + user.name,
-          "NOVO MATCH!",
-          null,
-          null);
-      await PushNotificationService().sendNotification(
-          <String>[user.firebaseAuthUid],
-          "Você deu um MATCH com " + likedUser.name,
-          "NOVO MATCH!",
-          null,
-          null);
+
+      if (likedUser.oneSignalId != "") {
+        await PushNotificationService().sendNotification(
+            <String>[likedUser.oneSignalId],
+            "Você deu um MATCH com " + user.name,
+            "NOVO MATCH!",
+            null,
+            null);
+      }
+
+      if (user.oneSignalId != "") {
+        await PushNotificationService().sendNotification(
+            <String>[user.oneSignalId],
+            "Você deu um MATCH com " + likedUser.name,
+            "NOVO MATCH!",
+            null,
+            null);
+      }
+
       return true;
     }
 

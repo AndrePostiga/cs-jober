@@ -121,7 +121,25 @@ class UserService {
     return querySnapShot.docs.map((e) => UserType.fromSnapshot(e)).toList();
   }
 
-  Future<User?> updateUserLatLong(firebaseAuthUid) async {
+  Future<User?> updateUserOneSignalId(
+      String firebaseAuthUid, String oneSignalId) async {
+    var storedUser = await getUserByFirebaseAuthUid(firebaseAuthUid);
+
+    if (storedUser != null) {
+      storedUser.oneSignalId = oneSignalId;
+
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(storedUser.reference!.id)
+          .update(storedUser.toMap());
+
+      return await getUserByFirebaseAuthUid(firebaseAuthUid);
+    }
+
+    throw Exception("Usuário não encontrado");
+  }
+
+  Future<User?> updateUserLatLong(String firebaseAuthUid) async {
     var location = await AppLocation.getUserActualLocation();
 
     var storedUser = await getUserByFirebaseAuthUid(firebaseAuthUid);

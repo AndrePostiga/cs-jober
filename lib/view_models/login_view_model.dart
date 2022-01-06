@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:grupolaranja20212/services/push_notification_service.dart';
 import 'package:grupolaranja20212/utils/constants.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class LoginViewModel extends ChangeNotifier {
   String message = "";
@@ -15,7 +15,7 @@ class LoginViewModel extends ChangeNotifier {
       isLoggedIn = userCredential.user != null;
 
       if (isLoggedIn) {
-        await OneSignal.shared.setExternalUserId(userCredential.user!.uid);
+        await PushNotificationService().loginUser(userCredential.user!.uid);
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == "user-not-found") {
