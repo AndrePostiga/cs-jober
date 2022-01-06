@@ -154,7 +154,7 @@ class _SwipePage extends State<SwipePage> {
   Widget build(BuildContext context) {
     return Column(children: [
       SizedBox(
-        height: 550,
+        height: 430,
         child: _swipeItem,
       ),
       const SizedBox(
@@ -186,28 +186,6 @@ class _SwipePage extends State<SwipePage> {
               ),
             ),
           ),
-          SizedBox(
-              height: 80,
-              width: 80,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.white),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50.0),
-                          side: const BorderSide(color: Colors.orange))),
-                ),
-                onPressed: () {
-                  if (_swipeItems.isNotEmpty) {
-                    _matchEngine.currentItem?.superLike();
-                  }
-                },
-                child: const Icon(
-                  Icons.star_rounded,
-                  color: Colors.orange,
-                  size: 50,
-                ),
-              )),
           SizedBox(
               height: 80,
               width: 80,
