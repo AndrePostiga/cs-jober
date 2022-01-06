@@ -136,37 +136,47 @@ class _SwipePage extends State<SwipePage> {
                 ),
                 borderRadius: const BorderRadius.all(Radius.circular(40.0))),
             alignment: Alignment.center,
-            child: Row(
-              children: [
-                const SizedBox(width: 5),
-                Column(
+            child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40),
+                    gradient: const LinearGradient(
+                        colors: [Colors.transparent, Colors.black],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        stops: [0.7, 1])),
+                child: Row(
                   children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Row(
+                    const SizedBox(width: 5),
+                    Column(
                       children: [
-                        Text(
-                          _swipeItems[index].content.name,
-                          style: const TextStyle(
-                            fontSize: 32,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        const Spacer(),
+                        Row(
+                          children: [
+                            Text(
+                              _swipeItems[index].content.name,
+                              style: const TextStyle(
+                                fontSize: 32,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 16,
+                            ),
+                            const Text(
+                              "18",
+                              style:
+                                  TextStyle(fontSize: 32, color: Colors.white),
+                            )
+                          ],
                         ),
                         const SizedBox(
-                          width: 16,
-                        ),
-                        const Text(
-                          "18",
-                          style: TextStyle(fontSize: 32, color: Colors.black),
+                          height: 50,
                         )
                       ],
                     )
                   ],
-                )
-              ],
-            ));
+                )));
       },
       onStackFinished: () async {
         await populateSwipeItens();
