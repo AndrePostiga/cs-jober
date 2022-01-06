@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:grupolaranja20212/models/user.dart' as user_model;
 import 'package:grupolaranja20212/view_models/swipe_view_model.dart';
 import 'package:swipe_cards/swipe_cards.dart';
@@ -127,19 +128,41 @@ class _SwipePage extends State<SwipePage> {
       matchEngine: _matchEngine,
       itemBuilder: (BuildContext context, int index) {
         return Container(
-          margin: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(_swipeItems[index].content.photoUrl),
-                fit: BoxFit.cover,
-              ),
-              borderRadius: const BorderRadius.all(Radius.circular(40.0))),
-          alignment: Alignment.center,
-          child: Text(
-            _swipeItems[index].content.name,
-            style: const TextStyle(fontSize: 100),
-          ),
-        );
+            margin: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(_swipeItems[index].content.photoUrl),
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: const BorderRadius.all(Radius.circular(40.0))),
+            alignment: Alignment.center,
+            child: Row(
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          _swipeItems[index].content.name,
+                          style: const TextStyle(
+                            fontSize: 32,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 16,
+                        ),
+                        const Text(
+                          "18",
+                          style: TextStyle(fontSize: 32, color: Colors.black),
+                        )
+                      ],
+                    )
+                  ],
+                )
+              ],
+            ));
       },
       onStackFinished: () async {
         await populateSwipeItens();
