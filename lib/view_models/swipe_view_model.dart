@@ -146,8 +146,7 @@ class SwipeViewModel extends ChangeNotifier {
       }
     }
 
-    // se algum dos elementos tiver nas 2 listas ou se a lista pra checar for vazia entao o retorno vai ser true
-
+    // se algum dos elementos tiver nas 2 listas o retorno vai ser true
     for (var element in listaParaChecarElementos) {
       if (listaParaVerificarSeContemAlgum.contains(element)) {
         return true;
