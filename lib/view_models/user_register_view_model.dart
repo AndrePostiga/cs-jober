@@ -19,6 +19,7 @@ class UserRegisterViewModel extends ChangeNotifier {
     String downloadURL =
         "https://firebasestorage.googleapis.com/v0/b/laranja20212.appspot.com/o/avatar.png?alt=media&token=780ef04c-eb05-4837-89ff-f93302d7db41";
 
+    // usando uuid pra gerar identificador unico pra img
     const uuid = Uuid();
     final filePath = "/images/${uuid.v4()}.jpg";
     final storage = FirebaseStorage.instance.ref(filePath);

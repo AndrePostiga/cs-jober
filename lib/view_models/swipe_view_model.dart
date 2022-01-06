@@ -61,6 +61,7 @@ class SwipeViewModel extends ChangeNotifier {
       User user, List<User>? previousFoundedUsers) async {
     previousFoundedUsers ??= <User>[];
 
+    // antes de tudo a funcao comeca recuperando os firebaseAuthUid que nao devem ser retornados na busca
     var previousFoundedUsersIds = <String>[];
 
     for (var previousFoundedUser in previousFoundedUsers) {
@@ -100,6 +101,7 @@ class SwipeViewModel extends ChangeNotifier {
     }
 
     for (var newFoundedUser in foundedUsers) {
+      // verifica se as skills batem (ou tem nos 2 ou o usuario encontrado tem a lista de skills vazia)
       if (newFoundedUser.typeId != user.typeId &&
           _containsAny(newFoundedUser.skills, user.skills)) {
         var maxSearchDistance = user.maxSearchDistance.toDouble();
@@ -107,6 +109,7 @@ class SwipeViewModel extends ChangeNotifier {
           maxSearchDistance = 1;
         }
 
+        // verifica se a distancia maxima procurada esta maior ou igual que a distancia dos pontos em KM calculando via LAT,LONG
         if (maxSearchDistance >=
             _distanceBetweenTwoLatAndLongs(
                 user.lat, user.long, newFoundedUser.lat, newFoundedUser.long)) {
@@ -115,6 +118,7 @@ class SwipeViewModel extends ChangeNotifier {
       }
     }
 
+    // se a lista de usuarios encontrados for menor que a maxItensToGet uma recursao vai ocorrer pra pegar mais usuarios caso tiver e os usuarios ja encontrados serao passados via parametro para n serem buscados
     if (usersToReturn.length < maxItensToGet) {
       foundedUsers.addAll(previousFoundedUsers);
       usersToReturn.addAll(await getUsersToSwipe(user, foundedUsers));
@@ -125,6 +129,7 @@ class SwipeViewModel extends ChangeNotifier {
 
   bool _containsAny(List<String> listaParaVerificarSeContemAlgum,
       List<String> listaParaChecarElementos) {
+    // se algum dos elementos tiver nas 2 listas ou se a lista pra checar for vazia entao o retorno vai ser true
     var result = true;
 
     for (var element in listaParaChecarElementos) {
@@ -139,6 +144,7 @@ class SwipeViewModel extends ChangeNotifier {
 
   double _distanceBetweenTwoLatAndLongs(
       double lat1, double lon1, double lat2, double lon2) {
+    // checking distance using the implementation presented on this site  https://flutteragency.com/total-distance-from-latlng-list-in-flutter/
     double theta = lon1 - lon2;
     double dist = sin(_deg2rad(lat1)) * sin(_deg2rad(lat2)) +
         cos(_deg2rad(lat1)) * cos(_deg2rad(lat2)) * cos(_deg2rad(theta));
