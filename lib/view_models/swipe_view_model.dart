@@ -129,17 +129,32 @@ class SwipeViewModel extends ChangeNotifier {
 
   bool _containsAny(List<String> listaParaVerificarSeContemAlgum,
       List<String> listaParaChecarElementos) {
+    // se uma das listas for vazia retorna true
+    if (listaParaChecarElementos.isEmpty ||
+        listaParaVerificarSeContemAlgum.isEmpty) {
+      return true;
+    }
+
+    // se uma das duas listas so tiver 1 item e o item 1 for uma string vazia, retorna true tbm
+    if (listaParaChecarElementos.length == 1) {
+      if (listaParaChecarElementos.first == "") {
+        return true;
+      }
+    } else if (listaParaVerificarSeContemAlgum.length == 1) {
+      if (listaParaVerificarSeContemAlgum.first == "") {
+        return true;
+      }
+    }
+
     // se algum dos elementos tiver nas 2 listas ou se a lista pra checar for vazia entao o retorno vai ser true
-    var result = true;
 
     for (var element in listaParaChecarElementos) {
-      result = false;
       if (listaParaVerificarSeContemAlgum.contains(element)) {
         return true;
       }
     }
 
-    return result;
+    return false;
   }
 
   double _distanceBetweenTwoLatAndLongs(

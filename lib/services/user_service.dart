@@ -135,8 +135,6 @@ class UserService {
 
       return await getUserByFirebaseAuthUid(firebaseAuthUid);
     }
-
-    throw Exception("Usuário não encontrado");
   }
 
   Future<User?> updateUserLatLong(String firebaseAuthUid) async {

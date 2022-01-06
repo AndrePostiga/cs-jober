@@ -15,7 +15,7 @@ class RegisterViewModel extends ChangeNotifier {
       isRegistered = userCredential.user != null;
 
       if (isRegistered) {
-        await PushNotificationService().loginUser(userCredential.user!.uid);
+        PushNotificationService().loginUser(userCredential.user!.uid);
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == "weak-password") {

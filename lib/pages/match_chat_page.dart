@@ -32,7 +32,7 @@ class _MatchChatPage extends State<MatchChatPage> {
         backgroundColor: Colors.cyanAccent,
         flexibleSpace: SafeArea(
             child: GestureDetector(
-          onTap: () => {AppNavigator.navigateToProfilePage(context)},
+          onTap: () => {AppNavigator.navigateToProfilePage(context, 'xyz')},
           child: Container(
             padding: const EdgeInsets.only(right: 16),
             child: Row(
