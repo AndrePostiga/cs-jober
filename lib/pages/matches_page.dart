@@ -25,25 +25,22 @@ class _MatchesPage extends State<MatchesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Matches',
-      home: Scaffold(
-        body: _widgetOptions.elementAt(_selectedIndex),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-          selectedItemColor: Colors.purple,
-          unselectedItemColor: Colors.grey.shade500,
-          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600),
-          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600),
-          type: BottomNavigationBarType.fixed,
-          items: const [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.message), label: ("Conversas")),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.location_on), label: ("Mapa")),
-          ],
-        ),
+    return Scaffold(
+      body: _widgetOptions.elementAt(_selectedIndex),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        selectedItemColor: Colors.purple,
+        unselectedItemColor: Colors.grey.shade500,
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600),
+        unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600),
+        type: BottomNavigationBarType.fixed,
+        items: const [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.message), label: ("Conversas")),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.location_on), label: ("Mapa")),
+        ],
       ),
     );
   }

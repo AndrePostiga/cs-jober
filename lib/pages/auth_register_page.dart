@@ -26,6 +26,7 @@ class _AuthRegisterPage extends State<AuthRegisterPage> {
 
       isRegistered = await _registerVM.register(email, password);
       if (isRegistered) {
+        // if user is successfully registered redirect to main page blocking user to back
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const MainPage()),
             (Route<dynamic> route) => false);
