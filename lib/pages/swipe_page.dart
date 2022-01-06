@@ -138,8 +138,12 @@ class _SwipePage extends State<SwipePage> {
             alignment: Alignment.center,
             child: Row(
               children: [
+                const SizedBox(width: 5),
                 Column(
                   children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
                     Row(
                       children: [
                         Text(
