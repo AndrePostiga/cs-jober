@@ -17,10 +17,11 @@ class _MatchesMapPage extends State<MatchesMapPage> {
   late Widget _pageContent;
   late lat_lng.LatLng _centerOfMap = lat_lng.LatLng(-22.9041, -43.1327);
 
-  Future _initVars() async {
+  Future _initPage() async {
     var users =
         await _vm.getMatchesUsers(FirebaseAuth.instance.currentUser!.uid);
 
+    // populate map with matches on their location
     var newMarkers = <Marker>[];
 
     for (var user in users) {
@@ -32,6 +33,7 @@ class _MatchesMapPage extends State<MatchesMapPage> {
       ));
     }
 
+    // set center of map as user current location
     var user = await _vm
         .getUserByFirebaseAuthUid(FirebaseAuth.instance.currentUser!.uid);
 
@@ -48,7 +50,7 @@ class _MatchesMapPage extends State<MatchesMapPage> {
   void initState() {
     _pageContent = _waitPage();
     super.initState();
-    _initVars();
+    _initPage();
   }
 
   Widget _waitPage() {

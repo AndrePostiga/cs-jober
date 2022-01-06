@@ -16,6 +16,9 @@ class _AuthForgotPasswordPage extends State<AuthForgotPasswordPage> {
   late ForgotPasswordViewModel _vM = ForgotPasswordViewModel();
 
   void _send(BuildContext context) async {
+    // function to send one email having one link to update your password
+
+    // clean message variable
     setState(() {
       _message = "";
     });
