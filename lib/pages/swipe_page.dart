@@ -128,9 +128,12 @@ class _SwipePage extends State<SwipePage> {
       itemBuilder: (BuildContext context, int index) {
         return Container(
           margin: const EdgeInsets.all(20),
-          decoration: const BoxDecoration(
-              color: Colors.blue,
-              borderRadius: BorderRadius.all(Radius.circular(40.0))),
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(_swipeItems[index].content.photoUrl),
+                fit: BoxFit.cover,
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(40.0))),
           alignment: Alignment.center,
           child: Text(
             _swipeItems[index].content.name,
@@ -152,7 +155,7 @@ class _SwipePage extends State<SwipePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       SizedBox(
         height: 430,
         child: _swipeItem,
