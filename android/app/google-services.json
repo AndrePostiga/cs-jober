@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "524760728616",
+    "project_id": "laranja20212",
+    "storage_bucket": "laranja20212.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:524760728616:android:7c977fb0b619d8873fa11d",
+        "android_client_info": {
+          "package_name": "br.uff.ic.dm.grupolaranja20212"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "524760728616-tgoi26v9lm1s5lk2n8t5tirc2j8nua2l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6Gfl0oGv4F1iVNL2Z6IgBjbAd_lhOgRU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "524760728616-tgoi26v9lm1s5lk2n8t5tirc2j8nua2l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
