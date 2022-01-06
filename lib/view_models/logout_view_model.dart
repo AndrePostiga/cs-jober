@@ -11,7 +11,7 @@ class LogoutViewModel extends ChangeNotifier {
     if (currentUser != null) {
       await FirebaseAuth.instance.signOut();
 
-      await PushNotificationService().logout(currentUser.uid);
+      PushNotificationService().logout(currentUser.uid);
       logoutOk = true;
     }
 

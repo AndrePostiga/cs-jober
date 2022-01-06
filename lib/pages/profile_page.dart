@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+class ProfilePage extends StatefulWidget {
+  final String userFirebaseAuthUid;
 
+  const ProfilePage({Key? key, required this.userFirebaseAuthUid})
+      : super(key: key);
+
+  @override
+  _ProfilePage createState() => _ProfilePage();
+}
+
+class _ProfilePage extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -13,7 +21,7 @@ class ProfilePage extends StatelessWidget {
             icon: const Icon(Icons.arrow_back),
             onPressed: () => Navigator.of(context).pop(),
           ),
-          title: const Text('Perfil'),
+          title: Text('Perfil do ' + widget.userFirebaseAuthUid),
         ),
         body: const Center(
           child: Text('Tela onde mostra o perfil selecionado'),

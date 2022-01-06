@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:grupolaranja20212/services/push_notification_service.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:grupolaranja20212/models/user.dart';
@@ -43,7 +44,7 @@ class UserRegisterViewModel extends ChangeNotifier {
       int maxSearchDistance,
       List<String> skills,
       String birthDate) async {
-    return await UserService().createOrUpdateUserByFirebaseAuthUid(
+    var user = await UserService().createOrUpdateUserByFirebaseAuthUid(
         firebaseAuthUid,
         name,
         linkedinUrl,
@@ -53,5 +54,11 @@ class UserRegisterViewModel extends ChangeNotifier {
         maxSearchDistance,
         skills,
         birthDate);
+
+    await UserService().updateUserLatLong(firebaseAuthUid);
+
+    PushNotificationService().loginUser(firebaseAuthUid);
+
+    return user;
   }
 }

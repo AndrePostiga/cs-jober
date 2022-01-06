@@ -15,7 +15,7 @@ class LoginViewModel extends ChangeNotifier {
       isLoggedIn = userCredential.user != null;
 
       if (isLoggedIn) {
-        await PushNotificationService().loginUser(userCredential.user!.uid);
+        PushNotificationService().loginUser(userCredential.user!.uid);
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == "user-not-found") {
