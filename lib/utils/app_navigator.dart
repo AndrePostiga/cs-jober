@@ -68,13 +68,15 @@ class AppNavigator {
             fullscreenDialog: false));
   }
 
-  static Future navigateToMatchChatPage(BuildContext context) async {
+  static Future navigateToMatchChatPage(
+      BuildContext context, String matchUserFirebaseUid) async {
     return await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => ChangeNotifierProvider(
                 create: (context) => MatchesViewModel(),
-                child: const MatchChatPage()),
+                child: MatchChatPage(
+                    matchUserFirebaseAuthUid: matchUserFirebaseUid)),
             fullscreenDialog: false));
   }
 
