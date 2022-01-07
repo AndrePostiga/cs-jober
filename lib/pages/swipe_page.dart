@@ -50,7 +50,7 @@ class _SwipePage extends State<SwipePage> {
     _swipeItems = <SwipeItem>[];
 
     if (_user != null) {
-      var usersToSwipe = await _vM.getUsersToSwipe(_user!, null);
+      var usersToSwipe = await _vM.getUsersToSwipe(_user!);
 
       for (var user in usersToSwipe) {
         if (!_alreadyPassedUsers.contains(user.firebaseAuthUid)) {

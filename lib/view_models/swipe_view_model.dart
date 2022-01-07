@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:grupolaranja20212/models/user.dart';
-import 'dart:math' show cos, pi, sin, acos;
+import 'dart:math' show cos;
 import 'package:grupolaranja20212/models/match.dart';
 import 'package:grupolaranja20212/services/push_notification_service.dart';
 
@@ -34,7 +34,7 @@ class SwipeViewModel extends ChangeNotifier {
             "Você deu um MATCH com " + user.name,
             "NOVO MATCH!",
             null,
-            null);
+            {"page": "chat", "key": user.firebaseAuthUid});
       }
 
       if (user.oneSignalId != "") {
@@ -43,7 +43,7 @@ class SwipeViewModel extends ChangeNotifier {
             "Você deu um MATCH com " + likedUser.name,
             "NOVO MATCH!",
             null,
-            null);
+            {"page": "chat", "key": likedUser.firebaseAuthUid});
       }
 
       return true;
@@ -57,20 +57,10 @@ class SwipeViewModel extends ChangeNotifier {
         user.firebaseAuthUid, null, unlikedFirebaseAuthUid);
   }
 
-  Future<List<User>> getUsersToSwipe(
-      User user, List<User>? previousFoundedUsers) async {
-    previousFoundedUsers ??= <User>[];
-
+  Future<List<User>> getUsersToSwipe(User user) async {
     // antes de tudo a funcao comeca recuperando os firebaseAuthUid que nao devem ser retornados na busca
-    var previousFoundedUsersIds = <String>[];
 
-    for (var previousFoundedUser in previousFoundedUsers) {
-      previousFoundedUsersIds.add(previousFoundedUser.firebaseAuthUid);
-    }
-
-    var maxItensToGet = 5;
-
-    var firebaseAuthUidToNotGet = <String>[user.firebaseAuthUid];
+    var firebaseAuthUidToNotGet = <String>[];
 
     if (user.likes.isNotEmpty) {
       firebaseAuthUidToNotGet.addAll(user.likes);
@@ -80,15 +70,30 @@ class SwipeViewModel extends ChangeNotifier {
       firebaseAuthUidToNotGet.addAll(user.unlikes);
     }
 
-    if (previousFoundedUsersIds.isNotEmpty) {
-      firebaseAuthUidToNotGet.addAll(previousFoundedUsersIds);
+    var maxSearchDistance = user.maxSearchDistance;
+    if (maxSearchDistance == 0) {
+      maxSearchDistance = 1;
     }
 
+    var maxAndMinimumLatAndLong =
+        getMaxAndMinumLatAndLong(user.lat, user.long, maxSearchDistance);
+
+    // pega so 10 itens no firebaseAuthUidToNotGet por conta da limitacao do firebasestore
+    var filtroProFirebase = <String>[user.firebaseAuthUid];
+    var filtroNoCodigo = <String>[];
+    for (var userToNotGet in firebaseAuthUidToNotGet.toSet().toList()) {
+      if (filtroProFirebase.length < 10) {
+        filtroProFirebase.add(userToNotGet);
+      } else {
+        filtroNoCodigo.add(userToNotGet);
+      }
+    }
+
+    // whereNotIn é limitado a 10 itens
     var querySnapShot = await FirebaseFirestore.instance
         .collection('users')
-        .where("firebaseAuthUid",
-            whereNotIn: firebaseAuthUidToNotGet.toSet().toList())
-        .limit(maxItensToGet)
+        .where('typeId', isEqualTo: user.typeId == 0 ? 1 : 0)
+        .where("firebaseAuthUid", whereNotIn: filtroProFirebase)
         .get();
 
     var foundedUsers =
@@ -100,28 +105,24 @@ class SwipeViewModel extends ChangeNotifier {
       return usersToReturn;
     }
 
+    double minLat = maxAndMinimumLatAndLong["minLat"] ?? 0;
+    double maxLat = maxAndMinimumLatAndLong["maxLat"] ?? 0;
+    double minLong = maxAndMinimumLatAndLong["minLong"] ?? 0;
+    double maxLong = maxAndMinimumLatAndLong["maxLong"] ?? 0;
+
     for (var newFoundedUser in foundedUsers) {
       // verifica se as skills batem (ou tem nos 2 ou o usuario encontrado tem a lista de skills vazia)
-      if (newFoundedUser.typeId != user.typeId &&
-          _containsAny(newFoundedUser.skills, user.skills)) {
-        var maxSearchDistance = user.maxSearchDistance.toDouble();
-        if (maxSearchDistance == 0) {
-          maxSearchDistance = 1;
-        }
-
-        // verifica se a distancia maxima procurada esta maior ou igual que a distancia dos pontos em KM calculando via LAT,LONG
-        if (maxSearchDistance >=
-            _distanceBetweenTwoLatAndLongs(
-                user.lat, user.long, newFoundedUser.lat, newFoundedUser.long)) {
-          usersToReturn.add(newFoundedUser);
-        }
+      // verifica se long do usuario ta entre os numeros permitidos
+      // verifica se lat do usuario ta entre os numeros permitidos
+      // verifica se usuario ta na lista dos firebaseUid nao permitidos
+      if (_containsAny(newFoundedUser.skills, user.skills) &&
+          newFoundedUser.long >= minLong &&
+          newFoundedUser.long <= maxLong &&
+          newFoundedUser.lat >= minLat &&
+          newFoundedUser.lat <= maxLat &&
+          !filtroNoCodigo.contains(newFoundedUser.firebaseAuthUid)) {
+        usersToReturn.add(newFoundedUser);
       }
-    }
-
-    // se a lista de usuarios encontrados for menor que a maxItensToGet uma recursao vai ocorrer pra pegar mais usuarios caso tiver e os usuarios ja encontrados serao passados via parametro para n serem buscados
-    if (usersToReturn.length < maxItensToGet) {
-      foundedUsers.addAll(previousFoundedUsers);
-      usersToReturn.addAll(await getUsersToSwipe(user, foundedUsers));
     }
 
     return usersToReturn;
@@ -156,26 +157,29 @@ class SwipeViewModel extends ChangeNotifier {
     return false;
   }
 
-  double _distanceBetweenTwoLatAndLongs(
-      double lat1, double lon1, double lat2, double lon2) {
-    // checking distance using the implementation presented on this site  https://flutteragency.com/total-distance-from-latlng-list-in-flutter/
-    double theta = lon1 - lon2;
-    double dist = sin(_deg2rad(lat1)) * sin(_deg2rad(lat2)) +
-        cos(_deg2rad(lat1)) * cos(_deg2rad(lat2)) * cos(_deg2rad(theta));
-    dist = acos(dist);
-    dist = _rad2deg(dist);
-    dist = dist * 60 * 1.1515;
+  Map<String, double> getMaxAndMinumLatAndLong(
+      double lat, double long, int distanceRangeKm) {
+    // getting code from https://stackoverflow.com/questions/7477003/calculating-new-longitude-latitude-from-old-n-meters
+    // number of km per degree = ~111km (111.32 in google maps, but range varies between 110.567km at the equator and 111.699km at the poles)
+    // 1km in degree = 1 / 111.32km = 0.0089
+    // 1m in degree = 0.0089 / 1000 = 0.0000089
+    double coef = distanceRangeKm * 0.0089;
 
-    dist = dist * 1.609344;
+    double newLat1 = lat + coef;
 
-    return dist;
-  }
+    // pi / 180 = 0.018
+    double newLong1 = long + coef / cos(lat * 0.018);
 
-  double _deg2rad(double deg) {
-    return (deg * pi / 180.0);
-  }
+    double newLat2 = lat - coef;
 
-  double _rad2deg(double rad) {
-    return (rad * 180.0 / pi);
+    // pi / 180 = 0.018
+    double newLong2 = long - coef / cos(lat * 0.018);
+
+    return {
+      "maxLat": newLat1,
+      "maxLong": newLong1,
+      "minLat": newLat2,
+      "minLong": newLong2
+    };
   }
 }

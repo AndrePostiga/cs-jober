@@ -24,7 +24,7 @@ class PushNotificationService {
   }
 
   Future sendNotification(List<String> receptorsOneSignalids, String msg,
-      String? head, String? link, dynamic data) async {
+      String? head, String? link, Map<String, dynamic>? data) async {
     var notification = OSCreateNotification(
         content: msg,
         playerIds: receptorsOneSignalids,

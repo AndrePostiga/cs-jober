@@ -177,6 +177,10 @@ class UserService {
       }
     }
 
+    if (firebaseAuthUids.isEmpty) {
+      return <User>[];
+    }
+
     var querySnapShotUsers = await FirebaseFirestore.instance
         .collection('users')
         .where("firebaseAuthUid", whereIn: firebaseAuthUids)
