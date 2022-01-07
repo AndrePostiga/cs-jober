@@ -121,6 +121,16 @@ class _UserRegisterPage extends State<UserRegisterPage> {
 
   Future _save(BuildContext context) async {
     try {
+      var skillsList =
+          _skillsController.text.toUpperCase().split(",").toSet().toList();
+
+      // tratamento pra evitar salvar array de skills c 1 string vazia caso n tenha skill nenhuma
+      if (skillsList.length == 1) {
+        if (skillsList.first == "") {
+          skillsList = <String>[];
+        }
+      }
+
       await _userRegisterVM.createOrUpdateUserByFirebaseAuthUid(
           FirebaseAuth.instance.currentUser!.uid,
           _nameController.text,
@@ -129,7 +139,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
           _userTypeId,
           _descriptionController.text,
           _maxSearchDistance,
-          _skillsController.text.toUpperCase().split(",").toSet().toList(),
+          skillsList,
           _birthDateController.text);
 
       setState(() {

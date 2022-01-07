@@ -1,11 +1,9 @@
-class ChatUsers {
-  String name;
-  String msgTxt;
-  String imageUrl;
-  String time;
-  ChatUsers(
-      {required this.name,
-      required this.msgTxt,
-      required this.imageUrl,
-      required this.time});
+import 'package:grupolaranja20212/models/match_message.dart';
+import 'package:grupolaranja20212/models/user.dart';
+
+class MatchChatUser {
+  final User matchedUser;
+  final MatchMessage msg;
+
+  MatchChatUser(this.matchedUser, this.msg);
 }

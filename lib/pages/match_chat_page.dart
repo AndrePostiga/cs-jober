@@ -1,28 +1,111 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:grupolaranja20212/models/chat_message_model.dart';
+import 'package:grupolaranja20212/models/user.dart' as models_user;
+import 'package:grupolaranja20212/models/match_message.dart';
+import 'package:grupolaranja20212/services/messages_service.dart';
 import 'package:grupolaranja20212/utils/app_navigator.dart';
+import 'package:grupolaranja20212/view_models/match_chat_view_model.dart';
 
 class MatchChatPage extends StatefulWidget {
-  const MatchChatPage({Key? key}) : super(key: key);
+  final String matchUserFirebaseAuthUid;
+
+  const MatchChatPage({Key? key, required this.matchUserFirebaseAuthUid})
+      : super(key: key);
 
   @override
   _MatchChatPage createState() => _MatchChatPage();
 }
 
-List<ChatMessage> messages = [
-  ChatMessage(
-      messageContent: "Olá candidato, marcamos a entrevista para 25/12.",
-      messageType: "receiver"),
-  ChatMessage(
-      messageContent: "Agradeço o retorno, estou me preparando",
-      messageType: "sender"),
-  ChatMessage(messageContent: "Obrigado, até lá.", messageType: "receiver"),
-  ChatMessage(
-      messageContent: "Boa noite, gostaria de remarcar a entrevista",
-      messageType: "sender")
-];
-
 class _MatchChatPage extends State<MatchChatPage> {
+  final MatchChatViewModel _vM = MatchChatViewModel();
+
+  final _msgController = TextEditingController();
+
+  Future _sendMsg() async {
+    await _vM.addMsg(_loggedUser, _matchedUser, _msgController.text);
+
+    setState(() {
+      _messages.add(MatchMessage(
+          MessagesService().getFromToUidsAndConvertToUniqueKey(
+              _loggedUser.firebaseAuthUid, _matchedUser.firebaseAuthUid),
+          DateTime.now(),
+          _msgController.text));
+    });
+
+    _msgController.text = "";
+  }
+
+  List<MatchMessage> _messages = <MatchMessage>[];
+  late models_user.User _loggedUser = models_user.User(
+    FirebaseAuth.instance.currentUser!.uid,
+    "",
+    "Aguarde... Carregando informações...",
+    "",
+    "",
+    0,
+    "",
+    0.0,
+    0.0,
+    1,
+    <String>[],
+    <String>[],
+    <String>[],
+    "",
+  );
+  late models_user.User _matchedUser = models_user.User(
+    widget.matchUserFirebaseAuthUid,
+    "",
+    "Aguarde... Carregando informações...",
+    "",
+    "",
+    0,
+    "",
+    0.0,
+    0.0,
+    1,
+    <String>[],
+    <String>[],
+    <String>[],
+    "",
+  );
+
+  Future _getMsgs() async {
+    var msgs = await _vM.getMessagesBetweenFirebaseUids(
+        <String>[widget.matchUserFirebaseAuthUid, _loggedUser.firebaseAuthUid]);
+
+    setState(() {
+      _messages = msgs;
+    });
+  }
+
+  Future _getPageInfo() async {
+    await _getMsgs();
+
+    var gotMatchedUser =
+        await _vM.getUserByFirebaseAuthUid(widget.matchUserFirebaseAuthUid);
+
+    var gotLoggedUser =
+        await _vM.getUserByFirebaseAuthUid(_loggedUser.firebaseAuthUid);
+
+    if (gotLoggedUser != null) {
+      setState(() {
+        _loggedUser = gotLoggedUser;
+      });
+    }
+
+    if (gotMatchedUser != null) {
+      setState(() {
+        _matchedUser = gotMatchedUser;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    _getPageInfo();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +115,10 @@ class _MatchChatPage extends State<MatchChatPage> {
         backgroundColor: Colors.cyanAccent,
         flexibleSpace: SafeArea(
             child: GestureDetector(
-          onTap: () => {AppNavigator.navigateToProfilePage(context)},
+          onTap: () => {
+            AppNavigator.navigateToProfilePage(
+                context, widget.matchUserFirebaseAuthUid)
+          },
           child: Container(
             padding: const EdgeInsets.only(right: 16),
             child: Row(
@@ -49,9 +135,8 @@ class _MatchChatPage extends State<MatchChatPage> {
                 const SizedBox(
                   width: 2,
                 ),
-                const CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      "https://randomuser.me/api/portraits/men/5.jpg"),
+                CircleAvatar(
+                  backgroundImage: NetworkImage(_matchedUser.photoUrl),
                   maxRadius: 20,
                 ),
                 const SizedBox(
@@ -61,10 +146,10 @@ class _MatchChatPage extends State<MatchChatPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const <Widget>[
+                    children: <Widget>[
                       Text(
-                        "John Doe",
-                        style: TextStyle(
+                        _matchedUser.name,
+                        style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                     ],
@@ -78,7 +163,7 @@ class _MatchChatPage extends State<MatchChatPage> {
       body: Stack(
         children: <Widget>[
           ListView.builder(
-            itemCount: messages.length,
+            itemCount: _messages.length,
             shrinkWrap: true,
             padding: const EdgeInsets.only(top: 10, bottom: 10),
             physics: const NeverScrollableScrollPhysics(),
@@ -87,19 +172,21 @@ class _MatchChatPage extends State<MatchChatPage> {
                 padding: const EdgeInsets.only(
                     left: 16, right: 16, top: 10, bottom: 10),
                 child: Align(
-                  alignment: (messages[index].messageType == "receiver"
-                      ? Alignment.topLeft
-                      : Alignment.topRight),
+                  alignment:
+                      (_messages[index].toUserUid == _loggedUser.firebaseAuthUid
+                          ? Alignment.topLeft
+                          : Alignment.topRight),
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: (messages[index].messageType == "receiver"
+                      color: (_messages[index].toUserUid ==
+                              _loggedUser.firebaseAuthUid
                           ? Colors.grey.shade200
                           : Colors.blue[200]),
                     ),
                     padding: const EdgeInsets.all(16),
                     child: Text(
-                      messages[index].messageContent,
+                      _messages[index].text,
                       style: const TextStyle(fontSize: 15),
                     ),
                   ),
@@ -116,19 +203,22 @@ class _MatchChatPage extends State<MatchChatPage> {
               color: Colors.white,
               child: Row(
                 children: <Widget>[
-                  const Expanded(
+                  Expanded(
                     child: TextField(
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           hintText: "Digite sua mensagem...",
                           hintStyle: TextStyle(color: Colors.black54),
                           border: InputBorder.none),
+                      controller: _msgController,
                     ),
                   ),
                   const SizedBox(
                     width: 15,
                   ),
                   FloatingActionButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _sendMsg();
+                    },
                     child: const Icon(
                       Icons.send,
                       color: Colors.white,

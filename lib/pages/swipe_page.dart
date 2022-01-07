@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:grupolaranja20212/models/user.dart' as user_model;
 import 'package:grupolaranja20212/view_models/swipe_view_model.dart';
 import 'package:swipe_cards/swipe_cards.dart';
@@ -127,16 +128,55 @@ class _SwipePage extends State<SwipePage> {
       matchEngine: _matchEngine,
       itemBuilder: (BuildContext context, int index) {
         return Container(
-          margin: const EdgeInsets.all(20),
-          decoration: const BoxDecoration(
-              color: Colors.blue,
-              borderRadius: BorderRadius.all(Radius.circular(40.0))),
-          alignment: Alignment.center,
-          child: Text(
-            _swipeItems[index].content.name,
-            style: const TextStyle(fontSize: 100),
-          ),
-        );
+            margin: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(_swipeItems[index].content.photoUrl),
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: const BorderRadius.all(Radius.circular(40.0))),
+            alignment: Alignment.center,
+            child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40),
+                    gradient: const LinearGradient(
+                        colors: [Colors.transparent, Colors.black],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        stops: [0.7, 1])),
+                child: Row(
+                  children: [
+                    const SizedBox(width: 5),
+                    Column(
+                      children: [
+                        const Spacer(),
+                        Row(
+                          children: [
+                            Text(
+                              _swipeItems[index].content.name,
+                              style: const TextStyle(
+                                fontSize: 32,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 16,
+                            ),
+                            const Text(
+                              "18",
+                              style:
+                                  TextStyle(fontSize: 32, color: Colors.white),
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 50,
+                        )
+                      ],
+                    )
+                  ],
+                )));
       },
       onStackFinished: () async {
         await populateSwipeItens();
@@ -152,7 +192,7 @@ class _SwipePage extends State<SwipePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       SizedBox(
         height: 430,
         child: _swipeItem,

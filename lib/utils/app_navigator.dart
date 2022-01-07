@@ -55,23 +55,28 @@ class AppNavigator {
             fullscreenDialog: false));
   }
 
-  static Future navigateToProfilePage(BuildContext context) async {
+  static Future navigateToProfilePage(
+      BuildContext context, String firebaseAuthUid) async {
     return await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => ChangeNotifierProvider(
                 create: (context) => MatchesViewModel(),
-                child: const ProfilePage()),
+                child: ProfilePage(
+                  userFirebaseAuthUid: firebaseAuthUid,
+                )),
             fullscreenDialog: false));
   }
 
-  static Future navigateToMatchChatPage(BuildContext context) async {
+  static Future navigateToMatchChatPage(
+      BuildContext context, String matchUserFirebaseUid) async {
     return await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => ChangeNotifierProvider(
                 create: (context) => MatchesViewModel(),
-                child: const MatchChatPage()),
+                child: MatchChatPage(
+                    matchUserFirebaseAuthUid: matchUserFirebaseUid)),
             fullscreenDialog: false));
   }
 
