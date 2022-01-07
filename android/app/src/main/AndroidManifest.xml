@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="br.uff.ic.dm.grupolaranja20212">
   <uses-permission android:name="android.permission.CAMERA" />
   <uses-permission android:name="android.permission.FLASHLIGHT" />
-  <application android:label="grupolaranja20212" android:icon="@mipmap/ic_launcher" android:requestLegacyExternalStorage="true">
+  <application android:label="Jober" android:icon="@mipmap/ic_launcher" android:requestLegacyExternalStorage="true">
     <meta-data android:name="com.google.android.geo.API_KEY" android:value="nossa_chave_aqui" />
     <activity android:name=".MainActivity" android:launchMode="singleTop" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize">
       <!-- Specifies an Android theme to apply to this Activity as soon as
