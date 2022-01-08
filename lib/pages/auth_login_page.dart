@@ -56,7 +56,10 @@ class _AuthLoginPage extends State<AuthLoginPage> {
     _loginVM = Provider.of<LoginViewModel>(context);
 
     return Scaffold(
-        appBar: AppBar(title: const Text("Login")),
+        appBar: AppBar(
+          title: const Text("Login"),
+          backgroundColor: Colors.orange,
+        ),
         body: Center(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Padding(
@@ -76,11 +79,15 @@ class _AuthLoginPage extends State<AuthLoginPage> {
               ),
             ),
             TextButton(
+                style: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.all(Colors.purple)),
                 onPressed: () {
                   _login(context);
                 },
                 child: const Text("Login")),
             ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.purple)),
               onPressed: () {
                 AppNavigator.navigateToForgotPasswordPage(context);
               },
