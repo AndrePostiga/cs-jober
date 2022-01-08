@@ -9,7 +9,7 @@ import 'package:grupolaranja20212/services/user_service.dart';
 
 class SwipeViewModel extends ChangeNotifier {
   Future _createMatch(List<String> usersId) async {
-    var match = Match(usersId);
+    var match = Match(usersId, DateTime.now());
     await FirebaseFirestore.instance.collection("matches").add(match.toMap());
   }
 
