@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:grupolaranja20212/models/user.dart';
-import 'dart:math' show cos;
+import 'dart:math' show acos, cos, pi, sin;
 import 'package:grupolaranja20212/models/match.dart';
 import 'package:grupolaranja20212/services/push_notification_service.dart';
 
@@ -75,9 +75,6 @@ class SwipeViewModel extends ChangeNotifier {
       maxSearchDistance = 1;
     }
 
-    var maxAndMinimumLatAndLong =
-        getMaxAndMinumLatAndLong(user.lat, user.long, maxSearchDistance);
-
     // pega so 10 itens no firebaseAuthUidToNotGet por conta da limitacao do firebasestore
     var filtroProFirebase = <String>[user.firebaseAuthUid];
     var filtroNoCodigo = <String>[];
@@ -105,21 +102,14 @@ class SwipeViewModel extends ChangeNotifier {
       return usersToReturn;
     }
 
-    double minLat = maxAndMinimumLatAndLong["minLat"] ?? 0;
-    double maxLat = maxAndMinimumLatAndLong["maxLat"] ?? 0;
-    double minLong = maxAndMinimumLatAndLong["minLong"] ?? 0;
-    double maxLong = maxAndMinimumLatAndLong["maxLong"] ?? 0;
-
     for (var newFoundedUser in foundedUsers) {
       // verifica se as skills batem (ou tem nos 2 ou o usuario encontrado tem a lista de skills vazia)
       // verifica se long do usuario ta entre os numeros permitidos
       // verifica se lat do usuario ta entre os numeros permitidos
       // verifica se usuario ta na lista dos firebaseUid nao permitidos
       if (_containsAny(newFoundedUser.skills, user.skills) &&
-          newFoundedUser.long >= minLong &&
-          newFoundedUser.long <= maxLong &&
-          newFoundedUser.lat >= minLat &&
-          newFoundedUser.lat <= maxLat &&
+          _distanceBetweenTwoLatAndLongs(newFoundedUser, user) <=
+              user.maxSearchDistance &&
           !filtroNoCodigo.contains(newFoundedUser.firebaseAuthUid)) {
         usersToReturn.add(newFoundedUser);
       }
@@ -157,29 +147,30 @@ class SwipeViewModel extends ChangeNotifier {
     return false;
   }
 
-  Map<String, double> getMaxAndMinumLatAndLong(
-      double lat, double long, int distanceRangeKm) {
-    // getting code from https://stackoverflow.com/questions/7477003/calculating-new-longitude-latitude-from-old-n-meters
-    // number of km per degree = ~111km (111.32 in google maps, but range varies between 110.567km at the equator and 111.699km at the poles)
-    // 1km in degree = 1 / 111.32km = 0.0089
-    // 1m in degree = 0.0089 / 1000 = 0.0000089
-    double coef = distanceRangeKm * 0.0089;
+  double _distanceBetweenTwoLatAndLongs(User user1, User user2) {
+    double lat1 = user1.lat;
+    double lon1 = user1.long;
+    double lat2 = user2.lat;
+    double lon2 = user2.long;
 
-    double newLat1 = lat + coef;
+    // checking distance using the implementation presented on this site  https://flutteragency.com/total-distance-from-latlng-list-in-flutter/
+    double theta = lon1 - lon2;
+    double dist = sin(_deg2rad(lat1)) * sin(_deg2rad(lat2)) +
+        cos(_deg2rad(lat1)) * cos(_deg2rad(lat2)) * cos(_deg2rad(theta));
+    dist = acos(dist);
+    dist = _rad2deg(dist);
+    dist = dist * 60 * 1.1515;
 
-    // pi / 180 = 0.018
-    double newLong1 = long + coef / cos(lat * 0.018);
+    dist = dist * 1.609344;
 
-    double newLat2 = lat - coef;
+    return dist;
+  }
 
-    // pi / 180 = 0.018
-    double newLong2 = long - coef / cos(lat * 0.018);
+  double _deg2rad(double deg) {
+    return (deg * pi / 180.0);
+  }
 
-    return {
-      "maxLat": newLat1,
-      "maxLong": newLong1,
-      "minLat": newLat2,
-      "minLong": newLong2
-    };
+  double _rad2deg(double rad) {
+    return (rad * 180.0 / pi);
   }
 }
