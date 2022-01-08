@@ -166,6 +166,10 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0),
                   child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.purple),
+                    ),
                     onPressed: () {},
                     child: PopupMenuButton<PhotoOptions>(
                       child: const Text("Defina sua Foto para o JOBer"),
@@ -206,6 +210,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                   padding: const EdgeInsets.all(16.0),
                 ),
                 Slider(
+                  activeColor: Colors.purple,
                   value: _maxSearchDistance.toDouble(),
                   min: 0,
                   max: 100,

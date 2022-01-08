@@ -35,23 +35,32 @@ class _AuthLogoutPage extends State<AuthLogoutPage> {
     _logoutVM = Provider.of<LogoutViewModel>(context);
 
     return MaterialApp(
-      title: 'Logout',
-      home: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => Navigator.of(context).pop(),
+        title: 'Logout',
+        home: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            title: const Text('Logout'),
+            backgroundColor: Colors.orange,
           ),
-          title: const Text('Logout'),
-        ),
-        body: Center(
-          child: TextButton(
-              onPressed: () {
-                _logout(context);
-              },
-              child: Text(_btnLogoutTxt)),
-        ),
-      ),
-    );
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Aperte logout para sair'),
+                TextButton(
+                    style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all(Colors.purple)),
+                    onPressed: () {
+                      _logout(context);
+                    },
+                    child: Text(_btnLogoutTxt)),
+              ],
+            ),
+          ),
+        ));
   }
 }
