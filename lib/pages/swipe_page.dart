@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:grupolaranja20212/models/user.dart' as user_model;
+import 'package:grupolaranja20212/utils/app_navigator.dart';
 import 'package:grupolaranja20212/view_models/swipe_view_model.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 
@@ -150,25 +151,31 @@ class _SwipePage extends State<SwipePage> {
                     Column(
                       children: [
                         const Spacer(),
-                        Row(
-                          children: [
-                            Text(
-                              _swipeItems[index].content.name,
-                              style: const TextStyle(
-                                fontSize: 32,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
+                        GestureDetector(
+                          onTap: () {
+                            AppNavigator.navigateToProfilePage(context,
+                                _swipeItems[index].content.firebaseAuthUid);
+                          },
+                          child: Row(
+                            children: [
+                              Text(
+                                _swipeItems[index].content.name,
+                                style: const TextStyle(
+                                  fontSize: 32,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            const SizedBox(
-                              width: 16,
-                            ),
-                            const Text(
-                              "18",
-                              style:
-                                  TextStyle(fontSize: 32, color: Colors.white),
-                            )
-                          ],
+                              const SizedBox(
+                                width: 16,
+                              ),
+                              const Text(
+                                "",
+                                style: TextStyle(
+                                    fontSize: 32, color: Colors.white),
+                              )
+                            ],
+                          ),
                         ),
                         const SizedBox(
                           height: 50,

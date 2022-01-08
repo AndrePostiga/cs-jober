@@ -66,6 +66,12 @@ class _MainPageState extends State<MainPage> {
         .getUserByFirebaseAuthUid(FirebaseAuth.instance.currentUser!.uid);
 
     if (loggedUser == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Grave seu perfil para utilizar o JOBer"),
+          duration: const Duration(seconds: 5),
+        ),
+      );
       setState(() {
         // redir to register page
         _selectedIndex = 2;

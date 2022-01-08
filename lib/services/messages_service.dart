@@ -44,7 +44,7 @@ class MessagesService {
         .where("uniqueId",
             whereIn: _getAllCombinationsBetweenFromAndToFirebaseUids(
                 firebaseAuthUids[0], firebaseAuthUids[1]))
-        .orderBy("createdAt", descending: true)
+        .orderBy("createdAt")
         .limit(1)
         .get();
 

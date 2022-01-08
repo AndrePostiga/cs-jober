@@ -16,11 +16,16 @@ class MatchesChatViewModel extends ChangeNotifier {
           .getLastMessageBetweenFirebaseUids(
               <String>[firebaseAuthUid, matchUser.firebaseAuthUid]);
 
-      lastMatchMessage ??= MatchMessage(firebaseAuthUid + "->", DateTime.now(),
+      lastMatchMessage ??= MatchMessage(
+          firebaseAuthUid + "->",
+          DateTime.now().subtract(Duration(days: 1)),
           "---> Sem mensagens ainda <---");
 
       matchChatUser.add(MatchChatUser(matchUser, lastMatchMessage));
     }
+
+    matchChatUser
+        .sort((a, b) => (a.msg.createdAt.isAfter(b.msg.createdAt) ? 0 : 1));
 
     return matchChatUser;
   }
