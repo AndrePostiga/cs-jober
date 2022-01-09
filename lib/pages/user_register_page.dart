@@ -35,6 +35,9 @@ class _UserRegisterPage extends State<UserRegisterPage> {
   final _descriptionController = TextEditingController();
   final _skillsController = TextEditingController();
   final _birthDateController = TextEditingController();
+  final _birthDayController = TextEditingController();
+  final _birthMonthController = TextEditingController();
+  final _birthYearController = TextEditingController();
 
   List<DropdownMenuItem<int>> _getDropDownUserTypesItems(
       List<UserType> dropDownUserTypesItens) {
@@ -264,6 +267,52 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                           },
                           decoration: const InputDecoration(
                               hintText: "URL do seu LinkedIn"),
+                        ),
+                        Row(
+                          children: [
+                            Flexible(
+                                child: TextFormField(
+                              controller: _birthDayController,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Dia';
+                                }
+                                return null;
+                              },
+                              decoration:
+                                  const InputDecoration(hintText: "Dia"),
+                            )),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Flexible(
+                                child: TextFormField(
+                              controller: _birthMonthController,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Mês';
+                                }
+                                return null;
+                              },
+                              decoration:
+                                  const InputDecoration(hintText: "Mês"),
+                            )),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Flexible(
+                                child: TextFormField(
+                              controller: _birthYearController,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Ano';
+                                }
+                                return null;
+                              },
+                              decoration:
+                                  const InputDecoration(hintText: "Ano"),
+                            )),
+                          ],
                         ),
                         TextFormField(
                           controller: _birthDateController,
