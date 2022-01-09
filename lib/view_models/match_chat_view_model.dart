@@ -5,6 +5,7 @@ import 'package:grupolaranja20212/services/messages_service.dart';
 import 'package:grupolaranja20212/services/push_notification_service.dart';
 import 'package:grupolaranja20212/services/user_service.dart';
 
+
 class MatchChatViewModel extends ChangeNotifier {
   Future<User?> getUserByFirebaseAuthUid(String firebaseAuthUid) async {
     return await UserService().getUserByFirebaseAuthUid(firebaseAuthUid);
@@ -29,4 +30,9 @@ class MatchChatViewModel extends ChangeNotifier {
           {"page": "chat", "key": toUser.firebaseAuthUid});
     }
   }
+
+  void listenMessages( Function f , List <String> firebaseAuthUids){
+    MessagesService().listenMessages(f, firebaseAuthUids);
+  }
+  
 }

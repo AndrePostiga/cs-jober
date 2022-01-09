@@ -38,7 +38,7 @@ class _MatchesChatPage extends State<MatchesChatPage> {
       },
       child: Container(
         padding:
-            const EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
+            const EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 12),
         child: Row(
           children: <Widget>[
             Expanded(

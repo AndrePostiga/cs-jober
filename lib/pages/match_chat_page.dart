@@ -106,6 +106,13 @@ class _MatchChatPage extends State<MatchChatPage> {
   void initState() {
     _getPageInfo();
     super.initState();
+    _vM.listenMessages( (matchMessage) => {
+
+      setState(() {
+        _messages.add(matchMessage);
+      })
+
+    } , <String>[ _loggedUser.firebaseAuthUid, widget.matchUserFirebaseAuthUid ]);
   }
 
   @override
