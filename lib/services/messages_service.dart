@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:grupolaranja20212/models/match_message.dart';
 
 class MessagesService {
+  // SERVICE RELACIONADO AO TRATAMENTO DE MSGS... RECUPERACAO E ENVIO
   Future<List<MatchMessage>> getMessagesBetweenFirebaseUids(
       List<String> firebaseAuthUids) async {
     var querySnapShot = await FirebaseFirestore.instance

@@ -8,6 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 void main() async {
+  // INICIALIZA O APP, DEFININDO VAR DE APP ID PRO ONE SIGNAL E DEFININDO PAGINA INICIAL DO APP VERIFICANDO SE USER TA LOGADO OU N
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Colors.orange,
     systemNavigationBarColor: Colors.purple[200],

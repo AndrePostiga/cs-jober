@@ -1,4 +1,5 @@
 class Constants {
+  // CLASSE QUE GUARDA CONSTANTES PARA O APP
   static String userNotFound = "O usuário não está registrado... Registre-se";
   static String invalidEmail = "O e-mail informado é inválido";
   static String emailAlreadyInUse = "Esse e-mail já está em uso";

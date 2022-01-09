@@ -6,6 +6,7 @@ import 'package:grupolaranja20212/models/user_type.dart';
 import 'package:grupolaranja20212/utils/app_location.dart';
 
 class UserService {
+  // SERVICE RESPONSAVEL PELO TRATAMETNO DO USUARIO, RECUPERANDO E ATUALIZANDO
   Future<User?> getUserByFirebaseAuthUid(String firebaseAuthUid) async {
     var querySnapShot = await FirebaseFirestore.instance
         .collection("users")

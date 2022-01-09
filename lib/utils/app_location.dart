@@ -1,6 +1,7 @@
 import 'package:location/location.dart';
 
 class AppLocation {
+  // CLASSE QUE LIDA COM A RECUPERACAO DE LOCALIZACAO DO CELULAR
   static Future<LocationData?> getUserActualLocation() async {
     Location location = Location();
 

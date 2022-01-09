@@ -2,11 +2,7 @@ import 'package:grupolaranja20212/services/user_service.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class PushNotificationService {
-  static const _appId = "6e064919-a3ca-4f23-a88a-275b5594d4e8";
-
-  String getAppId() {
-    return _appId;
-  }
+  // SERVICE RESPONSAVEL POR TRATAMENTOS DO ONE SIGNAL, RECUPERANDO USER ID DO ONE SIGNAL, DESLOGANDO O MSM E ENVIANDO NOTIFICACOES
 
   Future logout(String firebaseAuthUserUid) async {
     await OneSignal.shared.removeExternalUserId();
