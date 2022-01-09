@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:grupolaranja20212/utils/constants.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:grupolaranja20212/models/user_type.dart';
@@ -19,8 +20,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
   final UserRegisterViewModel _userRegisterVM = UserRegisterViewModel();
   final _formKey = GlobalKey<FormState>();
 
-  String _image =
-      "https://firebasestorage.googleapis.com/v0/b/laranja20212.appspot.com/o/avatar.png?alt=media&token=780ef04c-eb05-4837-89ff-f93302d7db41";
+  String _image = Constants.userDefaultPhoto;
 
   String _btnStoreMsg = "Gravar";
 
@@ -34,7 +34,6 @@ class _UserRegisterPage extends State<UserRegisterPage> {
   final _linkedinUrlController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _skillsController = TextEditingController();
-  final _birthDateController = TextEditingController();
   final _birthDayController = TextEditingController();
   final _birthMonthController = TextEditingController();
   final _birthYearController = TextEditingController();
@@ -90,12 +89,13 @@ class _UserRegisterPage extends State<UserRegisterPage> {
     var userTypes = await _userRegisterVM.getUserTypes();
     var user = await _userRegisterVM
         .getUserByFirebaseAuthUid(FirebaseAuth.instance.currentUser!.uid);
+
     setState(() {
       _dropDownUserTypesItens = _getDropDownUserTypesItems(userTypes);
       if (user != null) {
-        _image = user.photoUrl.isEmpty
-            ? "https://firebasestorage.googleapis.com/v0/b/laranja20212.appspot.com/o/avatar.png?alt=media&token=780ef04c-eb05-4837-89ff-f93302d7db41"
-            : user.photoUrl;
+        var birthDateParts = user.birthDate.split('-');
+        _image =
+            user.photoUrl.isEmpty ? Constants.userDefaultPhoto : user.photoUrl;
         _nameController.text = user.name;
         _linkedinUrlController.text = user.linkedinUrl;
         _descriptionController.text = user.linkedinUrl;
@@ -103,7 +103,9 @@ class _UserRegisterPage extends State<UserRegisterPage> {
         _userTypeId = user.typeId;
         _skillsArr = user.skills;
         _skillsController.text = _skillsArr.join(",");
-        _birthDateController.text = user.birthDate;
+        _birthDayController.text = birthDateParts[2];
+        _birthMonthController.text = birthDateParts[1];
+        _birthYearController.text = birthDateParts[0];
       } else {
         _userTypeId = userTypes[0].id;
       }
@@ -122,6 +124,13 @@ class _UserRegisterPage extends State<UserRegisterPage> {
     });
   }
 
+  bool _isNumeric(String? s) {
+    if (s == null) {
+      return false;
+    }
+    return double.tryParse(s) != null;
+  }
+
   Future _save(BuildContext context) async {
     try {
       var skillsList =
@@ -134,6 +143,34 @@ class _UserRegisterPage extends State<UserRegisterPage> {
         }
       }
 
+      if (_nameController.text.isEmpty) {
+        throw "Preencha o seu nome";
+      }
+
+      if (_birthYearController.text.isEmpty) {
+        throw "Preencha o ano do seu nascimento";
+      } else {
+        if (!_isNumeric(_birthYearController.text)) {
+          throw "Preencha um ano de nascimento válido";
+        }
+      }
+
+      if (_birthMonthController.text.isEmpty) {
+        throw "Preencha o mês do seu nascimento";
+      } else {
+        if (!_isNumeric(_birthMonthController.text)) {
+          throw "Preencha um mês de nascimento válido";
+        }
+      }
+
+      if (_birthDayController.text.isEmpty) {
+        throw "Preencha o dia do seu nascimento";
+      } else {
+        if (!_isNumeric(_birthDayController.text)) {
+          throw "Preencha um dia de nascimento válido";
+        }
+      }
+
       await _userRegisterVM.createOrUpdateUserByFirebaseAuthUid(
           FirebaseAuth.instance.currentUser!.uid,
           _nameController.text,
@@ -143,7 +180,11 @@ class _UserRegisterPage extends State<UserRegisterPage> {
           _descriptionController.text,
           _maxSearchDistance,
           skillsList,
-          _birthDateController.text);
+          _birthYearController.text +
+              '-' +
+              _birthMonthController.text +
+              '-' +
+              _birthDayController.text);
 
       setState(() {
         _btnStoreMsg = "Gravação realizada com sucesso!";
@@ -268,6 +309,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                           decoration: const InputDecoration(
                               hintText: "URL do seu LinkedIn"),
                         ),
+                        Text('Sua data de nascimento:'),
                         Row(
                           children: [
                             Flexible(
@@ -313,17 +355,6 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                                   const InputDecoration(hintText: "Ano"),
                             )),
                           ],
-                        ),
-                        TextFormField(
-                          controller: _birthDateController,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "Informe sua data de nascimento";
-                            }
-                            return null;
-                          },
-                          decoration: const InputDecoration(
-                              hintText: "Sua data de nascimento DD/MM/YYYY"),
                         ),
                         TextFormField(
                           controller: _descriptionController,

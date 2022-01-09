@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:grupolaranja20212/services/push_notification_service.dart';
+import 'package:grupolaranja20212/utils/constants.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:grupolaranja20212/models/user.dart';
@@ -17,8 +18,7 @@ class UserRegisterViewModel extends ChangeNotifier {
   }
 
   Future<String> uploadPhoto(File file) async {
-    String downloadURL =
-        "https://firebasestorage.googleapis.com/v0/b/laranja20212.appspot.com/o/avatar.png?alt=media&token=780ef04c-eb05-4837-89ff-f93302d7db41";
+    String downloadURL = Constants.userDefaultPhoto;
 
     // usando uuid pra gerar identificador unico pra img
     const uuid = Uuid();

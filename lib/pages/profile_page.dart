@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:grupolaranja20212/models/user.dart';
+import 'package:grupolaranja20212/utils/constants.dart';
 import 'package:grupolaranja20212/view_models/profile_view_model.dart';
 
 String getSkills(List<String> skills) {
@@ -27,7 +29,7 @@ class _ProfilePage extends State<ProfilePage> {
       "",
       "Carregando informações",
       "",
-      "https://firebasestorage.googleapis.com/v0/b/laranja20212.appspot.com/o/avatar.png?alt=media&token=780ef04c-eb05-4837-89ff-f93302d7db41",
+      Constants.userDefaultPhoto,
       0,
       "Carregando...",
       0,
