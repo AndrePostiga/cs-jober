@@ -152,6 +152,11 @@ class _UserRegisterPage extends State<UserRegisterPage> {
       } else {
         if (!_isNumeric(_birthYearController.text)) {
           throw "Preencha um ano de nascimento válido";
+        } else {
+          var year = int.parse(_birthYearController.text);
+          if (year < 1) {
+            throw "Preencha um ano superior a 1";
+          }
         }
       }
 
@@ -160,6 +165,11 @@ class _UserRegisterPage extends State<UserRegisterPage> {
       } else {
         if (!_isNumeric(_birthMonthController.text)) {
           throw "Preencha um mês de nascimento válido";
+        } else {
+          var month = int.parse(_birthMonthController.text);
+          if (month > 12 || month < 1) {
+            throw "Preencha um mês entre 1(janeiro) e 12(dezembro)";
+          }
         }
       }
 
@@ -168,6 +178,11 @@ class _UserRegisterPage extends State<UserRegisterPage> {
       } else {
         if (!_isNumeric(_birthDayController.text)) {
           throw "Preencha um dia de nascimento válido";
+        } else {
+          var day = int.parse(_birthDayController.text);
+          if (day > 31 || day < 1) {
+            throw "Preencha um dia entre 1 e 31";
+          }
         }
       }
 
