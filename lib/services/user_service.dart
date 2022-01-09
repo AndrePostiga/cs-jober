@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:grupolaranja20212/models/match_user.dart';
 import 'package:grupolaranja20212/models/user.dart';
 import 'package:grupolaranja20212/models/match.dart';
 import 'package:grupolaranja20212/models/user_type.dart';
@@ -158,7 +159,7 @@ class UserService {
     throw Exception("Usuário não encontrado");
   }
 
-  Future<List<User>> getMatchesUsers(String firebaseAuthUid) async {
+  Future<List<MatchUser>> getMatchesUsers(String firebaseAuthUid) async {
     var querySnapShot = await FirebaseFirestore.instance
         .collection('matches')
         .where("usersId", arrayContains: firebaseAuthUid)
@@ -167,28 +168,25 @@ class UserService {
     var foundedMatches =
         querySnapShot.docs.map((e) => Match.fromSnapshot(e)).toList();
 
-    var firebaseAuthUids = <String>[];
+    var matchesWithMatchedUsers = <MatchUser>[];
+
+    if (foundedMatches.isEmpty) {
+      return matchesWithMatchedUsers;
+    }
 
     for (var foundedMatch in foundedMatches) {
       for (var userId in foundedMatch.usersId) {
-        if (userId != firebaseAuthUid && !firebaseAuthUids.contains(userId)) {
-          firebaseAuthUids.add(userId);
+        if (userId != firebaseAuthUid) {
+          var matchedUser =
+              await UserService().getUserByFirebaseAuthUid(userId);
+
+          if (matchedUser != null) {
+            matchesWithMatchedUsers.add(MatchUser(matchedUser, foundedMatch));
+          }
         }
       }
     }
 
-    if (firebaseAuthUids.isEmpty) {
-      return <User>[];
-    }
-
-    var querySnapShotUsers = await FirebaseFirestore.instance
-        .collection('users')
-        .where("firebaseAuthUid", whereIn: firebaseAuthUids)
-        .get();
-
-    var usersFromMatches =
-        querySnapShotUsers.docs.map((e) => User.fromSnapshot(e)).toList();
-
-    return usersFromMatches;
+    return matchesWithMatchedUsers;
   }
 }

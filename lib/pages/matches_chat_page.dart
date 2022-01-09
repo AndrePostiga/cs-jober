@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:grupolaranja20212/models/chat_users_model.dart';
+import 'package:grupolaranja20212/models/match_chat_user.dart';
 import 'package:grupolaranja20212/utils/app_navigator.dart';
 import 'package:grupolaranja20212/view_models/matches_chat_view_model.dart';
 

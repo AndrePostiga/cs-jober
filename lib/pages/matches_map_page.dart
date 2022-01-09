@@ -28,8 +28,8 @@ class _MatchesMapPage extends State<MatchesMapPage> {
       newMarkers.add(Marker(
         width: 50.0,
         height: 50.0,
-        point: lat_lng.LatLng(user.lat, user.long),
-        builder: (ctx) => Image.network(user.photoUrl),
+        point: lat_lng.LatLng(user.matchedUser.lat, user.matchedUser.long),
+        builder: (ctx) => Image.network(user.matchedUser.photoUrl),
       ));
     }
 
