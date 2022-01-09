@@ -1,12 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:grupolaranja20212/pages/main_page.dart';
 import 'package:grupolaranja20212/pages/welcome_page.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 void main() async {
+  // INICIALIZA O APP, DEFININDO VAR DE APP ID PRO ONE SIGNAL E DEFININDO PAGINA INICIAL DO APP VERIFICANDO SE USER TA LOGADO OU N
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Colors.orange,
+    systemNavigationBarColor: Colors.purple[200],
+  ));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   AndroidGoogleMapsFlutter.useAndroidViewSurface = true;
@@ -26,11 +32,6 @@ void main() async {
     // Will be called whenever a notification is received in foreground
     // Display Notification, pass null param for not displaying the notification
     event.complete(event.notification);
-  });
-
-  OneSignal.shared
-      .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
-    // Will be called whenever a notification is opened/button pressed.
   });
 
   OneSignal.shared.setPermissionObserver((OSPermissionStateChanges changes) {

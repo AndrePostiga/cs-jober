@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:grupolaranja20212/models/user.dart' as user_model;
+import 'package:grupolaranja20212/utils/app_navigator.dart';
 import 'package:grupolaranja20212/view_models/swipe_view_model.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 
@@ -50,7 +51,7 @@ class _SwipePage extends State<SwipePage> {
     _swipeItems = <SwipeItem>[];
 
     if (_user != null) {
-      var usersToSwipe = await _vM.getUsersToSwipe(_user!, null);
+      var usersToSwipe = await _vM.getUsersToSwipe(_user!);
 
       for (var user in usersToSwipe) {
         if (!_alreadyPassedUsers.contains(user.firebaseAuthUid)) {
@@ -123,6 +124,30 @@ class _SwipePage extends State<SwipePage> {
     );
   }
 
+  int _getYearOfUser(String birthDateString) {
+    var birthParts = birthDateString.split('-');
+    var birthDate = DateTime(int.parse(birthParts[0]), int.parse(birthParts[1]),
+        int.parse(birthParts[2]));
+
+    final now = new DateTime.now();
+
+    int years = now.year - birthDate.year;
+    int months = now.month - birthDate.month;
+    int days = now.day - birthDate.day;
+
+    if (months < 0 || (months == 0 && days < 0)) {
+      years--;
+      months += (days < 0 ? 11 : 12);
+    }
+
+    if (days < 0) {
+      final monthAgo = new DateTime(now.year, now.month - 1, birthDate.day);
+      days = now.difference(monthAgo).inDays + 1;
+    }
+
+    return years;
+  }
+
   Widget _makeSwipeCards() {
     return SwipeCards(
       matchEngine: _matchEngine,
@@ -150,25 +175,31 @@ class _SwipePage extends State<SwipePage> {
                     Column(
                       children: [
                         const Spacer(),
-                        Row(
-                          children: [
-                            Text(
-                              _swipeItems[index].content.name,
-                              style: const TextStyle(
-                                fontSize: 32,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
+                        GestureDetector(
+                          onTap: () {
+                            AppNavigator.navigateToProfilePage(context,
+                                _swipeItems[index].content.firebaseAuthUid);
+                          },
+                          child: Row(
+                            children: [
+                              Text(
+                                _swipeItems[index].content.name,
+                                style: const TextStyle(
+                                  fontSize: 32,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            const SizedBox(
-                              width: 16,
-                            ),
-                            const Text(
-                              "18",
-                              style:
-                                  TextStyle(fontSize: 32, color: Colors.white),
-                            )
-                          ],
+                              const SizedBox(
+                                width: 16,
+                              ),
+                              Text(
+                                '${_getYearOfUser(_swipeItems[index].content.birthDate)}',
+                                style: TextStyle(
+                                    fontSize: 32, color: Colors.white),
+                              )
+                            ],
+                          ),
                         ),
                         const SizedBox(
                           height: 50,

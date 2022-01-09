@@ -15,6 +15,7 @@ import 'package:grupolaranja20212/view_models/register_view_model.dart';
 import 'package:provider/provider.dart';
 
 class AppNavigator {
+  // CLASSE QUE LIDA COM OS REDIRECTS DENTRO DO APP
   static Future<bool?> navigateToLoginPage(BuildContext context) async {
     return await Navigator.push(
         context,

@@ -10,18 +10,32 @@ class WelcomePage extends StatelessWidget {
       title: 'WelcomePage',
       home: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.orange,
           title: const Text('WelcomePage'),
         ),
         body: Center(
             child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(
+              height: 350,
+              width: 350,
+              child: Image(image: AssetImage('assets/app_logo.png')),
+            ),
+            SizedBox(
+              height: 50,
+            ),
             ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.purple)),
               onPressed: () {
                 AppNavigator.navigateToLoginPage(context);
               },
               child: const Text('LOGIN'),
             ),
             ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.purple)),
               onPressed: () {
                 AppNavigator.navigateToRegisterPage(context);
               },

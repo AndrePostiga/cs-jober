@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grupolaranja20212/models/match_user.dart';
 import 'package:grupolaranja20212/models/user.dart';
 import 'package:grupolaranja20212/services/user_service.dart';
 
@@ -7,7 +8,7 @@ class MatchesMapViewModel extends ChangeNotifier {
     return await UserService().getUserByFirebaseAuthUid(firebaseAuthUid);
   }
 
-  Future<List<User>> getMatchesUsers(String firebaseAuthUid) async {
+  Future<List<MatchUser>> getMatchesUsers(String firebaseAuthUid) async {
     return await UserService().getMatchesUsers(firebaseAuthUid);
   }
 }

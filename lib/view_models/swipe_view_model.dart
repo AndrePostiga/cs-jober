@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:grupolaranja20212/models/user.dart';
-import 'dart:math' show cos, pi, sin, acos;
+import 'dart:math' show acos, cos, pi, sin;
 import 'package:grupolaranja20212/models/match.dart';
 import 'package:grupolaranja20212/services/push_notification_service.dart';
 
@@ -9,7 +9,7 @@ import 'package:grupolaranja20212/services/user_service.dart';
 
 class SwipeViewModel extends ChangeNotifier {
   Future _createMatch(List<String> usersId) async {
-    var match = Match(usersId);
+    var match = Match(usersId, DateTime.now());
     await FirebaseFirestore.instance.collection("matches").add(match.toMap());
   }
 
@@ -34,7 +34,7 @@ class SwipeViewModel extends ChangeNotifier {
             "Você deu um MATCH com " + user.name,
             "NOVO MATCH!",
             null,
-            null);
+            {"page": "chat", "key": user.firebaseAuthUid});
       }
 
       if (user.oneSignalId != "") {
@@ -43,7 +43,7 @@ class SwipeViewModel extends ChangeNotifier {
             "Você deu um MATCH com " + likedUser.name,
             "NOVO MATCH!",
             null,
-            null);
+            {"page": "chat", "key": likedUser.firebaseAuthUid});
       }
 
       return true;
@@ -57,20 +57,10 @@ class SwipeViewModel extends ChangeNotifier {
         user.firebaseAuthUid, null, unlikedFirebaseAuthUid);
   }
 
-  Future<List<User>> getUsersToSwipe(
-      User user, List<User>? previousFoundedUsers) async {
-    previousFoundedUsers ??= <User>[];
-
+  Future<List<User>> getUsersToSwipe(User user) async {
     // antes de tudo a funcao comeca recuperando os firebaseAuthUid que nao devem ser retornados na busca
-    var previousFoundedUsersIds = <String>[];
 
-    for (var previousFoundedUser in previousFoundedUsers) {
-      previousFoundedUsersIds.add(previousFoundedUser.firebaseAuthUid);
-    }
-
-    var maxItensToGet = 5;
-
-    var firebaseAuthUidToNotGet = <String>[user.firebaseAuthUid];
+    var firebaseAuthUidToNotGet = <String>[];
 
     if (user.likes.isNotEmpty) {
       firebaseAuthUidToNotGet.addAll(user.likes);
@@ -80,15 +70,27 @@ class SwipeViewModel extends ChangeNotifier {
       firebaseAuthUidToNotGet.addAll(user.unlikes);
     }
 
-    if (previousFoundedUsersIds.isNotEmpty) {
-      firebaseAuthUidToNotGet.addAll(previousFoundedUsersIds);
+    var maxSearchDistance = user.maxSearchDistance;
+    if (maxSearchDistance == 0) {
+      maxSearchDistance = 1;
     }
 
+    // pega so 10 itens no firebaseAuthUidToNotGet por conta da limitacao do firebasestore
+    var filtroProFirebase = <String>[user.firebaseAuthUid];
+    var filtroNoCodigo = <String>[];
+    for (var userToNotGet in firebaseAuthUidToNotGet.toSet().toList()) {
+      if (filtroProFirebase.length < 10) {
+        filtroProFirebase.add(userToNotGet);
+      } else {
+        filtroNoCodigo.add(userToNotGet);
+      }
+    }
+
+    // whereNotIn é limitado a 10 itens
     var querySnapShot = await FirebaseFirestore.instance
         .collection('users')
-        .where("firebaseAuthUid",
-            whereNotIn: firebaseAuthUidToNotGet.toSet().toList())
-        .limit(maxItensToGet)
+        .where('typeId', isEqualTo: user.typeId == 0 ? 1 : 0)
+        .where("firebaseAuthUid", whereNotIn: filtroProFirebase)
         .get();
 
     var foundedUsers =
@@ -102,26 +104,15 @@ class SwipeViewModel extends ChangeNotifier {
 
     for (var newFoundedUser in foundedUsers) {
       // verifica se as skills batem (ou tem nos 2 ou o usuario encontrado tem a lista de skills vazia)
-      if (newFoundedUser.typeId != user.typeId &&
-          _containsAny(newFoundedUser.skills, user.skills)) {
-        var maxSearchDistance = user.maxSearchDistance.toDouble();
-        if (maxSearchDistance == 0) {
-          maxSearchDistance = 1;
-        }
-
-        // verifica se a distancia maxima procurada esta maior ou igual que a distancia dos pontos em KM calculando via LAT,LONG
-        if (maxSearchDistance >=
-            _distanceBetweenTwoLatAndLongs(
-                user.lat, user.long, newFoundedUser.lat, newFoundedUser.long)) {
-          usersToReturn.add(newFoundedUser);
-        }
+      // verifica se long do usuario ta entre os numeros permitidos
+      // verifica se lat do usuario ta entre os numeros permitidos
+      // verifica se usuario ta na lista dos firebaseUid nao permitidos
+      if (_containsAny(newFoundedUser.skills, user.skills) &&
+          _distanceBetweenTwoLatAndLongs(newFoundedUser, user) <=
+              user.maxSearchDistance &&
+          !filtroNoCodigo.contains(newFoundedUser.firebaseAuthUid)) {
+        usersToReturn.add(newFoundedUser);
       }
-    }
-
-    // se a lista de usuarios encontrados for menor que a maxItensToGet uma recursao vai ocorrer pra pegar mais usuarios caso tiver e os usuarios ja encontrados serao passados via parametro para n serem buscados
-    if (usersToReturn.length < maxItensToGet) {
-      foundedUsers.addAll(previousFoundedUsers);
-      usersToReturn.addAll(await getUsersToSwipe(user, foundedUsers));
     }
 
     return usersToReturn;
@@ -156,8 +147,12 @@ class SwipeViewModel extends ChangeNotifier {
     return false;
   }
 
-  double _distanceBetweenTwoLatAndLongs(
-      double lat1, double lon1, double lat2, double lon2) {
+  double _distanceBetweenTwoLatAndLongs(User user1, User user2) {
+    double lat1 = user1.lat;
+    double lon1 = user1.long;
+    double lat2 = user2.lat;
+    double lon2 = user2.long;
+
     // checking distance using the implementation presented on this site  https://flutteragency.com/total-distance-from-latlng-list-in-flutter/
     double theta = lon1 - lon2;
     double dist = sin(_deg2rad(lat1)) * sin(_deg2rad(lat2)) +

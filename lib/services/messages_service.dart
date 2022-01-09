@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:grupolaranja20212/models/match_message.dart';
 
 class MessagesService {
+  // SERVICE RELACIONADO AO TRATAMENTO DE MSGS... RECUPERACAO E ENVIO
   Future<List<MatchMessage>> getMessagesBetweenFirebaseUids(
       List<String> firebaseAuthUids) async {
     var querySnapShot = await FirebaseFirestore.instance
@@ -9,7 +10,7 @@ class MessagesService {
         .where("uniqueId",
             whereIn: _getAllCombinationsBetweenFromAndToFirebaseUids(
                 firebaseAuthUids[0], firebaseAuthUids[1]))
-        .orderBy("createdAt", descending: true)
+        .orderBy("createdAt")
         .get();
 
     return querySnapShot.docs.map((e) => MatchMessage.fromSnapshot(e)).toList();

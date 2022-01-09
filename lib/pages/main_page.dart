@@ -2,9 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grupolaranja20212/pages/swipe_page.dart';
 import 'package:grupolaranja20212/pages/welcome_page.dart';
+import 'package:grupolaranja20212/utils/app_navigator.dart';
 import 'package:grupolaranja20212/view_models/main_view_model.dart';
 import 'package:grupolaranja20212/pages/matches_page.dart';
 import 'package:grupolaranja20212/pages/user_register_page.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -64,6 +66,12 @@ class _MainPageState extends State<MainPage> {
         .getUserByFirebaseAuthUid(FirebaseAuth.instance.currentUser!.uid);
 
     if (loggedUser == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Grave seu perfil para utilizar o JOBer"),
+          duration: const Duration(seconds: 5),
+        ),
+      );
       setState(() {
         // redir to register page
         _selectedIndex = 2;
@@ -75,44 +83,61 @@ class _MainPageState extends State<MainPage> {
   }
 
   @override
-  Widget build(BuildContext context) => Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Colors.orange.shade200, Colors.black],
+  Widget build(BuildContext context) {
+    OneSignal.shared
+        .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
+      // Will be called whenever a notification is opened/button pressed.
+      var additionalData = result.notification.additionalData;
+
+      if (additionalData!.containsKey("page")) {
+        if (additionalData["page"] == "chat") {
+          if (additionalData.containsKey("key")) {
+            AppNavigator.navigateToMatchChatPage(
+                context, additionalData["key"]);
+          }
+        }
+      }
+    });
+
+    return Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.orange.shade200, Colors.black],
+          ),
         ),
-      ),
-      child: Scaffold(
-        appBar: _titleOptions.elementAt(_selectedIndex),
-        backgroundColor: Colors.transparent,
-        body: SafeArea(
-          child: _widgetOptions.elementAt(_selectedIndex),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.auto_awesome_motion_rounded,
-                  semanticLabel: 'Swipe',
-                ),
-                label: 'Swipe'),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.favorite_rounded,
-                  semanticLabel: 'Matches',
-                ),
-                label: 'Matches'),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.person_rounded,
-                  semanticLabel: 'Perfil',
-                ),
-                label: 'Perfil'),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.orange,
-          onTap: _onItemTapped,
-        ),
-      ));
+        child: Scaffold(
+          appBar: _titleOptions.elementAt(_selectedIndex),
+          backgroundColor: Colors.transparent,
+          body: SafeArea(
+            child: _widgetOptions.elementAt(_selectedIndex),
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.auto_awesome_motion_rounded,
+                    semanticLabel: 'Swipe',
+                  ),
+                  label: 'Swipe'),
+              BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.favorite_rounded,
+                    semanticLabel: 'Matches',
+                  ),
+                  label: 'Matches'),
+              BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.person_rounded,
+                    semanticLabel: 'Perfil',
+                  ),
+                  label: 'Perfil'),
+            ],
+            currentIndex: _selectedIndex,
+            selectedItemColor: Colors.orange,
+            onTap: _onItemTapped,
+          ),
+        ));
+  }
 }

@@ -41,7 +41,10 @@ class _AuthRegisterPage extends State<AuthRegisterPage> {
     _registerVM = Provider.of<RegisterViewModel>(context);
 
     return Scaffold(
-        appBar: AppBar(title: const Text("Register")),
+        appBar: AppBar(
+          title: const Text("Register"),
+          backgroundColor: Colors.orange,
+        ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
@@ -71,6 +74,9 @@ class _AuthRegisterPage extends State<AuthRegisterPage> {
                     decoration: const InputDecoration(hintText: "Password"),
                   ),
                   TextButton(
+                      style: ButtonStyle(
+                          foregroundColor:
+                              MaterialStateProperty.all(Colors.purple)),
                       onPressed: () {
                         _registerUser(context);
                       },
