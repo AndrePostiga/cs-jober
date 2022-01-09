@@ -16,12 +16,16 @@ class MessagesService {
     return querySnapShot.docs.map((e) => MatchMessage.fromSnapshot(e)).toList();
   }
 
-   void listenMessages( Function f , List <String> firebaseAuthUids){
-    FirebaseFirestore.instance.collection('messages').where("uniqueId",
+  void listenMessages(Function f, List<String> firebaseAuthUids) {
+    FirebaseFirestore.instance
+        .collection('messages')
+        .where("uniqueId",
             whereIn: _getAllCombinationsBetweenFromAndToFirebaseUids(
-                firebaseAuthUids[0], firebaseAuthUids[1])).snapshots().listen(
-      (event) { f( event.docs.map((e) => MatchMessage.fromSnapshot(e)).toList() ); }
-      );
+                firebaseAuthUids[0], firebaseAuthUids[1]))
+        .snapshots()
+        .listen((event) {
+      f(event.docs.map((e) => MatchMessage.fromSnapshot(e)).toList());
+    });
   }
 
   List<String> _getAllCombinationsBetweenFromAndToFirebaseUids(
