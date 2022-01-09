@@ -22,17 +22,19 @@ class _MatchChatPage extends State<MatchChatPage> {
   final _msgController = TextEditingController();
 
   Future _sendMsg() async {
-    await _vM.addMsg(_loggedUser, _matchedUser, _msgController.text);
+    if (_msgController.text != "") {
+      await _vM.addMsg(_loggedUser, _matchedUser, _msgController.text);
 
-    setState(() {
-      _messages.add(MatchMessage(
-          MessagesService().getFromToUidsAndConvertToUniqueKey(
-              _loggedUser.firebaseAuthUid, _matchedUser.firebaseAuthUid),
-          DateTime.now(),
-          _msgController.text));
-    });
+      setState(() {
+        _messages.add(MatchMessage(
+            MessagesService().getFromToUidsAndConvertToUniqueKey(
+                _loggedUser.firebaseAuthUid, _matchedUser.firebaseAuthUid),
+            DateTime.now(),
+            _msgController.text));
+      });
 
-    _msgController.text = "";
+      _msgController.text = "";
+    }
   }
 
   List<MatchMessage> _messages = <MatchMessage>[];
