@@ -98,7 +98,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
             user.photoUrl.isEmpty ? Constants.userDefaultPhoto : user.photoUrl;
         _nameController.text = user.name;
         _linkedinUrlController.text = user.linkedinUrl;
-        _descriptionController.text = user.linkedinUrl;
+        _descriptionController.text = user.description;
         _maxSearchDistance = user.maxSearchDistance;
         _userTypeId = user.typeId;
         _skillsArr = user.skills;
