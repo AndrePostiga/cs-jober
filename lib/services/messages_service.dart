@@ -10,7 +10,7 @@ class MessagesService {
         .where("uniqueId",
             whereIn: _getAllCombinationsBetweenFromAndToFirebaseUids(
                 firebaseAuthUids[0], firebaseAuthUids[1]))
-        .orderBy("createdAt", descending: true)
+        .orderBy("createdAt")
         .get();
 
     return querySnapShot.docs.map((e) => MatchMessage.fromSnapshot(e)).toList();
@@ -45,7 +45,7 @@ class MessagesService {
         .where("uniqueId",
             whereIn: _getAllCombinationsBetweenFromAndToFirebaseUids(
                 firebaseAuthUids[0], firebaseAuthUids[1]))
-        .orderBy("createdAt")
+        .orderBy("createdAt", descending: true)
         .limit(1)
         .get();
 
