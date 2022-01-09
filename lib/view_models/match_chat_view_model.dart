@@ -26,7 +26,7 @@ class MatchChatViewModel extends ChangeNotifier {
           text,
           "Nova mensagem de " + fromUser.name,
           null,
-          {"page": "chat", "key": toUser.firebaseAuthUid});
+          {"page": "chat", "key": fromUser.firebaseAuthUid});
     }
   }
 

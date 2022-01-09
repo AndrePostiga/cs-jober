@@ -102,16 +102,18 @@ class _MatchChatPage extends State<MatchChatPage> {
     }
   }
 
+  void _setMessagesFromListener(dynamic matchMessages) {
+    setState(() {
+      _messages = matchMessages;
+    });
+  }
+
   @override
   void initState() {
     _getPageInfo();
     super.initState();
     _vM.listenMessages(
-        (matchMessage) => {
-              setState(() {
-                _messages.add(matchMessage);
-              })
-            },
+        (matchMessages) => {_setMessagesFromListener(matchMessages)},
         <String>[_loggedUser.firebaseAuthUid, widget.matchUserFirebaseAuthUid]);
   }
 

@@ -22,6 +22,7 @@ class MessagesService {
         .where("uniqueId",
             whereIn: _getAllCombinationsBetweenFromAndToFirebaseUids(
                 firebaseAuthUids[0], firebaseAuthUids[1]))
+        .orderBy("createdAt")
         .snapshots()
         .listen((event) {
       f(event.docs.map((e) => MatchMessage.fromSnapshot(e)).toList());
