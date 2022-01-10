@@ -168,43 +168,47 @@ class _MatchChatPage extends State<MatchChatPage> {
           ),
         )),
       ),
-      body: Stack(
-        children: <Widget>[
-          ListView.builder(
-            itemCount: _messages.length,
-            shrinkWrap: true,
-            padding: const EdgeInsets.only(top: 10, bottom: 10),
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Container(
-                padding: const EdgeInsets.only(
-                    left: 16, right: 16, top: 10, bottom: 10),
-                child: Align(
-                  alignment:
-                      (_messages[index].toUserUid == _loggedUser.firebaseAuthUid
-                          ? Alignment.topLeft
-                          : Alignment.topRight),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: (_messages[index].toUserUid ==
-                              _loggedUser.firebaseAuthUid
-                          ? Colors.grey.shade200
-                          : Colors.blue[200]),
-                    ),
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      _messages[index].text,
-                      style: const TextStyle(fontSize: 15),
-                    ),
-                  ),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: SingleChildScrollView(
+                child: ListView.builder(
+                  itemCount: _messages.length,
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return Container(
+                      padding: const EdgeInsets.only(
+                          left: 16, right: 16, top: 10, bottom: 10),
+                      child: Align(
+                        alignment: (_messages[index].toUserUid ==
+                                _loggedUser.firebaseAuthUid
+                            ? Alignment.topLeft
+                            : Alignment.topRight),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: (_messages[index].toUserUid ==
+                                    _loggedUser.firebaseAuthUid
+                                ? Colors.grey.shade200
+                                : Colors.blue[200]),
+                          ),
+                          padding: const EdgeInsets.all(16),
+                          child: Text(
+                            _messages[index].text,
+                            style: const TextStyle(fontSize: 15),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Container(
+              ),
+            ),
+            Container(
               padding: const EdgeInsets.only(left: 10, bottom: 10, top: 10),
               height: 60,
               width: double.infinity,
@@ -238,8 +242,8 @@ class _MatchChatPage extends State<MatchChatPage> {
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
