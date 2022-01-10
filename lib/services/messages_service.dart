@@ -16,16 +16,18 @@ class MessagesService {
     return querySnapShot.docs.map((e) => MatchMessage.fromSnapshot(e)).toList();
   }
 
-  void listenMessages(Function f, List<String> firebaseAuthUids) {
+  void listenMessagesFromMatchedUser(Function f,
+      String matchedUserfirebaseAuthUid, String loggedUserfirebaseAuthUid) {
     FirebaseFirestore.instance
         .collection('messages')
         .where("uniqueId",
-            whereIn: _getAllCombinationsBetweenFromAndToFirebaseUids(
-                firebaseAuthUids[0], firebaseAuthUids[1]))
-        .orderBy("createdAt")
+            isEqualTo: _getFromToUidsAndConvertToUniqueKey(
+                matchedUserfirebaseAuthUid, loggedUserfirebaseAuthUid))
+        .orderBy("createdAt", descending: true)
+        .limit(1)
         .snapshots()
         .listen((event) {
-      f(event.docs.map((e) => MatchMessage.fromSnapshot(e)).toList());
+      f(event.docs.map((e) => MatchMessage.fromSnapshot(e)).toList()[0]);
     });
   }
 
@@ -33,16 +35,16 @@ class MessagesService {
       String fromFirebaseAuthUid, String toFirebaseAuthUid) {
     var combinations = <String>[];
 
-    combinations.add(getFromToUidsAndConvertToUniqueKey(
+    combinations.add(_getFromToUidsAndConvertToUniqueKey(
         fromFirebaseAuthUid, toFirebaseAuthUid));
 
-    combinations.add(getFromToUidsAndConvertToUniqueKey(
+    combinations.add(_getFromToUidsAndConvertToUniqueKey(
         toFirebaseAuthUid, fromFirebaseAuthUid));
 
     return combinations;
   }
 
-  String getFromToUidsAndConvertToUniqueKey(
+  String _getFromToUidsAndConvertToUniqueKey(
       String fromFirebaseAuthUid, String toFirebaseAuthUid) {
     return fromFirebaseAuthUid + "->" + toFirebaseAuthUid;
   }
@@ -72,14 +74,16 @@ class MessagesService {
     return listMsgs[0];
   }
 
-  Future addMsg(String fromUserFirebaseAuthUid, String toUserFirebaseAuthUid,
-      String text) async {
+  Future<MatchMessage> addMsg(String fromUserFirebaseAuthUid,
+      String toUserFirebaseAuthUid, String text) async {
     var newMsg = MatchMessage(
-        MessagesService().getFromToUidsAndConvertToUniqueKey(
+        _getFromToUidsAndConvertToUniqueKey(
             fromUserFirebaseAuthUid, toUserFirebaseAuthUid),
         DateTime.now(),
         text);
 
     await FirebaseFirestore.instance.collection("messages").add(newMsg.toMap());
+
+    return newMsg;
   }
 }

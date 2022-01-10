@@ -16,8 +16,8 @@ class MatchChatViewModel extends ChangeNotifier {
         .getMessagesBetweenFirebaseUids(firebaseAuthUids);
   }
 
-  Future addMsg(User fromUser, User toUser, String text) async {
-    await MessagesService()
+  Future<MatchMessage> addMsg(User fromUser, User toUser, String text) async {
+    var newMsg = await MessagesService()
         .addMsg(fromUser.firebaseAuthUid, toUser.firebaseAuthUid, text);
 
     if (toUser.oneSignalId != "") {
@@ -28,9 +28,13 @@ class MatchChatViewModel extends ChangeNotifier {
           null,
           {"page": "chat", "key": fromUser.firebaseAuthUid});
     }
+
+    return newMsg;
   }
 
-  void listenMessages(Function f, List<String> firebaseAuthUids) {
-    MessagesService().listenMessages(f, firebaseAuthUids);
+  void listenMessages(Function f, String matchedUserfirebaseAuthUid,
+      String loggedUserfirebaseAuthUid) {
+    MessagesService().listenMessagesFromMatchedUser(
+        f, matchedUserfirebaseAuthUid, loggedUserfirebaseAuthUid);
   }
 }
