@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grupolaranja20212/models/user.dart' as models_user;
 import 'package:grupolaranja20212/models/match_message.dart';
-import 'package:grupolaranja20212/services/messages_service.dart';
 import 'package:grupolaranja20212/utils/app_navigator.dart';
 import 'package:grupolaranja20212/view_models/match_chat_view_model.dart';
 
@@ -23,14 +22,11 @@ class _MatchChatPage extends State<MatchChatPage> {
 
   Future _sendMsg() async {
     if (_msgController.text != "") {
-      await _vM.addMsg(_loggedUser, _matchedUser, _msgController.text);
+      var newMsg =
+          await _vM.addMsg(_loggedUser, _matchedUser, _msgController.text);
 
       setState(() {
-        _messages.add(MatchMessage(
-            MessagesService().getFromToUidsAndConvertToUniqueKey(
-                _loggedUser.firebaseAuthUid, _matchedUser.firebaseAuthUid),
-            DateTime.now(),
-            _msgController.text));
+        _messages.add(newMsg);
       });
 
       _msgController.text = "";
@@ -102,10 +98,20 @@ class _MatchChatPage extends State<MatchChatPage> {
     }
   }
 
+  void _setMessagesFromListener(dynamic matchMessage) {
+    setState(() {
+      _messages.add(matchMessage);
+    });
+  }
+
   @override
   void initState() {
     _getPageInfo();
     super.initState();
+    _vM.listenMessages(
+        (matchMessage) => {_setMessagesFromListener(matchMessage)},
+        widget.matchUserFirebaseAuthUid,
+        _loggedUser.firebaseAuthUid);
   }
 
   @override
@@ -162,43 +168,47 @@ class _MatchChatPage extends State<MatchChatPage> {
           ),
         )),
       ),
-      body: Stack(
-        children: <Widget>[
-          ListView.builder(
-            itemCount: _messages.length,
-            shrinkWrap: true,
-            padding: const EdgeInsets.only(top: 10, bottom: 10),
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Container(
-                padding: const EdgeInsets.only(
-                    left: 16, right: 16, top: 10, bottom: 10),
-                child: Align(
-                  alignment:
-                      (_messages[index].toUserUid == _loggedUser.firebaseAuthUid
-                          ? Alignment.topLeft
-                          : Alignment.topRight),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: (_messages[index].toUserUid ==
-                              _loggedUser.firebaseAuthUid
-                          ? Colors.grey.shade200
-                          : Colors.blue[200]),
-                    ),
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      _messages[index].text,
-                      style: const TextStyle(fontSize: 15),
-                    ),
-                  ),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: SingleChildScrollView(
+                child: ListView.builder(
+                  itemCount: _messages.length,
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return Container(
+                      padding: const EdgeInsets.only(
+                          left: 16, right: 16, top: 10, bottom: 10),
+                      child: Align(
+                        alignment: (_messages[index].toUserUid ==
+                                _loggedUser.firebaseAuthUid
+                            ? Alignment.topLeft
+                            : Alignment.topRight),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: (_messages[index].toUserUid ==
+                                    _loggedUser.firebaseAuthUid
+                                ? Colors.grey.shade200
+                                : Colors.blue[200]),
+                          ),
+                          padding: const EdgeInsets.all(16),
+                          child: Text(
+                            _messages[index].text,
+                            style: const TextStyle(fontSize: 15),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Container(
+              ),
+            ),
+            Container(
               padding: const EdgeInsets.only(left: 10, bottom: 10, top: 10),
               height: 60,
               width: double.infinity,
@@ -232,8 +242,8 @@ class _MatchChatPage extends State<MatchChatPage> {
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

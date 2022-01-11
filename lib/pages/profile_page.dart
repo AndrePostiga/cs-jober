@@ -4,7 +4,7 @@ import 'package:grupolaranja20212/models/user.dart';
 import 'package:grupolaranja20212/utils/constants.dart';
 import 'package:grupolaranja20212/view_models/profile_view_model.dart';
 
-String getSkills(List<String> skills) {
+String _getSkills(List<String> skills) {
   String str = '';
 
   str = skills.join(",");
@@ -100,7 +100,7 @@ class _ProfilePage extends State<ProfilePage> {
                   SizedBox(
                     height: 50,
                     child: Text(
-                      _user.name,
+                      _user.name + ',  ' + (_user.yearsOld.toString()),
                       style: TextStyle(fontSize: 20),
                     ),
                   ),
@@ -133,7 +133,7 @@ class _ProfilePage extends State<ProfilePage> {
                                   ),
                             _user.skills.isNotEmpty == true
                                 ? new Container(
-                                    child: Text(getSkills(_user.skills)),
+                                    child: Text(_getSkills(_user.skills)),
                                   )
                                 : new Container()
                           ],
