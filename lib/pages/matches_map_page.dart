@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:grupolaranja20212/utils/app_navigator.dart';
 import 'package:grupolaranja20212/view_models/matches_map_view_model.dart';
 import 'package:latlong2/latlong.dart' as lat_lng;
 
@@ -29,7 +30,12 @@ class _MatchesMapPage extends State<MatchesMapPage> {
         width: 50.0,
         height: 50.0,
         point: lat_lng.LatLng(user.matchedUser.lat, user.matchedUser.long),
-        builder: (ctx) => Image.network(user.matchedUser.photoUrl),
+        builder: (ctx) => GestureDetector(
+            onTap: () {
+              AppNavigator.navigateToProfilePage(
+                  context, user.matchedUser.firebaseAuthUid);
+            }, // Image tapped
+            child: Image.network(user.matchedUser.photoUrl)),
       ));
     }
 

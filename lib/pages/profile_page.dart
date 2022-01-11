@@ -22,30 +22,6 @@ class ProfilePage extends StatefulWidget {
   _ProfilePage createState() => _ProfilePage();
 }
 
-int _getYearOfUser(String birthDateString) {
-  var birthParts = birthDateString.split('-');
-  var birthDate = DateTime(int.parse(birthParts[0]), int.parse(birthParts[1]),
-      int.parse(birthParts[2]));
-
-  final now = new DateTime.now();
-
-  int years = now.year - birthDate.year;
-  int months = now.month - birthDate.month;
-  int days = now.day - birthDate.day;
-
-  if (months < 0 || (months == 0 && days < 0)) {
-    years--;
-    months += (days < 0 ? 11 : 12);
-  }
-
-  if (days < 0) {
-    final monthAgo = new DateTime(now.year, now.month - 1, birthDate.day);
-    days = now.difference(monthAgo).inDays + 1;
-  }
-
-  return years;
-}
-
 class _ProfilePage extends State<ProfilePage> {
   late final ProfileViewModel _vm = ProfileViewModel();
   late User _user = User(
@@ -124,9 +100,7 @@ class _ProfilePage extends State<ProfilePage> {
                   SizedBox(
                     height: 50,
                     child: Text(
-                      _user.name +
-                          ',  ' +
-                          (_getYearOfUser(_user.birthDate).toString()),
+                      _user.name + ',  ' + (_user.yearsOld.toString()),
                       style: TextStyle(fontSize: 20),
                     ),
                   ),
