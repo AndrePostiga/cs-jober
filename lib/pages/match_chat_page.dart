@@ -98,7 +98,7 @@ class _MatchChatPage extends State<MatchChatPage> {
     }
   }
 
-  void _setMessagesFromListener(dynamic matchMessage) {
+  void _setMessagesFromListener(MatchMessage matchMessage) {
     setState(() {
       _messages.add(matchMessage);
     });
