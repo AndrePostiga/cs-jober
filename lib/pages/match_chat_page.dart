@@ -19,6 +19,7 @@ class _MatchChatPage extends State<MatchChatPage> {
   final MatchChatViewModel _vM = MatchChatViewModel();
 
   final _msgController = TextEditingController();
+  final ScrollController _controller = ScrollController();
 
   Future _sendMsg() async {
     if (_msgController.text != "") {
@@ -30,6 +31,7 @@ class _MatchChatPage extends State<MatchChatPage> {
       });
 
       _msgController.text = "";
+      _scrollDown();
     }
   }
 
@@ -74,6 +76,8 @@ class _MatchChatPage extends State<MatchChatPage> {
     setState(() {
       _messages = msgs;
     });
+
+    _scrollDown();
   }
 
   Future _getPageInfo() async {
@@ -96,12 +100,24 @@ class _MatchChatPage extends State<MatchChatPage> {
         _matchedUser = gotMatchedUser;
       });
     }
+
+    _scrollDown();
   }
 
-  void _setMessagesFromListener(dynamic matchMessage) {
+  // This is what you're looking for!
+  void _scrollDown() {
+    _controller.animateTo(
+      _controller.position.maxScrollExtent,
+      duration: Duration(seconds: 2),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  void _setMessagesFromListener(MatchMessage matchMessage) {
     setState(() {
       _messages.add(matchMessage);
     });
+    _scrollDown();
   }
 
   @override
@@ -174,10 +190,11 @@ class _MatchChatPage extends State<MatchChatPage> {
           children: <Widget>[
             Expanded(
               child: SingleChildScrollView(
+                controller: _controller,
+                padding: const EdgeInsets.only(bottom: 70),
                 child: ListView.builder(
                   itemCount: _messages.length,
                   shrinkWrap: true,
-                  padding: const EdgeInsets.only(top: 10, bottom: 10),
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
                     return Container(

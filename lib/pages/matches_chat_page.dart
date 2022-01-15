@@ -15,26 +15,65 @@ class _MatchesChatPage extends State<MatchesChatPage> {
   final MatchesChatViewModel _vM = MatchesChatViewModel();
   late List<MatchChatUser> _matchesChat = <MatchChatUser>[];
 
+  late Widget _pageContent = _showSearchingMatches();
+
   Future _getMatchesChat() async {
+    setState(() {
+      _pageContent = _showSearchingMatches();
+    });
+
     var msgs = await _vM
         .getMatchesChatFromUser(FirebaseAuth.instance.currentUser!.uid);
 
     setState(() {
       _matchesChat = msgs;
+      if (msgs.isEmpty) {
+        _pageContent = _withoutMatches();
+      } else {
+        _pageContent = _showMatchesList();
+      }
     });
+  }
+
+  Widget _showMatchesList() {
+    return ListView.builder(
+      itemCount: _matchesChat.length,
+      shrinkWrap: true,
+      padding: const EdgeInsets.only(top: 16),
+      physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (context, index) {
+        return _buildConversationList(
+            _matchesChat[index].matchedUser.firebaseAuthUid,
+            _matchesChat[index].matchedUser.photoUrl,
+            _matchesChat[index].matchedUser.name,
+            _matchesChat[index].msg.text,
+            false,
+            "");
+      },
+    );
+  }
+
+  Widget _showSearchingMatches() {
+    return Text("Aguarde... Procurando matches já realizados matches!");
+  }
+
+  Widget _withoutMatches() {
+    return Text(
+        "Você ainda não possui matches... Vá para o swipe conseguir algum! Lembre-se, suas definições de habilidades (caso esteja vazio esse filtro não será considerado, e caso esteja preenchido, o filtro fará a seguinte validação: se o outro usuário tiver ao menos um dos itens colocados por você, esse outro usuário será retornado), seu tipo de usuário (o swipe só retorna usuários do tipo diferente do seu) e distância máxima de busca... Definem usuários que podem aparecer na sua página de swipe.");
   }
 
   @override
   void initState() {
-    _getMatchesChat();
     super.initState();
+    _getMatchesChat();
   }
 
   Widget _buildConversationList(String matchFirebaseUserUid, String userImgUrl,
       String userName, String msgTxt, bool isMsgRead, String timeSentMsg) {
     return GestureDetector(
       onTap: () {
-        AppNavigator.navigateToMatchChatPage(context, matchFirebaseUserUid);
+        AppNavigator.navigateToMatchChatPage(context, matchFirebaseUserUid)
+            .then((value) => _getMatchesChat());
       },
       child: Container(
         padding:
@@ -112,21 +151,7 @@ class _MatchesChatPage extends State<MatchesChatPage> {
               ],
             ),
           )),
-          ListView.builder(
-            itemCount: _matchesChat.length,
-            shrinkWrap: true,
-            padding: const EdgeInsets.only(top: 16),
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return _buildConversationList(
-                  _matchesChat[index].matchedUser.firebaseAuthUid,
-                  _matchesChat[index].matchedUser.photoUrl,
-                  _matchesChat[index].matchedUser.name,
-                  _matchesChat[index].msg.text,
-                  false,
-                  "");
-            },
-          ),
+          _pageContent
         ],
       ),
     );
