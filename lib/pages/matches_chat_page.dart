@@ -59,7 +59,7 @@ class _MatchesChatPage extends State<MatchesChatPage> {
 
   Widget _withoutMatches() {
     return Text(
-        "Você ainda não possui matches... Vá para o swipe conseguir algum! Lembre-se, suas definições de habilidades (caso esteja vazio esse filtro não será considerado), seu tipo de usuário (o swipe só retorna usuários do tipo diferente do seu) e distância máxima de busca... Definem usuários que podem aparecer na sua página de swipe.");
+        "Você ainda não possui matches... Vá para o swipe conseguir algum! Lembre-se, suas definições de habilidades (caso esteja vazio esse filtro não será considerado, e caso esteja preenchido, o filtro fará a seguinte validação: se o outro usuário tiver ao menos um dos itens colocados por você, esse outro usuário será retornado), seu tipo de usuário (o swipe só retorna usuários do tipo diferente do seu) e distância máxima de busca... Definem usuários que podem aparecer na sua página de swipe.");
   }
 
   @override

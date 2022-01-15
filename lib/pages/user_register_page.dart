@@ -110,8 +110,8 @@ class _UserRegisterPage extends State<UserRegisterPage> {
         _birthMonthController.text = birthDateParts[1];
         _birthYearController.text = birthDateParts[0];
       } else {
-        _nameController.text = firebaseUser.displayName!;
-        _image = firebaseUser.photoURL!;
+        _nameController.text = firebaseUser.displayName ?? "";
+        _image = firebaseUser.photoURL ?? Constants.userDefaultPhoto;
         _userTypeId = userTypes[0].id;
       }
     });

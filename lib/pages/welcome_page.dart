@@ -35,6 +35,22 @@ class WelcomePage extends StatelessWidget {
               icon: FaIcon(FontAwesomeIcons.google, color: Colors.redAccent),
               label: const Text('LOGIN com Google'),
             ),
+            ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.purple)),
+              onPressed: () {
+                AppNavigator.navigateToLoginPage(context);
+              },
+              child: const Text('LOGIN'),
+            ),
+            ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.purple)),
+              onPressed: () {
+                AppNavigator.navigateToRegisterPage(context);
+              },
+              child: const Text('REGISTRE-SE'),
+            ),
           ],
         )),
       ),
