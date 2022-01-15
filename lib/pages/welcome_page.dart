@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grupolaranja20212/utils/app_navigator.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -25,21 +26,14 @@ class WelcomePage extends StatelessWidget {
             SizedBox(
               height: 50,
             ),
-            ElevatedButton(
+            ElevatedButton.icon(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.purple)),
               onPressed: () {
-                AppNavigator.navigateToLoginPage(context);
+                AppNavigator.navigateToLoginWithGooglePage(context);
               },
-              child: const Text('LOGIN'),
-            ),
-            ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.purple)),
-              onPressed: () {
-                AppNavigator.navigateToRegisterPage(context);
-              },
-              child: const Text('REGISTER'),
+              icon: FaIcon(FontAwesomeIcons.google, color: Colors.redAccent),
+              label: const Text('LOGIN com Google'),
             ),
           ],
         )),

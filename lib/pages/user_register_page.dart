@@ -87,8 +87,11 @@ class _UserRegisterPage extends State<UserRegisterPage> {
 
   Future _initVars() async {
     var userTypes = await _userRegisterVM.getUserTypes();
-    var user = await _userRegisterVM
-        .getUserByFirebaseAuthUid(FirebaseAuth.instance.currentUser!.uid);
+
+    var firebaseUser = FirebaseAuth.instance.currentUser;
+
+    var user =
+        await _userRegisterVM.getUserByFirebaseAuthUid(firebaseUser!.uid);
 
     setState(() {
       _dropDownUserTypesItens = _getDropDownUserTypesItems(userTypes);
@@ -107,6 +110,8 @@ class _UserRegisterPage extends State<UserRegisterPage> {
         _birthMonthController.text = birthDateParts[1];
         _birthYearController.text = birthDateParts[0];
       } else {
+        _nameController.text = firebaseUser.displayName!;
+        _image = firebaseUser.photoURL!;
         _userTypeId = userTypes[0].id;
       }
     });
@@ -185,6 +190,9 @@ class _UserRegisterPage extends State<UserRegisterPage> {
           }
         }
       }
+      setState(() {
+        _btnStoreMsg = "Aguarde...";
+      });
 
       await _userRegisterVM.createOrUpdateUserByFirebaseAuthUid(
           FirebaseAuth.instance.currentUser!.uid,
@@ -201,12 +209,22 @@ class _UserRegisterPage extends State<UserRegisterPage> {
               '-' +
               _birthDayController.text);
 
-      setState(() {
-        _btnStoreMsg = "Gravação realizada com sucesso!";
-      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Gravação realizada com sucesso!"),
+          duration: const Duration(seconds: 5),
+        ),
+      );
     } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+          duration: const Duration(seconds: 5),
+        ),
+      );
+    } finally {
       setState(() {
-        _btnStoreMsg = e.toString();
+        _btnStoreMsg = "Gravar";
       });
     }
   }
