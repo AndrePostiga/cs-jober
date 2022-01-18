@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grupolaranja20212/pages/main_page.dart';
 import 'package:grupolaranja20212/pages/welcome_page.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 void main() async {
@@ -18,7 +17,6 @@ void main() async {
   ));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  AndroidGoogleMapsFlutter.useAndroidViewSurface = true;
 
   // Remove this method to stop OneSignal Debugging
   // OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);

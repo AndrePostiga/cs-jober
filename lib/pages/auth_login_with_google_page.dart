@@ -13,14 +13,24 @@ class _AuthLoginWithGooglePage extends State<AuthLoginWithGooglePage> {
   final _vm = LoginWithGoogleViewModel();
 
   Future _makeLogin() async {
-    var isLoggedIn = await _vm.googleLogin();
+    try {
+      var isLoggedIn = await _vm.googleLogin();
 
-    if (isLoggedIn) {
-      // on successful login take the user to the main page
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const MainPage()),
-          (Route<dynamic> route) => false);
-    } else {
+      if (isLoggedIn) {
+        // on successful login take the user to the main page
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const MainPage()),
+            (Route<dynamic> route) => false);
+      } else {
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+          duration: const Duration(seconds: 5),
+        ),
+      );
       Navigator.pop(context);
     }
   }
