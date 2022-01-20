@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grupolaranja20212/pages/main_page.dart';
 import 'package:grupolaranja20212/pages/welcome_page.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 void main() async {
+  // usando tutorial do https://www.youtube.com/watch?v=1k-gITZA9CI pra configurar google auth
+  WidgetsFlutterBinding.ensureInitialized();
+
   // INICIALIZA O APP, DEFININDO VAR DE APP ID PRO ONE SIGNAL E DEFININDO PAGINA INICIAL DO APP VERIFICANDO SE USER TA LOGADO OU N
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Colors.orange,
@@ -15,7 +17,6 @@ void main() async {
   ));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  AndroidGoogleMapsFlutter.useAndroidViewSurface = true;
 
   // Remove this method to stop OneSignal Debugging
   // OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);

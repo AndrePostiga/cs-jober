@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grupolaranja20212/pages/auth_forgot_password_page.dart';
 import 'package:grupolaranja20212/pages/auth_login_page.dart';
+import 'package:grupolaranja20212/pages/auth_login_with_google_page.dart';
 import 'package:grupolaranja20212/pages/auth_logout_page.dart';
 import 'package:grupolaranja20212/pages/auth_register_page.dart';
 import 'package:grupolaranja20212/pages/main_page.dart';
@@ -8,6 +9,7 @@ import 'package:grupolaranja20212/pages/match_chat_page.dart';
 import 'package:grupolaranja20212/pages/profile_page.dart';
 import 'package:grupolaranja20212/view_models/forgot_password_view_model.dart';
 import 'package:grupolaranja20212/view_models/login_view_model.dart';
+import 'package:grupolaranja20212/view_models/login_with_google_view_model.dart';
 import 'package:grupolaranja20212/view_models/logout_view_model.dart';
 import 'package:grupolaranja20212/view_models/main_view_model.dart';
 import 'package:grupolaranja20212/view_models/matches_view_model.dart';
@@ -33,6 +35,16 @@ class AppNavigator {
             builder: (context) => ChangeNotifierProvider(
                 create: (context) => RegisterViewModel(),
                 child: const AuthRegisterPage()),
+            fullscreenDialog: true));
+  }
+
+  static Future navigateToLoginWithGooglePage(BuildContext context) async {
+    return await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ChangeNotifierProvider(
+                create: (context) => LoginWithGoogleViewModel(),
+                child: const AuthLoginWithGooglePage()),
             fullscreenDialog: true));
   }
 

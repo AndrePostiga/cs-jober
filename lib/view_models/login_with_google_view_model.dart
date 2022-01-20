@@ -1,17 +1,32 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:grupolaranja20212/services/push_notification_service.dart';
 import 'package:grupolaranja20212/utils/constants.dart';
 
-class LoginViewModel extends ChangeNotifier {
-  String message = "";
+class LoginWithGoogleViewModel extends ChangeNotifier {
+  String message = "Aguarde...";
 
-  Future<bool> login(String email, String password) async {
+  final googleSignIn = GoogleSignIn();
+
+  GoogleSignInAccount? _user;
+
+  GoogleSignInAccount get user => _user!;
+
+  Future<bool> googleLogin() async {
+    final googleUser = await googleSignIn.signIn();
+    if (googleUser == null) return false;
+    _user = googleUser;
+
+    final googleAuth = await googleUser.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
     bool isLoggedIn = false;
 
     try {
-      final userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+      final userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
       isLoggedIn = userCredential.user != null;
 
       if (isLoggedIn) {
@@ -28,6 +43,10 @@ class LoginViewModel extends ChangeNotifier {
         message = Constants.wrongPassword;
       } else if (e.code == "too-many-requests") {
         message = Constants.tooManyRequests;
+      } else {
+        message =
+            "Erro ao tentar se logar, feche essa tela e clique novamente no botão de login com Google! " +
+                (e.message ?? "");
       }
       notifyListeners();
     }
