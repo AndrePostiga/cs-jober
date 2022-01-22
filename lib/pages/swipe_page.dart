@@ -140,7 +140,7 @@ class _SwipePage extends State<SwipePage> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(40),
                     gradient: const LinearGradient(
-                        colors: [Colors.transparent, Colors.black],
+                        colors: [Colors.white, Colors.black],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         stops: [0.7, 1])),
