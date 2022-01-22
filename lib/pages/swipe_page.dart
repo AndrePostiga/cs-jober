@@ -130,6 +130,7 @@ class _SwipePage extends State<SwipePage> {
         return Container(
             margin: const EdgeInsets.all(20),
             decoration: BoxDecoration(
+                color: Colors.white,
                 image: DecorationImage(
                   image: NetworkImage(_swipeItems[index].content.photoUrl),
                   fit: BoxFit.cover,
@@ -140,7 +141,7 @@ class _SwipePage extends State<SwipePage> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(40),
                     gradient: const LinearGradient(
-                        colors: [Colors.white, Colors.black],
+                        colors: [Colors.transparent, Colors.black],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         stops: [0.7, 1])),
